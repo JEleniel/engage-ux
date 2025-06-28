@@ -1,0 +1,11 @@
+name: Documentation Request
+description: Request corrections or additions to the documentation.
+title: '[docs]: '
+labels: ['documentation', 'triage']
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What would you like to see changed or added?
+      placeholder: Description

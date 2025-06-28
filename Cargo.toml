@@ -1,0 +1,26 @@
+[workspace]
+members = ["os/*", "hardware/*", "network"]
+
+[workspace.package]
+license = "GPL-3.0-or-later"
+version = "0.1.0-alpha.1"
+keywords = ["x11", "wayland", "compositor", "windowmanager", "window"]
+categories = ["accessibility", "graphics", "gui", "hardware-support", "network-programming", "os"]
+repository = "https://github.com/JEleniel/engage-ux"
+edition = "2024"
+publish = false
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }
+chrono = { version = "0.4", features = ["serde"] }
+chrono-tz = { version = "0.10" }
+
+[package]
+name = "engage-ux"
+description = "An application UI (a.k.a. window) and input/output manager designed around the User Experience first"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[dependencies]

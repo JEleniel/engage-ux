@@ -1,0 +1,42 @@
+name: Bug Report
+description: File a bug report.
+title: '[Bug]: '
+labels: ['bug', 'triage']
+body:
+  - type: markdown
+    attributes:
+      value: Please provide as much detail as possible. Attach logs, examples, and other files to this report.
+  - type: textarea
+    id: unexpected-behavior
+    attributes:
+      label: Unexpected Behavior
+      description: What happened that you did not expect?
+      placeholder: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Expected Behavior
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How, step by step, can we reproduce the unexpected hehavior?
+      placeholder: 1) ...
+  - type: textarea
+    id: about
+    attributes:
+      label: About the Application
+      description: Please paste the output of the "About" dialog.
+      placeholder: About
+    validations:
+      required: true
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: Is there anything else we should know?
+      placeholder: Additional information
