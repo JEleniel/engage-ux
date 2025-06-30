@@ -1,3 +1,8 @@
+# Project specific
+Gemfile.lock
+**/_site/
+.bundles_cache
+
 # Visual Studio Code
 **/.vscode/*
 !**/.vscode/settings.json

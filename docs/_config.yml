@@ -1,0 +1,13 @@
+title: Engage UX
+email: jeleniel@crystultima.org
+description: >-
+  Documentation for the Engage UX, an application UI (a.k.a. window) and input/output manager designed around the User Experience first
+
+domain: jeleniel.github.io
+url: https://JEleniel.github.io/
+baseurl: /engage-ux/
+repository: JEleniel/engage-ux
+
+github_username: JEleniel
+
+theme: jekyll-theme-cayman
