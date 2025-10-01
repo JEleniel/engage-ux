@@ -16,6 +16,8 @@ pub mod progress;
 pub mod tooltip;
 pub mod breadcrumb;
 pub mod avatar;
+pub mod line_numbers;
+pub mod ruler;
 
 // Interactive components
 pub mod button;
@@ -28,6 +30,14 @@ pub mod slider;
 pub mod select;
 pub mod link;
 pub mod pagination;
+pub mod carousel;
+pub mod date_picker;
+pub mod text_editor;
+pub mod console;
+
+// Graphic and Display components
+pub mod group;
+pub mod video;
 
 // Notification components
 pub mod badge;
@@ -40,9 +50,11 @@ pub mod card;
 pub mod table;
 pub mod accordion;
 pub mod tabs;
+pub mod window;
 
 // Menu components
 pub mod menu;
+pub mod title_menu;
 
 // Dialog components
 pub mod dialog;
@@ -75,6 +87,16 @@ pub use avatar::Avatar;
 pub use menu::{Dropdown, Drawer, HamburgerMenu, MenuItem};
 pub use dialog::{AlertDialog, ConfirmDialog, Modal, FileDialog};
 pub use pagination::Pagination;
+pub use line_numbers::LineNumbers;
+pub use ruler::{Ruler, RulerOrientation, RulerUnit};
+pub use carousel::{Carousel, CarouselItem};
+pub use date_picker::{DatePicker, Date};
+pub use text_editor::TextEditor;
+pub use console::{Console, ConsoleLine, AnsiColor};
+pub use group::Group;
+pub use video::Video;
+pub use title_menu::{TitleMenu, TitleMenuItem};
+pub use window::Window;
 
 #[cfg(test)]
 mod tests {
