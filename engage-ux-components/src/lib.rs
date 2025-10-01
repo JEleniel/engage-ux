@@ -14,6 +14,8 @@ pub mod image;
 pub mod list;
 pub mod progress;
 pub mod tooltip;
+pub mod breadcrumb;
+pub mod avatar;
 
 // Interactive components
 pub mod button;
@@ -34,6 +36,14 @@ pub mod toast;
 pub mod container;
 pub mod card;
 pub mod table;
+pub mod accordion;
+pub mod tabs;
+
+// Menu components
+pub mod menu;
+
+// Dialog components
+pub mod dialog;
 
 // Window components
 pub mod window_controls;
@@ -55,6 +65,12 @@ pub use badge::Badge;
 pub use toast::Toast;
 pub use table::Table;
 pub use window_controls::{WindowControlButton, WindowControls};
+pub use accordion::{Accordion, AccordionPanel};
+pub use tabs::{Tabs, Tab};
+pub use breadcrumb::{Breadcrumb, BreadcrumbItem};
+pub use avatar::Avatar;
+pub use menu::{Dropdown, Drawer, HamburgerMenu, MenuItem};
+pub use dialog::{AlertDialog, ConfirmDialog, Modal, FileDialog};
 
 #[cfg(test)]
 mod tests {
