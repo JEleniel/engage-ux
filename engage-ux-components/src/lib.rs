@@ -27,10 +27,12 @@ pub mod toggle;
 pub mod slider;
 pub mod select;
 pub mod link;
+pub mod pagination;
 
 // Notification components
 pub mod badge;
 pub mod toast;
+pub mod banner;
 
 // Layout components
 pub mod container;
@@ -63,6 +65,7 @@ pub use progress::Progress;
 pub use tooltip::{Tooltip, Popover};
 pub use badge::Badge;
 pub use toast::Toast;
+pub use banner::Banner;
 pub use table::Table;
 pub use window_controls::{WindowControlButton, WindowControls};
 pub use accordion::{Accordion, AccordionPanel};
@@ -71,6 +74,7 @@ pub use breadcrumb::{Breadcrumb, BreadcrumbItem};
 pub use avatar::Avatar;
 pub use menu::{Dropdown, Drawer, HamburgerMenu, MenuItem};
 pub use dialog::{AlertDialog, ConfirmDialog, Modal, FileDialog};
+pub use pagination::Pagination;
 
 #[cfg(test)]
 mod tests {
