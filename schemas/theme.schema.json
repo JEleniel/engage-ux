@@ -1,0 +1,189 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Engage UX Theme",
+  "description": "JSON schema for Engage UX theme configuration",
+  "type": "object",
+  "required": ["name", "colors", "typography", "spacing", "borders", "shadows"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Theme name"
+    },
+    "colors": {
+      "type": "object",
+      "description": "Color palette for the theme",
+      "required": [
+        "primary",
+        "secondary",
+        "background",
+        "surface",
+        "error",
+        "warning",
+        "success",
+        "info",
+        "text_primary",
+        "text_secondary",
+        "text_disabled"
+      ],
+      "properties": {
+        "primary": { "$ref": "#/definitions/color" },
+        "secondary": { "$ref": "#/definitions/color" },
+        "background": { "$ref": "#/definitions/color" },
+        "surface": { "$ref": "#/definitions/color" },
+        "error": { "$ref": "#/definitions/color" },
+        "warning": { "$ref": "#/definitions/color" },
+        "success": { "$ref": "#/definitions/color" },
+        "info": { "$ref": "#/definitions/color" },
+        "text_primary": { "$ref": "#/definitions/color" },
+        "text_secondary": { "$ref": "#/definitions/color" },
+        "text_disabled": { "$ref": "#/definitions/color" },
+        "custom": {
+          "type": "object",
+          "description": "Custom color definitions",
+          "additionalProperties": { "$ref": "#/definitions/color" }
+        }
+      }
+    },
+    "typography": {
+      "type": "object",
+      "description": "Typography settings",
+      "required": [
+        "font_family",
+        "font_size_base",
+        "font_size_small",
+        "font_size_large",
+        "line_height"
+      ],
+      "properties": {
+        "font_family": {
+          "type": "string",
+          "description": "Font family stack"
+        },
+        "font_size_base": {
+          "type": "number",
+          "description": "Base font size in pixels",
+          "minimum": 8,
+          "maximum": 72
+        },
+        "font_size_small": {
+          "type": "number",
+          "description": "Small font size in pixels",
+          "minimum": 6,
+          "maximum": 48
+        },
+        "font_size_large": {
+          "type": "number",
+          "description": "Large font size in pixels",
+          "minimum": 12,
+          "maximum": 96
+        },
+        "line_height": {
+          "type": "number",
+          "description": "Line height multiplier",
+          "minimum": 1.0,
+          "maximum": 3.0
+        }
+      }
+    },
+    "spacing": {
+      "type": "object",
+      "description": "Spacing system",
+      "required": ["unit", "small", "medium", "large"],
+      "properties": {
+        "unit": {
+          "type": "number",
+          "description": "Base spacing unit in pixels",
+          "minimum": 1
+        },
+        "small": {
+          "type": "number",
+          "description": "Small spacing in pixels",
+          "minimum": 0
+        },
+        "medium": {
+          "type": "number",
+          "description": "Medium spacing in pixels",
+          "minimum": 0
+        },
+        "large": {
+          "type": "number",
+          "description": "Large spacing in pixels",
+          "minimum": 0
+        }
+      }
+    },
+    "borders": {
+      "type": "object",
+      "description": "Border styling",
+      "required": ["width", "radius", "color"],
+      "properties": {
+        "width": {
+          "type": "number",
+          "description": "Border width in pixels",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "radius": {
+          "type": "number",
+          "description": "Border radius in pixels",
+          "minimum": 0,
+          "maximum": 50
+        },
+        "color": { "$ref": "#/definitions/color" }
+      }
+    },
+    "shadows": {
+      "type": "object",
+      "description": "Shadow styling",
+      "required": ["enabled", "blur_radius", "offset_x", "offset_y", "color"],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether shadows are enabled"
+        },
+        "blur_radius": {
+          "type": "number",
+          "description": "Shadow blur radius in pixels",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "offset_x": {
+          "type": "number",
+          "description": "Horizontal shadow offset in pixels",
+          "minimum": -50,
+          "maximum": 50
+        },
+        "offset_y": {
+          "type": "number",
+          "description": "Vertical shadow offset in pixels",
+          "minimum": -50,
+          "maximum": 50
+        },
+        "color": { "$ref": "#/definitions/color" }
+      }
+    }
+  },
+  "definitions": {
+    "color": {
+      "type": "object",
+      "description": "A color in RGB or HSL color space",
+      "required": ["space", "components"],
+      "properties": {
+        "space": {
+          "type": "string",
+          "enum": ["RGB", "HSL"],
+          "description": "Color space"
+        },
+        "components": {
+          "type": "array",
+          "description": "Color components [r/h, g/s, b/l, a]",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    }
+  }
+}
