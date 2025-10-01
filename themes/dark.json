@@ -1,0 +1,146 @@
+{
+  "name": "Dark",
+  "colors": {
+    "primary": {
+      "space": "RGB",
+      "components": [
+        0.5647059,
+        0.7921569,
+        0.9764706,
+        1.0
+      ]
+    },
+    "secondary": {
+      "space": "RGB",
+      "components": [
+        0.80784315,
+        0.5764706,
+        0.84705883,
+        1.0
+      ]
+    },
+    "background": {
+      "space": "RGB",
+      "components": [
+        0.07058824,
+        0.07058824,
+        0.07058824,
+        1.0
+      ]
+    },
+    "surface": {
+      "space": "RGB",
+      "components": [
+        0.11764706,
+        0.11764706,
+        0.11764706,
+        1.0
+      ]
+    },
+    "error": {
+      "space": "RGB",
+      "components": [
+        0.9372549,
+        0.3254902,
+        0.3137255,
+        1.0
+      ]
+    },
+    "warning": {
+      "space": "RGB",
+      "components": [
+        1.0,
+        0.7176471,
+        0.3019608,
+        1.0
+      ]
+    },
+    "success": {
+      "space": "RGB",
+      "components": [
+        0.4,
+        0.73333335,
+        0.41568628,
+        1.0
+      ]
+    },
+    "info": {
+      "space": "RGB",
+      "components": [
+        0.30980393,
+        0.7647059,
+        0.96862745,
+        1.0
+      ]
+    },
+    "text_primary": {
+      "space": "RGB",
+      "components": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "text_secondary": {
+      "space": "RGB",
+      "components": [
+        0.6901961,
+        0.6901961,
+        0.6901961,
+        1.0
+      ]
+    },
+    "text_disabled": {
+      "space": "RGB",
+      "components": [
+        0.43137255,
+        0.43137255,
+        0.43137255,
+        1.0
+      ]
+    },
+    "custom": {}
+  },
+  "typography": {
+    "font_family": "system-ui, -apple-system, sans-serif",
+    "font_size_base": 16.0,
+    "font_size_small": 14.0,
+    "font_size_large": 20.0,
+    "line_height": 1.5
+  },
+  "spacing": {
+    "unit": 8.0,
+    "small": 8.0,
+    "medium": 16.0,
+    "large": 24.0
+  },
+  "borders": {
+    "width": 1.0,
+    "radius": 4.0,
+    "color": {
+      "space": "RGB",
+      "components": [
+        0.25882354,
+        0.25882354,
+        0.25882354,
+        1.0
+      ]
+    }
+  },
+  "shadows": {
+    "enabled": true,
+    "blur_radius": 4.0,
+    "offset_x": 0.0,
+    "offset_y": 2.0,
+    "color": {
+      "space": "RGB",
+      "components": [
+        0.0,
+        0.0,
+        0.0,
+        0.4
+      ]
+    }
+  }
+}

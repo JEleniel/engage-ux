@@ -1,0 +1,5 @@
+# Rust formatting configuration for Engage UX
+# Use tabs for indentation as per project requirements
+
+hard_tabs = true
+tab_spaces = 4

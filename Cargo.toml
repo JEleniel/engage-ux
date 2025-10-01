@@ -1,0 +1,29 @@
+[workspace]
+resolver = "2"
+members = [
+	"engage-ux-core",
+	"engage-ux-oal",
+	"engage-ux-components",
+	"engage-ux-themes",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Engage UX Contributors"]
+license = "GPL-3.0"
+repository = "https://github.com/JEleniel/engage-ux"
+rust-version = "1.70"
+
+[workspace.dependencies]
+tokio = { version = "1.41", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
