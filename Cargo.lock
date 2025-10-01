@@ -62,6 +62,7 @@ version = "0.1.0"
 dependencies = [
  "engage-ux-core",
  "engage-ux-oal",
+ "engage-ux-themes",
  "serde",
  "serde_json",
  "tokio",
