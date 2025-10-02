@@ -147,12 +147,12 @@ impl Font {
 		}
 	}
 
-	/// Load font from file path (stub for now)
-	pub fn load_from_file(_path: &str) -> Result<Self, MediaError> {
-		// TODO: Implement actual font loading
-		Err(MediaError::UnsupportedFormat(
-			"Font loading not yet implemented".to_string(),
-		))
+	/// Load font from file path
+	pub fn load_from_file(path: &str) -> Result<Self, MediaError> {
+		let data = std::fs::read(path)
+			.map_err(|e| MediaError::LoadFailed(format!("Failed to read font file: {}", e)))?;
+
+		Self::load_from_bytes(data, 16.0)
 	}
 
 	/// Load font from bytes
@@ -162,9 +162,17 @@ impl Font {
 			return Err(MediaError::InvalidData("Empty font data".to_string()));
 		}
 
+		// Validate font data with fontdue
+		let font_settings = fontdue::FontSettings::default();
+		let _parsed_font = fontdue::Font::from_bytes(data.as_slice(), font_settings)
+			.map_err(|e| MediaError::InvalidData(format!("Invalid font data: {}", e)))?;
+
+		// Use default family name since fontdue doesn't expose it directly
+		let family_name = "Loaded Font".to_string();
+
 		// Create font with data
 		Ok(Self {
-			family: FontFamily::new("Loaded Font"),
+			family: FontFamily::new(family_name),
 			weight: FontWeight::Normal,
 			style: FontStyle::Normal,
 			size,
@@ -266,10 +274,15 @@ mod tests {
 
 	#[test]
 	fn test_font_load_from_bytes() {
+		// Test with invalid data - should return error
 		let data = vec![1, 2, 3, 4]; // Fake font data
-		let font = Font::load_from_bytes(data.clone(), 14.0).unwrap();
-		assert_eq!(font.data, Some(data));
-		assert_eq!(font.size, 14.0);
+		let result = Font::load_from_bytes(data, 14.0);
+		assert!(result.is_err());
+		
+		// Empty data should also fail
+		let empty_data = vec![];
+		let result = Font::load_from_bytes(empty_data, 14.0);
+		assert!(result.is_err());
 	}
 
 	#[test]

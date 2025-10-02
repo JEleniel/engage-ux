@@ -185,17 +185,64 @@ impl SvgParser {
 		content.contains("http://") || content.contains("https://")
 	}
 
-	fn parse_basic_svg(&self, _content: &str) -> Result<SvgDocument, RenderError> {
-		// This is a simplified parser stub
-		// In production, would use a proper XML/SVG parsing library
+	fn parse_basic_svg(&self, content: &str) -> Result<SvgDocument, RenderError> {
+		// Parse SVG using usvg
+		let opts = usvg::Options::default();
+		let tree = usvg::Tree::from_str(content, &opts)
+			.map_err(|e| RenderError::InvalidSvg(format!("Failed to parse SVG: {}", e)))?;
+
+		// Get SVG dimensions
+		let svg_size = tree.size();
+
+		// Create root element with dimensions
 		let mut root = SvgElement::new(SvgElementType::Svg);
-		root.set_attribute("width".to_string(), "100".to_string());
-		root.set_attribute("height".to_string(), "100".to_string());
+		root.set_attribute("width".to_string(), svg_size.width().to_string());
+		root.set_attribute("height".to_string(), svg_size.height().to_string());
+
+		// Convert usvg tree to our SvgElement structure
+		self.convert_group_to_elements(tree.root(), &mut root);
 
 		let mut doc = SvgDocument::new(root);
 		doc.parse_dimensions();
 
 		Ok(doc)
+	}
+
+	fn convert_group_to_elements(&self, group: &usvg::Group, parent: &mut SvgElement) {
+		// Iterate through children of the group
+		for node in group.children() {
+			match node {
+				usvg::Node::Group(g) => {
+					let mut group_elem = SvgElement::new(SvgElementType::Group);
+					group_elem.set_attribute("id".to_string(), g.id().to_string());
+					self.convert_group_to_elements(g, &mut group_elem);
+					parent.add_child(group_elem);
+				}
+				usvg::Node::Path(p) => {
+					let mut path_elem = SvgElement::new(SvgElementType::Path);
+					path_elem.set_attribute("id".to_string(), p.id().to_string());
+					// Store path info (actual path data would require more complex conversion)
+					path_elem.set_attribute("stroke-width".to_string(), "1".to_string());
+					parent.add_child(path_elem);
+				}
+				usvg::Node::Image(_) => {
+					// Images are handled separately for security
+					let img = SvgElement::new(SvgElementType::Use);
+					parent.add_child(img);
+				}
+				usvg::Node::Text(t) => {
+					let mut text = SvgElement::new(SvgElementType::Text);
+					text.set_attribute("id".to_string(), t.id().to_string());
+					// Store placeholder text content
+					// Note: usvg's text extraction would require more complex handling
+					let text_content = "text".to_string();
+					if !text_content.is_empty() {
+						text.content = Some(text_content);
+					}
+					parent.add_child(text);
+				}
+			}
+		}
 	}
 }
 

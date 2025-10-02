@@ -129,29 +129,76 @@ impl ImageData {
 		}
 	}
 
-	/// Load from file path (stub for now)
-	pub fn load_from_file(_path: &str) -> Result<Self, MediaError> {
-		// TODO: Implement actual image loading
-		Err(MediaError::UnsupportedFormat(
-			"Image loading not yet implemented".to_string(),
-		))
+	/// Load from file path
+	pub fn load_from_file(path: &str) -> Result<Self, MediaError> {
+		use image::ImageReader;
+		
+		let img = ImageReader::open(path)
+			.map_err(|e| MediaError::LoadFailed(format!("Failed to open image: {}", e)))?
+			.decode()
+			.map_err(|e| MediaError::LoadFailed(format!("Failed to decode image: {}", e)))?;
+
+		let format = ImageFormat::from_extension(
+			std::path::Path::new(path)
+				.extension()
+				.and_then(|e| e.to_str())
+				.unwrap_or(""),
+		)
+		.ok_or_else(|| MediaError::UnsupportedFormat("Unknown image format".to_string()))?;
+
+		let width = img.width();
+		let height = img.height();
+
+		let (color_type, data) = match img {
+			image::DynamicImage::ImageLuma8(_) => {
+				(ColorType::Grayscale, img.to_luma8().into_raw())
+			}
+			image::DynamicImage::ImageRgb8(_) => (ColorType::Rgb, img.to_rgb8().into_raw()),
+			_ => (ColorType::Rgba, img.to_rgba8().into_raw()),
+		};
+
+		Ok(Self {
+			width,
+			height,
+			format,
+			color_type,
+			data,
+		})
 	}
 
 	/// Load from bytes
 	pub fn load_from_bytes(data: Vec<u8>) -> Result<Self, MediaError> {
+		use image::ImageReader;
+		use std::io::Cursor;
+
 		// Detect format
 		let format = ImageFormat::from_bytes(&data).ok_or_else(|| {
 			MediaError::UnsupportedFormat("Unknown image format".to_string())
 		})?;
 
-		// Create placeholder image data
-		// TODO: Implement actual image decoding
+		let img = ImageReader::new(Cursor::new(&data))
+			.with_guessed_format()
+			.map_err(|e| MediaError::LoadFailed(format!("Failed to guess format: {}", e)))?
+			.decode()
+			.map_err(|e| MediaError::LoadFailed(format!("Failed to decode image: {}", e)))?;
+
+		let width = img.width();
+		let height = img.height();
+
+		let (color_type, img_data) = match img {
+			image::DynamicImage::ImageLuma8(_) => {
+				(ColorType::Grayscale, img.to_luma8().into_raw())
+			}
+			image::DynamicImage::ImageRgb8(_) => (ColorType::Rgb, img.to_rgb8().into_raw()),
+			_ => (ColorType::Rgba, img.to_rgba8().into_raw()),
+		};
+
 		Ok(Self {
-			width: 1,
-			height: 1,
+			width,
+			height,
 			format,
-			color_type: ColorType::Rgba,
-			data: vec![0; 4], // Placeholder
+			color_type,
+			data: img_data,
 		})
 	}
 
@@ -279,11 +326,14 @@ mod tests {
 
 	#[test]
 	fn test_load_from_bytes() {
+		// Test with incomplete PNG header - should fail
 		let png_bytes = vec![0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
 		let result = ImageData::load_from_bytes(png_bytes);
-		assert!(result.is_ok());
+		assert!(result.is_err()); // Incomplete image data should fail
 
-		let image = result.unwrap();
-		assert_eq!(image.format, ImageFormat::Png);
+		// Test with unknown format
+		let unknown_bytes = vec![0x00, 0x01, 0x02, 0x03];
+		let result = ImageData::load_from_bytes(unknown_bytes);
+		assert!(result.is_err());
 	}
 }
