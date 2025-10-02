@@ -1,0 +1,132 @@
+---
+name: Pull Request
+description: Submit changes to the project
+title: ''
+labels: ''
+assignees: ''
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out this pull request template completely. Fields marked as required must be filled.
+
+        **Example of a good PR:**
+
+        ```text
+        Type of Change:
+        New Feature
+
+        Breaking Changes:
+        No
+
+        Description:
+        Added user authentication feature with JWT tokens.
+        - Implemented login/logout endpoints
+        - Added middleware for token validation
+        - Created user authentication service
+        - Added password hashing with bcrypt
+
+        Related Issues:
+        - Fixes #123
+        - Implements #456
+        - Updates #789
+
+        Implementation Details:
+        - Using jsonwebtoken library for JWT handling
+        - Passwords are hashed with 10 salt rounds
+        - Token expiration set to 24h
+        - Added proper error handling for auth failures
+
+        Testing:
+        - Added unit tests for auth service
+        - Integration tests for endpoints
+        - Manual testing with Postman
+        - All tests passing
+
+        Checklist:
+        - [x] Code adheres to style guidelines
+        - [x] Code is well-commented
+        - [x] Documentation has been updated
+        - [x] Commit messages follow guidelines
+        - [x] Changes reviewed locally
+        - [x] Code compiles without warnings
+        ```
+
+  - type: dropdown
+    id: pr_type
+    attributes:
+      label: Type of Change (required)
+      options:
+        - bug_fix: Bug Fix
+        - documentation: Documentation Update
+        - new_feature: New Feature
+        - performance_improvement: Performance Improvement
+        - refactor: Code Refactor
+        - security: Security Update
+        - tests: Tests
+      description: Select the type of change that best describes your PR.
+      required: true
+
+  - type: checkboxes
+    id: breaking_change
+    attributes:
+      label: Breaking Change(s)
+      options:
+        - breaking_change: This change introduces a breaking change.
+      description: Check if your PR introduces a breaking change.
+
+  - type: checkboxes
+    id: testing
+    attributes:
+      label: Testing Checklist (required)
+      options:
+        - unit_tests_updated: Unit tests have been updated or added as necessary.
+        - tests_passing: All tests are passing. (false will be rejected)
+        - manual_testing: Manual testing has been performed where applicable.
+      description: Ensure that your changes have been adequately tested.
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: PR Checklist (required)
+      description: Please ensure the following items have been completed before submitting your PR.
+      required: true
+      options:
+        - style_guidelines: Code adheres to the project's style guidelines.
+        - code_commented: Code is well-commented, especially in complex areas.
+        - documentation_updated: Relevant documentation has been updated to reflect changes.
+        - commit_guidelines: Commit messages follow the project's guidelines.
+        - local_review: Changes have been reviewed locally by another team member.
+        - compiles_without_warnings: Code compiles without warnings. (false will be rejected)
+
+  - type: textarea
+    id: related_issues
+    attributes:
+      label: Related Issue(s) (required)
+      placeholder: List related issues here, e.g., Fixes #123
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description (required)
+      placeholder: Provide a detailed description of your changes.
+      required: true
+
+  - type: textarea
+    id: implementation_details
+    attributes:
+      label: Implementation Details
+      placeholder: Provide implementation details if relevant
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      placeholder: Add any other context or screenshots about the PR here
+      required: false
+---
+

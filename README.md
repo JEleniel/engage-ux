@@ -1,7 +1,5 @@
 # Engage UX
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
 A fully cross-platform Rust UI toolkit that provides a themable component library without depending on a browser engine. Engage UX uses an OS Abstraction Layer (OAL) for low-level platform interaction, allowing a single set of components to work across Windows, macOS, Linux, Android, and iOS.
 
 ## Features
@@ -26,29 +24,33 @@ Engage UX is organized as a Cargo workspace with the following crates:
 ### Core Crates
 
 - **engage-ux-core**: Foundation layer providing:
-	- Color system (RGB/HSL support)
-	- Component trait and base structures
-	- Event system using Tokio signals
-	- Thread-safe primitives
+
+    + Color system (RGB/HSL support)
+    + Component trait and base structures
+    + Event system using Tokio signals
+    + Thread-safe primitives
 
 - **engage-ux-oal**: OS Abstraction Layer providing:
-	- Platform detection and initialization
-	- Window management abstractions
-	- Platform-specific implementations
+
+    + Platform detection and initialization
+    + Window management abstractions
+    + Platform-specific implementations
 
 - **engage-ux-themes**: Theme system providing:
-	- JSON-based theme configuration
-	- Default light and dark themes
-	- Color palettes, typography, spacing, borders, and shadows
+
+    + JSON-based theme configuration
+    + Default light and dark themes
+    + Color palettes, typography, spacing, borders, and shadows
 
 - **engage-ux-components**: UI components including:
-	- Informational (Label, Text, Icon, Image)
-	- Interactive (Button, TextInput, Checkbox, Radio, Toggle, Slider)
-	- Layout (Container, Card)
+    + Informational (Label, Text, Icon, Image)
+    + Interactive (Button, TextInput, Checkbox, Radio, Toggle, Slider)
+    + Layout (Container, Card)
 
 ## Components
 
 ### Informational
+
 - **Breadcrumb** ✓
 - **Line Numbers** ✓
 - **List** ✓
@@ -62,6 +64,7 @@ Engage UX is organized as a Cargo workspace with the following crates:
 - **Avatar** ✓
 
 ### Interaction
+
 - **Button** ✓
 - **Carousel** ✓
 - **Checkbox** ✓
@@ -78,30 +81,36 @@ Engage UX is organized as a Cargo workspace with the following crates:
 - **Console View** ✓ (with ANSI escape code support)
 
 ### Graphic and Display
+
 - **Group** ✓
 - **Video** ✓
 
 ### Notification
+
 - **Badge** ✓
 - **Banner** ✓
 - **Toast** ✓
 
 ### Menus
+
 - **Drawer** ✓
 - **Dropdown** ✓
 - **Hamburger Menu** ✓
 - **Title Menu** ✓
 
 ### Window Controls
+
 - **Close** ✓
 - **Maximize / Restore** ✓
 - **Minimize / Restore** ✓
 
 ### Panes Groups
+
 - **Accordion** ✓
 - **Tabbed** ✓
 
 ### Dialogs
+
 - **Alert** ✓
 - **Confirm Dialog** ✓
 - **Custom Modal** ✓
@@ -109,6 +118,7 @@ Engage UX is organized as a Cargo workspace with the following crates:
 - **Save As Dialog** ✓
 
 ### Grouping / Layout
+
 - **Card** ✓
 - **Container** ✓
 - **Table** ✓
@@ -122,10 +132,10 @@ Add Engage UX to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-engage-ux-core = { path = "path/to/engage-ux/engage-ux-core" }
-engage-ux-components = { path = "path/to/engage-ux/engage-ux-components" }
-engage-ux-themes = { path = "path/to/engage-ux/engage-ux-themes" }
-engage-ux-oal = { path = "path/to/engage-ux/engage-ux-oal" }
+engage-ux-core = { version="0.1.0-alpha.1" }
+engage-ux-components = { version="0.1.0-alpha.1" }
+engage-ux-themes = { version="0.1.0-alpha.1" }
+engage-ux-oal = { version="0.1.0-alpha.1" }
 ```
 
 ### Example: Creating a Button
@@ -191,6 +201,7 @@ let transparent_red = red.with_alpha(0.5);
 - **UX Focused**: Entirely focused on the user experience layer
 - **Themable**: Every visual aspect can be customized through themes
 - **Thread-Safe**: Built on Tokio for async, non-blocking operations
+- **Accessible**: Full support for WCAG guidelines, with the default themes meeting WCAG AAA.
 
 ### What Engage UX Is Not
 

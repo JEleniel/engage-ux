@@ -1,0 +1,86 @@
+{
+	"$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json",
+	"blanks-around-fences": true,
+	"blanks-around-lists": true,
+	"blanks-around-tables": true,
+	"code-block-style": {
+		"style": "fenced"
+	},
+	"code-fence-style": {
+		"style": "backtick"
+	},
+	"commands-show-output": true,
+	"emphasis-style": {
+		"style": "underscore"
+	},
+	"fenced-code-language": true,
+	"first-line-heading": true,
+	"heading-increment": true,
+	"heading-start-left": true,
+	"heading-style": {
+		"style": "atx"
+	},
+	"hr-style": {
+		"style": "consistent"
+	},
+	"line-length": false,
+	"link-fragments": true,
+	"link-image-reference-definitions": true,
+	"link-image-style": {
+		"autolink": true,
+		"collapsed": false,
+		"full": true,
+		"inline": true,
+		"shortcut": false
+	},
+	"list-indent": true,
+	"list-marker-space": {
+		"ol_multi": 1,
+		"ol_single": 1,
+		"ul_multi": 1,
+		"ul_single": 1
+	},
+	"no-alt-text": true,
+	"no-bare-urls": true,
+	"no-blanks-blockquote": true,
+	"no-duplicate-heading": {
+		"siblings_only": true
+	},
+	"no-emphasis-as-heading": true,
+	"no-empty-links": true,
+	"no-hard-tabs": false,
+	"no-inline-html": false,
+	"no-missing-space-atx": true,
+	"no-multiple-blanks": true,
+	"no-multiple-space-atx": true,
+	"no-multiple-space-blockquote": true,
+	"no-reversed-links": true,
+	"no-space-in-code": true,
+	"no-space-in-emphasis": true,
+	"no-space-in-links": true,
+	"no-trailing-punctuation": true,
+	"no-trailing-spaces": {
+		"br_spaces": 0,
+		"strict": true
+	},
+	"ol-prefix": {
+		"style": "ordered"
+	},
+	"reference-links-images": true,
+	"single-h1": true,
+	"single-title": true,
+	"single-trailing-newline": true,
+	"strong-style": {
+		"style": "asterisk"
+	},
+	"table-column-count": true,
+	"table-pipe-style": {
+		"style": "leading_and_trailing"
+	},
+	"ul-indent": {
+		"indent": 4
+	},
+	"ul-style": {
+		"style": "sublist"
+	}
+}
