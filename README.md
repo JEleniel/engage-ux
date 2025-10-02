@@ -192,6 +192,31 @@ let rgb_blue = blue.to_rgb();
 let transparent_red = red.with_alpha(0.5);
 ```
 
+### User-Friendly Color Formats in Themes
+
+Themes support multiple color formats for user convenience:
+
+```json
+{
+	"colors": {
+		"primary": {"hex": "#1976D2"},
+		"secondary": {"rgb": [66, 66, 66]},
+		"background": {"hsl": [0, 0, 1.0]},
+		"error": {"rgb": [211, 47, 47, 0.9]},
+		"shadow": {"hex": "#00000033"}
+	}
+}
+```
+
+**Supported formats:**
+
+-	**Hex**: `{"hex": "#RRGGBB"}` or `{"hex": "#RRGGBBAA"}`
+-	**RGB**: `{"rgb": [r, g, b]}` (0-255) or `{"rgb": [r, g, b, a]}` (alpha: 0.0-1.0)
+-	**HSL**: `{"hsl": [h, s, l]}` (h: 0-360, s/l: 0.0-1.0) or `{"hsl": [h, s, l, a]}`
+-	**Legacy**: `{"space": "RGB", "components": [r, g, b, a]}` (0.0-1.0)
+
+See [docs/color-formats.md](docs/color-formats.md) for more details and examples.
+
 ## Design Philosophy
 
 ### What Engage UX Is

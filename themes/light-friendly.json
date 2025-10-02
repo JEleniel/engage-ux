@@ -1,0 +1,68 @@
+{
+	"name": "Light (User-Friendly Format)",
+	"colors": {
+		"primary": {
+			"hex": "#1976D2"
+		},
+		"secondary": {
+			"hex": "#424242"
+		},
+		"background": {
+			"hex": "#FFFFFF"
+		},
+		"surface": {
+			"hex": "#F5F5F5"
+		},
+		"error": {
+			"hex": "#D32F2F"
+		},
+		"warning": {
+			"hex": "#FFA000"
+		},
+		"success": {
+			"hex": "#388E3C"
+		},
+		"info": {
+			"hex": "#0288D1"
+		},
+		"text_primary": {
+			"hex": "#212121"
+		},
+		"text_secondary": {
+			"hex": "#757575"
+		},
+		"text_disabled": {
+			"hex": "#BDBDBD"
+		},
+		"custom": {}
+	},
+	"typography": {
+		"font_family": "system-ui, -apple-system, sans-serif",
+		"font_size_base": 16.0,
+		"font_size_small": 14.0,
+		"font_size_large": 20.0,
+		"line_height": 1.5
+	},
+	"spacing": {
+		"unit": 8.0,
+		"small": 8.0,
+		"medium": 16.0,
+		"large": 24.0
+	},
+	"borders": {
+		"width": 1.0,
+		"radius": 4.0,
+		"color": {
+			"hex": "#E0E0E0"
+		}
+	},
+	"shadows": {
+		"enabled": true,
+		"blur_radius": 4.0,
+		"offset_x": 0.0,
+		"offset_y": 2.0,
+		"color": {
+			"rgb": [0, 0, 0, 0.2]
+		}
+	}
+}
