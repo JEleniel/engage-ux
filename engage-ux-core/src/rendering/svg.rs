@@ -103,22 +103,20 @@ impl SvgDocument {
 
 	/// Parse width from root element
 	pub fn parse_dimensions(&mut self) {
-		if let Some(width_str) = self.root.get_attribute("width") {
-			if let Ok(w) = width_str.trim_end_matches("px").parse::<f32>() {
+		if let Some(width_str) = self.root.get_attribute("width")
+			&& let Ok(w) = width_str.trim_end_matches("px").parse::<f32>() {
 				self.width = Some(w);
 			}
-		}
 
-		if let Some(height_str) = self.root.get_attribute("height") {
-			if let Ok(h) = height_str.trim_end_matches("px").parse::<f32>() {
+		if let Some(height_str) = self.root.get_attribute("height")
+			&& let Ok(h) = height_str.trim_end_matches("px").parse::<f32>() {
 				self.height = Some(h);
 			}
-		}
 
 		if let Some(viewbox_str) = self.root.get_attribute("viewBox") {
 			let parts: Vec<&str> = viewbox_str.split_whitespace().collect();
-			if parts.len() == 4 {
-				if let (Ok(min_x), Ok(min_y), Ok(width), Ok(height)) = (
+			if parts.len() == 4
+				&& let (Ok(min_x), Ok(min_y), Ok(width), Ok(height)) = (
 					parts[0].parse::<f32>(),
 					parts[1].parse::<f32>(),
 					parts[2].parse::<f32>(),
@@ -126,7 +124,6 @@ impl SvgDocument {
 				) {
 					self.viewbox = Some((min_x, min_y, width, height));
 				}
-			}
 		}
 	}
 }
@@ -210,7 +207,7 @@ impl Default for SvgParser {
 
 /// Convert SVG element type from string
 impl SvgElementType {
-	pub fn from_str(s: &str) -> Option<Self> {
+	pub fn from_tag_name(s: &str) -> Option<Self> {
 		match s.to_lowercase().as_str() {
 			"svg" => Some(SvgElementType::Svg),
 			"path" => Some(SvgElementType::Path),
@@ -275,13 +272,16 @@ mod tests {
 	}
 
 	#[test]
-	fn test_svg_element_type_from_str() {
+	fn test_svg_element_type_from_tag_name() {
 		assert_eq!(
-			SvgElementType::from_str("circle"),
+			SvgElementType::from_tag_name("circle"),
 			Some(SvgElementType::Circle)
 		);
-		assert_eq!(SvgElementType::from_str("rect"), Some(SvgElementType::Rect));
-		assert_eq!(SvgElementType::from_str("unknown"), None);
+		assert_eq!(
+			SvgElementType::from_tag_name("rect"),
+			Some(SvgElementType::Rect)
+		);
+		assert_eq!(SvgElementType::from_tag_name("unknown"), None);
 	}
 
 	#[test]

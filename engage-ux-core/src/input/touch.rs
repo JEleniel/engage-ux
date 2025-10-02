@@ -223,11 +223,7 @@ impl GestureRecognizer {
 				None
 			}
 			TouchPhase::Moved => {
-				if let Some(initial) = self.initial_distance {
-					Some(distance / initial)
-				} else {
-					None
-				}
+				self.initial_distance.map(|initial| distance / initial)
 			}
 			_ => {
 				self.initial_distance = None;
@@ -251,11 +247,7 @@ impl GestureRecognizer {
 				None
 			}
 			TouchPhase::Moved => {
-				if let Some(initial) = self.initial_centroid {
-					Some((centroid.0 - initial.0, centroid.1 - initial.1))
-				} else {
-					None
-				}
+				self.initial_centroid.map(|initial| (centroid.0 - initial.0, centroid.1 - initial.1))
 			}
 			_ => {
 				self.initial_centroid = None;

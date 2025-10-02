@@ -47,6 +47,7 @@ pub enum AriaRole {
 
 /// Accessibility properties for a component
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub struct AccessibilityProps {
 	/// ARIA role
 	pub role: Option<AriaRole>,
@@ -72,23 +73,6 @@ pub struct AccessibilityProps {
 	pub live: Option<AriaLive>,
 }
 
-impl Default for AccessibilityProps {
-	fn default() -> Self {
-		Self {
-			role: None,
-			label: None,
-			description: None,
-			focusable: false,
-			tab_index: None,
-			expanded: None,
-			checked: None,
-			disabled: false,
-			required: false,
-			readonly: false,
-			live: None,
-		}
-	}
-}
 
 impl AccessibilityProps {
 	/// Create new accessibility properties

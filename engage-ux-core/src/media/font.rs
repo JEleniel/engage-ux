@@ -191,7 +191,7 @@ impl FontRegistry {
 		let family_name = font.family.name.clone();
 		self.fonts
 			.entry(family_name)
-			.or_insert_with(Vec::new)
+			.or_default()
 			.push(font);
 	}
 
