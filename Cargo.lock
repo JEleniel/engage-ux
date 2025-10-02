@@ -72,6 +72,7 @@ dependencies = [
 name = "engage-ux-core"
 version = "0.1.0-alpha.1"
 dependencies = [
+ "bitflags",
  "serde",
  "serde_json",
  "tokio",
@@ -82,6 +83,16 @@ name = "engage-ux-oal"
 version = "0.1.0-alpha.1"
 dependencies = [
  "engage-ux-core",
+]
+
+[[package]]
+name = "engage-ux-tests"
+version = "0.1.0-alpha.1"
+dependencies = [
+ "engage-ux-components",
+ "engage-ux-core",
+ "engage-ux-oal",
+ "engage-ux-themes",
 ]
 
 [[package]]

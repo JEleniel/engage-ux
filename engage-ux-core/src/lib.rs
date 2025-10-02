@@ -5,14 +5,19 @@
 //! - Event handling with Tokio
 //! - Component traits
 //! - Thread-safe primitives
+//! - Input handling (keyboard, mouse, touch)
+//! - Accessibility support
 
+pub mod accessibility;
 pub mod color;
 pub mod component;
 pub mod events;
+pub mod input;
 
 pub use color::{Color, ColorSpace};
 pub use component::Component;
 pub use events::{Event, EventHandler};
+pub use input::{InputEvent, InputHandler};
 
 #[cfg(test)]
 mod tests {
