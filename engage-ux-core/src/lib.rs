@@ -7,17 +7,22 @@
 //! - Thread-safe primitives
 //! - Input handling (keyboard, mouse, touch)
 //! - Accessibility support
+//! - SVG rendering (without script execution)
+//! - Media support (fonts and images)
 
 pub mod accessibility;
 pub mod color;
 pub mod component;
 pub mod events;
 pub mod input;
+pub mod media;
+pub mod rendering;
 
 pub use color::{Color, ColorSpace};
 pub use component::Component;
 pub use events::{Event, EventHandler};
 pub use input::{InputEvent, InputHandler};
+pub use rendering::{RenderError, SvgDocument, SvgParser};
 
 #[cfg(test)]
 mod tests {
