@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"allowUmdGlobalAccess": false,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"checkJs": true,
+		"emitDecoratorMetadata": true,
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"forceConsistentCasingInFileNames": true,
+		"lib": ["ESNext"],
+		"moduleResolution": "bundler",
+		"noErrorTruncation": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"noUncheckedSideEffectImports": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true
+	},
+	"extends": "./.svelte-kit/tsconfig.json"
+}
