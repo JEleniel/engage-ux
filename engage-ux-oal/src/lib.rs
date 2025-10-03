@@ -6,9 +6,11 @@
 //! - Input handling
 //! - File system access
 
+pub mod backends;
 pub mod platform;
 pub mod window;
 
+pub use backends::{BackendFactory, RenderBackend, WindowBackend, get_backend_factory};
 pub use platform::Platform;
 pub use window::Window;
 

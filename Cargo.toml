@@ -23,6 +23,11 @@ categories = [
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0" }
 tokio = { version = "1.41", features = ["full"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "gif", "bmp", "tiff"] }
+fontdue = { version = "0.9" }
+usvg = { version = "0.44" }
+resvg = { version = "0.44" }
+tiny-skia = { version = "0.11" }
 
 [profile.release]
 lto = true

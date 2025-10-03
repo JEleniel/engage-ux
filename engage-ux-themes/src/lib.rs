@@ -217,4 +217,200 @@ mod tests {
 		assert_eq!(theme.spacing.small, 8.0);
 		assert_eq!(theme.spacing.medium, 16.0);
 	}
+
+	#[test]
+	fn test_load_user_friendly_hex_format() {
+		let json = r##"{
+			"name": "Test Theme",
+			"colors": {
+				"primary": {"hex": "#1976D2"},
+				"secondary": {"hex": "#424242"},
+				"background": {"hex": "#FFFFFF"},
+				"surface": {"hex": "#F5F5F5"},
+				"error": {"hex": "#D32F2F"},
+				"warning": {"hex": "#FFA000"},
+				"success": {"hex": "#388E3C"},
+				"info": {"hex": "#0288D1"},
+				"text_primary": {"hex": "#212121"},
+				"text_secondary": {"hex": "#757575"},
+				"text_disabled": {"hex": "#BDBDBD"},
+				"custom": {}
+			},
+			"typography": {
+				"font_family": "system-ui",
+				"font_size_base": 16.0,
+				"font_size_small": 14.0,
+				"font_size_large": 20.0,
+				"line_height": 1.5
+			},
+			"spacing": {
+				"unit": 8.0,
+				"small": 8.0,
+				"medium": 16.0,
+				"large": 24.0
+			},
+			"borders": {
+				"width": 1.0,
+				"radius": 4.0,
+				"color": {"hex": "#E0E0E0"}
+			},
+			"shadows": {
+				"enabled": true,
+				"blur_radius": 4.0,
+				"offset_x": 0.0,
+				"offset_y": 2.0,
+				"color": {"rgb": [0, 0, 0, 0.2]}
+			}
+		}"##;
+		
+		let theme = Theme::from_json(json).unwrap();
+		assert_eq!(theme.name, "Test Theme");
+	}
+
+	#[test]
+	fn test_load_user_friendly_rgb_format() {
+		let json = r#"{
+			"name": "RGB Test",
+			"colors": {
+				"primary": {"rgb": [25, 118, 210]},
+				"secondary": {"rgb": [66, 66, 66]},
+				"background": {"rgb": [255, 255, 255]},
+				"surface": {"rgb": [245, 245, 245]},
+				"error": {"rgb": [211, 47, 47]},
+				"warning": {"rgb": [255, 160, 0]},
+				"success": {"rgb": [56, 142, 60]},
+				"info": {"rgb": [2, 136, 209]},
+				"text_primary": {"rgb": [33, 33, 33]},
+				"text_secondary": {"rgb": [117, 117, 117]},
+				"text_disabled": {"rgb": [189, 189, 189]},
+				"custom": {}
+			},
+			"typography": {
+				"font_family": "system-ui",
+				"font_size_base": 16.0,
+				"font_size_small": 14.0,
+				"font_size_large": 20.0,
+				"line_height": 1.5
+			},
+			"spacing": {
+				"unit": 8.0,
+				"small": 8.0,
+				"medium": 16.0,
+				"large": 24.0
+			},
+			"borders": {
+				"width": 1.0,
+				"radius": 4.0,
+				"color": {"rgb": [224, 224, 224]}
+			},
+			"shadows": {
+				"enabled": true,
+				"blur_radius": 4.0,
+				"offset_x": 0.0,
+				"offset_y": 2.0,
+				"color": {"rgb": [0, 0, 0, 0.2]}
+			}
+		}"#;
+		
+		let theme = Theme::from_json(json).unwrap();
+		assert_eq!(theme.name, "RGB Test");
+	}
+
+	#[test]
+	fn test_load_user_friendly_hsl_format() {
+		let json = r#"{
+			"name": "HSL Test",
+			"colors": {
+				"primary": {"hsl": [207, 0.79, 0.46]},
+				"secondary": {"hsl": [0, 0, 0.26]},
+				"background": {"hsl": [0, 0, 1.0]},
+				"surface": {"hsl": [0, 0, 0.96]},
+				"error": {"hsl": [0, 0.65, 0.51]},
+				"warning": {"hsl": [38, 1.0, 0.5]},
+				"success": {"hsl": [122, 0.43, 0.39]},
+				"info": {"hsl": [199, 0.98, 0.41]},
+				"text_primary": {"hsl": [0, 0, 0.13]},
+				"text_secondary": {"hsl": [0, 0, 0.46]},
+				"text_disabled": {"hsl": [0, 0, 0.74]},
+				"custom": {}
+			},
+			"typography": {
+				"font_family": "system-ui",
+				"font_size_base": 16.0,
+				"font_size_small": 14.0,
+				"font_size_large": 20.0,
+				"line_height": 1.5
+			},
+			"spacing": {
+				"unit": 8.0,
+				"small": 8.0,
+				"medium": 16.0,
+				"large": 24.0
+			},
+			"borders": {
+				"width": 1.0,
+				"radius": 4.0,
+				"color": {"hsl": [0, 0, 0.88]}
+			},
+			"shadows": {
+				"enabled": true,
+				"blur_radius": 4.0,
+				"offset_x": 0.0,
+				"offset_y": 2.0,
+				"color": {"hsl": [0, 0, 0, 0.2]}
+			}
+		}"#;
+		
+		let theme = Theme::from_json(json).unwrap();
+		assert_eq!(theme.name, "HSL Test");
+	}
+
+	#[test]
+	fn test_load_mixed_format() {
+		let json = r##"{
+			"name": "Mixed Format Test",
+			"colors": {
+				"primary": {"hex": "#1976D2"},
+				"secondary": {"rgb": [66, 66, 66]},
+				"background": {"hsl": [0, 0, 1.0]},
+				"surface": {"space": "RGB", "components": [0.96, 0.96, 0.96, 1.0]},
+				"error": {"hex": "#D32F2F"},
+				"warning": {"rgb": [255, 160, 0, 0.9]},
+				"success": {"hsl": [122, 0.43, 0.39, 0.95]},
+				"info": {"hex": "#0288D1FF"},
+				"text_primary": {"rgb": [33, 33, 33]},
+				"text_secondary": {"hsl": [0, 0, 0.46]},
+				"text_disabled": {"hex": "#BDBDBD"},
+				"custom": {}
+			},
+			"typography": {
+				"font_family": "system-ui",
+				"font_size_base": 16.0,
+				"font_size_small": 14.0,
+				"font_size_large": 20.0,
+				"line_height": 1.5
+			},
+			"spacing": {
+				"unit": 8.0,
+				"small": 8.0,
+				"medium": 16.0,
+				"large": 24.0
+			},
+			"borders": {
+				"width": 1.0,
+				"radius": 4.0,
+				"color": {"hex": "#E0E0E0"}
+			},
+			"shadows": {
+				"enabled": true,
+				"blur_radius": 4.0,
+				"offset_x": 0.0,
+				"offset_y": 2.0,
+				"color": {"rgb": [0, 0, 0, 0.2]}
+			}
+		}"##;
+		
+		let theme = Theme::from_json(json).unwrap();
+		assert_eq!(theme.name, "Mixed Format Test");
+	}
 }

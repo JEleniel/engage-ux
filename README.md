@@ -24,28 +24,39 @@ Engage UX is organized as a Cargo workspace with the following crates:
 ### Core Crates
 
 - **engage-ux-core**: Foundation layer providing:
-
-    + Color system (RGB/HSL support)
-    + Component trait and base structures
-    + Event system using Tokio signals
-    + Thread-safe primitives
+	- Color system (RGB/HSL support with user-friendly formats)
+	- Component trait and base structures
+	- Event system using Tokio signals
+	- Input system (keyboard, mouse, touch with gesture recognition)
+	- Accessibility infrastructure (ARIA, focus management, screen readers)
+	- Rendering abstractions (SVG parsing, font and image loading)
+	- Thread-safe primitives
 
 - **engage-ux-oal**: OS Abstraction Layer providing:
-
-    + Platform detection and initialization
-    + Window management abstractions
-    + Platform-specific implementations
+	- Platform detection and initialization
+	- Window management abstractions
+	- Graphics rendering backend interfaces
+	- Platform-specific factory patterns
 
 - **engage-ux-themes**: Theme system providing:
+	- JSON-based theme configuration
+	- Default light and dark themes
+	- User-friendly color formats (hex, RGB, HSL)
+	- Color palettes, typography, spacing, borders, and shadows
 
-    + JSON-based theme configuration
-    + Default light and dark themes
-    + Color palettes, typography, spacing, borders, and shadows
+- **engage-ux-components**: UI components library providing:
+	- All 50 components from the specification
+	- Informational components (Label, Text, Icon, Image, Avatar, Progress, etc.)
+	- Interactive components (Button, TextInput, Checkbox, Radio, Toggle, Slider, etc.)
+	- Layout components (Container, Card, Table, Window)
+	- Notification components (Badge, Banner, Toast)
+	- Menu components (Drawer, Dropdown, Hamburger Menu)
+	- Dialog components (Alert, Confirm, Custom Modal, File dialogs)
 
-- **engage-ux-components**: UI components including:
-    + Informational (Label, Text, Icon, Image)
-    + Interactive (Button, TextInput, Checkbox, Radio, Toggle, Slider)
-    + Layout (Container, Card)
+- **engage-ux-tests**: Integration test suite providing:
+	- Input system integration tests
+	- Rendering pipeline tests
+	- Theme integration tests
 
 ## Components
 
@@ -192,6 +203,31 @@ let rgb_blue = blue.to_rgb();
 let transparent_red = red.with_alpha(0.5);
 ```
 
+### User-Friendly Color Formats in Themes
+
+Themes support multiple color formats for user convenience:
+
+```json
+{
+	"colors": {
+		"primary": {"hex": "#1976D2"},
+		"secondary": {"rgb": [66, 66, 66]},
+		"background": {"hsl": [0, 0, 1.0]},
+		"error": {"rgb": [211, 47, 47, 0.9]},
+		"shadow": {"hex": "#00000033"}
+	}
+}
+```
+
+**Supported formats:**
+
+-	**Hex**: `{"hex": "#RRGGBB"}` or `{"hex": "#RRGGBBAA"}`
+-	**RGB**: `{"rgb": [r, g, b]}` (0-255) or `{"rgb": [r, g, b, a]}` (alpha: 0.0-1.0)
+-	**HSL**: `{"hsl": [h, s, l]}` (h: 0-360, s/l: 0.0-1.0) or `{"hsl": [h, s, l, a]}`
+-	**Legacy**: `{"space": "RGB", "components": [r, g, b, a]}` (0.0-1.0)
+
+See [docs/color-formats.md](docs/color-formats.md) for more details and examples.
+
 ## Design Philosophy
 
 ### What Engage UX Is
@@ -208,7 +244,7 @@ let transparent_red = red.with_alpha(0.5);
 - **Not Reactive**: Engage UX is not reactive and is decoupled from data/logic handling
 - **Not Hybrid**: No web technologies or JavaScript - pure native code
 - **Not a Framework**: Does not provide state management, routing, or business logic
-- **Not an SVG Renderer**: SVG graphics are supported but scripts are not executed (security feature)
+- **Not an SVG Script Executor**: SVG graphics are supported but scripts are not executed (security feature)
 
 ## Development
 
@@ -255,14 +291,39 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## Roadmap
 
-- [ ] Complete all component implementations
-- [ ] Add comprehensive examples
-- [ ] Implement platform-specific OAL backends
-- [ ] Add WCAG AAA accessibility features
-- [ ] Reach 90% test coverage
-- [ ] Add interactive/functional tests
-- [ ] Support for additional image and font formats
-- [ ] SVG rendering engine (without script execution)
+**Phase 1 - Complete ✅**
+- [x] Complete all 50 component implementations
+- [x] Add comprehensive examples
+- [x] Core color, component, event, and theme systems
+- [x] 223 component tests passing
+
+**Phase 2 - Complete ✅**
+- [x] User-friendly color formats (hex, RGB, HSL)
+- [x] Complete input system (keyboard, mouse, touch with gestures)
+- [x] Accessibility infrastructure (WCAG AAA ready)
+- [x] Graphics rendering backend architecture
+- [x] Window management backend interfaces
+- [x] Secure SVG parsing (with script blocking)
+- [x] Font loading and management system
+- [x] Image format support (PNG, JPEG, WebP, GIF, BMP, TIFF)
+- [x] Integration tests (8 tests)
+- [x] Comprehensive documentation
+
+**Phase 3 - Planned**
+- [ ] Framework for custom component development
+- [ ] Animation system
+- [ ] Drag and drop support
+- [ ] Custom input handler extensibility
+
+**Phase 4 - Planned**
+- [ ] Relative value support for properties (rb, rp, %)
+- [ ] Layout properties in themes
+- [ ] Multi-monitor configuration support
+
+**Future - Platform-Specific**
+- [ ] Implement platform-specific OAL backends (Direct2D, Core Graphics, Cairo, etc.)
+- [ ] Native window management for each OS
+- [ ] End-to-end functional tests (requires platform backends)
 - [ ] Documentation site
 
 ## Support
