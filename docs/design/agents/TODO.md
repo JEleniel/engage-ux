@@ -1,5 +1,16 @@
 # Implementation Roadmap
 
+## Architecture Reference
+
+Before implementing any features, review the architecture documentation in `docs/design/architecture/`:
+
+- **[System Architecture](../architecture/System_Architecture.md)** - Understand the layered architecture and crate organization
+- **[Component Architecture](../architecture/Component_Architecture.md)** - Learn component patterns and rendering pipeline
+- **[Data Flow](../architecture/Data_Flow.md)** - Understand how data flows through the system
+- **[NFRs](../architecture/NFRs.md)** - Ensure all implementations meet non-functional requirements (security, accessibility, performance)
+
+Each requirement document includes detailed specifications and acceptance criteria for implementation.
+
 ## Phase 2 - COMPLETE ✅
 
 All Phase 2 tasks that can be implemented in pure Rust have been completed. The remaining items require platform-specific implementations with OS APIs and are documented below.
@@ -138,3 +149,115 @@ The following items require OS-specific APIs and external platform libraries:
     - The entire connection must be encrypted with a minimum equivalent to TLS 1.3 (you may use HTTPS and TLS 1.3 if it will be performant enough). Both client and server must support using the OS Certificate Authorities as well as configurable additional CAs. The server must support both encrypted and unencrypted key files.
     - All connections must be fully authenticated. Support for built in Windows authentication (including Active Directory), Linux PAM, LDAP, and OAuth are required. Support for basic user/password authentication will not be supported.
     - Minimally, the system must be able to render, send, and display 24fps video without noticable stuttering or any degradation. Ideally, it should be able to support 4k 120fps, given sufficient bandwidth.
+
+## Implementation Guidelines
+
+### For Machine Agents
+
+When implementing features, follow these guidelines:
+
+#### 1. Review Architecture First
+- Read the relevant architecture documents before coding
+- Understand the requirements and acceptance criteria
+- Review the NFRs to ensure compliance
+- Study the diagrams to understand system interactions
+
+#### 2. Follow Design Patterns
+- Use trait-based architecture (Component, RenderBackend, WindowBackend)
+- Apply factory pattern for platform-specific implementations
+- Use observer pattern for events (broadcast channels)
+- Follow strategy pattern for platform-specific behavior
+- Use adapter pattern for OS API integration
+
+#### 3. Ensure Quality
+- All code must pass `cargo clippy` with no warnings
+- All code must be formatted with `rustfmt`
+- Use tabs for indentation (4 spaces width)
+- Add comprehensive unit tests (aim for 90% coverage)
+- Add integration tests for system interactions
+- All public APIs must have documentation comments with examples
+
+#### 4. Maintain Security
+- **NEVER** use `unsafe` code (enforced by `#![forbid(unsafe_code)]`)
+- Validate all external input
+- Clamp all numeric values to safe ranges
+- Block script execution in SVG files
+- Use only actively maintained dependencies (updated within 6 months)
+
+#### 5. Ensure Accessibility
+- All interactive components must implement InputHandler trait
+- Add appropriate ARIA roles and labels
+- Ensure 7:1 contrast ratio for WCAG AAA
+- Support keyboard navigation
+- Implement focus management
+- Add screen reader announcements
+
+#### 6. Optimize Performance
+- Target 60 FPS (16ms per frame)
+- Use lazy loading for media assets
+- Cache layout calculations until invalidated
+- Batch render commands
+- Use async/await for long-running operations
+- Profile and optimize hot paths
+
+#### 7. Platform Abstraction
+- Keep platform-specific code in OAL layer
+- Use factory pattern to create platform backends
+- Implement unified interfaces across platforms
+- Test with stub backends for platform independence
+- Ensure feature parity across all platforms
+
+#### 8. Thread Safety
+- Use Arc<RwLock<T>> for shared component state
+- Use Tokio channels for event distribution
+- Avoid locks in hot paths where possible
+- Prevent deadlocks through proper lock ordering
+- Use atomic types for simple shared state
+
+#### 9. Error Handling
+- Return Result types for fallible operations
+- Provide clear, actionable error messages
+- Handle errors gracefully (no panics in production)
+- Log errors appropriately
+- Implement fallback behavior where possible
+
+#### 10. Testing Strategy
+- Unit tests for all components and systems
+- Integration tests for system interactions
+- Test error conditions and edge cases
+- Mock platform backends for testing
+- Ensure tests are deterministic (no flaky tests)
+- Keep tests fast (complete in under 60 seconds)
+
+### Component Implementation Checklist
+
+When implementing a new component:
+
+- [ ] Implement `Component` trait
+- [ ] Add `ComponentProperties` field
+- [ ] Implement builder pattern for construction
+- [ ] Add event callbacks (on_click, on_change, etc.)
+- [ ] Add accessibility properties (ARIA role, label)
+- [ ] Support theme colors and styles
+- [ ] Implement rendering logic
+- [ ] Add comprehensive unit tests (creation, properties, events, state)
+- [ ] Add documentation comments with examples
+- [ ] Test with both light and dark themes
+- [ ] Verify keyboard navigation works
+- [ ] Verify screen reader announcements
+- [ ] Profile performance if interactive
+
+### Backend Implementation Checklist
+
+When implementing a platform backend:
+
+- [ ] Implement platform-specific trait (WindowBackend or RenderBackend)
+- [ ] Handle all required operations
+- [ ] Convert between Engage types and platform types
+- [ ] Handle platform-specific events
+- [ ] Ensure thread safety
+- [ ] Handle errors gracefully
+- [ ] Add platform-specific tests
+- [ ] Document platform-specific requirements
+- [ ] Ensure performance meets targets
+- [ ] Verify memory is released properly

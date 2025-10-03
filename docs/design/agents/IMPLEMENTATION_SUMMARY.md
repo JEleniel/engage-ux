@@ -4,6 +4,22 @@
 
 This document summarizes the **COMPLETE** implementation of Engage UX, a fully cross-platform Rust UI toolkit with **ALL 50 components** from the specification and **223 passing tests**.
 
+## Architecture Documentation
+
+Comprehensive architecture documentation is available in the `docs/design/architecture/` folder:
+
+- **[System Architecture](../architecture/System_Architecture.md)** - High-level architecture, crate organization, design patterns
+- **[Component Architecture](../architecture/Component_Architecture.md)** - Component hierarchy, categories, state management, rendering
+- **[Data Flow](../architecture/Data_Flow.md)** - Input flow, rendering pipeline, event system, theme application
+- **Requirements Documents**:
+  - [Requirement 1: Core System](../architecture/Requirement_1_Core_System.md) - Color, component, events, input, accessibility, media
+  - [Requirement 2: UI Components](../architecture/Requirement_2_UI_Components.md) - All 50 components across 9 categories
+  - [Requirement 3: Theme System](../architecture/Requirement_3_Theme_System.md) - JSON themes, user-friendly colors, typography
+  - [Requirement 4: OS Abstraction](../architecture/Requirement_4_OS_Abstraction.md) - Platform detection, window management, rendering backends
+- **[Non-Functional Requirements (NFRs)](../architecture/NFRs.md)** - Security, accessibility (WCAG AAA), performance, reliability, testing, maintainability
+
+These documents provide detailed specifications, acceptance criteria, and architecture diagrams for all system components.
+
 ## What Was Built
 
 ### Workspace Structure
