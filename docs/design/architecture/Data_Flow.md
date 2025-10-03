@@ -97,9 +97,9 @@ flowchart TB
     style LAYOUT fill:#ffeb3b
     style RENDER fill:#ffc107
     style QUEUE fill:#ff9800
-    style EXEC fill:#ff5722
-    style BACKEND fill:#f44336
-    style DISPLAY fill:#e91e63
+    style EXEC fill:#ff7043
+    style BACKEND fill:#ff7043
+    style DISPLAY fill:#ce93d8
 ```
 
 ## Theme Application Flow
@@ -394,12 +394,12 @@ flowchart TB
     style TREE fill:#9fa8da
     style FOCUS fill:#9fa8da
     style SR fill:#9fa8da
-    style WIN_A11Y fill:#7986cb
-    style MAC_A11Y fill:#7986cb
-    style LIN_A11Y fill:#7986cb
-    style AND_A11Y fill:#7986cb
-    style IOS_A11Y fill:#7986cb
-    style ASSISTIVE fill:#5c6bc0
+    style WIN_A11Y fill:#9fa8da
+    style MAC_A11Y fill:#9fa8da
+    style LIN_A11Y fill:#9fa8da
+    style AND_A11Y fill:#9fa8da
+    style IOS_A11Y fill:#9fa8da
+    style ASSISTIVE fill:#9fa8da
 ```
 
 ## Font and Image Loading Flow
@@ -501,17 +501,17 @@ flowchart TB
     style PROCESS fill:#a5d6a7
     style EXEC fill:#81c784
     style SUCCESS fill:#66bb6a
-    style ERROR fill:#ef5350
-    style VALIDATION_ERR fill:#f44336
-    style IO_ERR fill:#f44336
-    style PARSE_ERR fill:#f44336
-    style RUNTIME_ERR fill:#f44336
+    style ERROR fill:#ff7043
+    style VALIDATION_ERR fill:#ff7043
+    style IO_ERR fill:#ff7043
+    style PARSE_ERR fill:#ff7043
+    style RUNTIME_ERR fill:#ff7043
     style LOG fill:#ff7043
     style RECOVER fill:#ffa726
     style USE_FALLBACK fill:#ffb74d
-    style PROPAGATE fill:#ff5722
+    style PROPAGATE fill:#ff7043
     style END_SUCCESS fill:#4caf50
-    style END_ERROR fill:#d32f2f
+    style END_ERROR fill:#ff7043
 ```
 
 ## Performance Optimization Data Flow

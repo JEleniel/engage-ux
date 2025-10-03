@@ -96,10 +96,10 @@ graph TB
     style GRAPH fill:#4fc3f7
     style NOTIF fill:#29b6f6
     style MENU fill:#03a9f4
-    style WIN fill:#039be5
-    style PANE fill:#0288d1
-    style DIALOG fill:#0277bd
-    style LAYOUT fill:#01579b
+    style WIN fill:#03a9f4
+    style PANE fill:#03a9f4
+    style DIALOG fill:#03a9f4
+    style LAYOUT fill:#03a9f4
 ```
 
 ## Informational Components Detail
@@ -551,9 +551,9 @@ flowchart TB
     style PREP fill:#ffeb3b
     style APPLY_THEME fill:#ffc107
     style CALC_LAYOUT fill:#ff9800
-    style GEN_CMD fill:#ff5722
-    style SUBMIT fill:#f44336
-    style END_RENDER fill:#e91e63
+    style GEN_CMD fill:#ff7043
+    style SUBMIT fill:#ff7043
+    style END_RENDER fill:#ce93d8
 ```
 
 ## Component Theming Integration
@@ -659,7 +659,7 @@ graph LR
     style COMP fill:#e8eaf6
     style ROLE fill:#c5cae9
     style TAB fill:#9fa8da
-    style ANNOUNCE fill:#7986cb
+    style ANNOUNCE fill:#9fa8da
 ```
 
 ## Performance Optimizations

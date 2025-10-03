@@ -86,11 +86,11 @@ graph TB
     style PLATFORM fill:#4fc3f7
     style WINDOW fill:#4fc3f7
     style GRAPHICS fill:#4fc3f7
-    style WIN fill:#29b6f6
-    style MAC fill:#29b6f6
-    style LIN fill:#29b6f6
-    style AND fill:#29b6f6
-    style IOS fill:#29b6f6
+    style WIN fill:#03a9f4
+    style MAC fill:#03a9f4
+    style LIN fill:#03a9f4
+    style AND fill:#03a9f4
+    style IOS fill:#03a9f4
 ```
 
 ## Crate Organization
@@ -250,7 +250,7 @@ flowchart TB
     style CAIRO fill:#ff9800
     style CANVAS fill:#ff9800
     style CGIO fill:#ff9800
-    style OUTPUT fill:#f44336
+    style OUTPUT fill:#ff7043
 ```
 
 ## Theme System Architecture
@@ -413,11 +413,11 @@ graph TB
     style ARIA fill:#ce93d8
     style FOCUS fill:#ce93d8
     style SR fill:#ce93d8
-    style MSAA fill:#ba68c8
-    style NSA11Y fill:#ba68c8
-    style ATSPI fill:#ba68c8
-    style TALK fill:#ba68c8
-    style VOICE fill:#ba68c8
+    style MSAA fill:#ce93d8
+    style NSA11Y fill:#ce93d8
+    style ATSPI fill:#ce93d8
+    style TALK fill:#ce93d8
+    style VOICE fill:#ce93d8
 ```
 
 ## Design Patterns Used

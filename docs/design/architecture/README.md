@@ -12,6 +12,7 @@ This directory contains comprehensive architecture documentation for Engage UX, 
 
 ### Architecture Diagrams
 
+- **[Color Scheme](Color_Scheme.md)** - WCAG AAA-compliant color palette used across all diagrams
 - **[System Architecture](System_Architecture.md)** - High-level system design with 8 Mermaid diagrams
   - Layered architecture
   - Crate organization
