@@ -1,14 +1,14 @@
 # Color Format Specification
 
-Engage UX supports multiple color formats for user convenience and flexibility. All formats can be used in theme JSON files.
+Engage UX supports multiple color formats for maximum convenience and flexibility. All formats can be used interchangeably in theme JSON files, allowing you to choose the most appropriate format for each color in your theme.
 
 ## Supported Formats
 
 ### 1. Hex Format
 
-The most common format for web colors.
+The most common format for web colors. Perfect for copying colors directly from design tools like Figma, Adobe XD, or Sketch.
 
-**Without Alpha:**
+**Without Alpha (fully opaque):**
 
 ```json
 {
@@ -18,7 +18,7 @@ The most common format for web colors.
 }
 ```
 
-**With Alpha:**
+**With Alpha (transparency):**
 
 ```json
 {
@@ -28,15 +28,17 @@ The most common format for web colors.
 }
 ```
 
--	6 characters for RGB (`#RRGGBB`)
--	8 characters for RGBA (`#RRGGBBAA`)
--	Alpha values: `00` (transparent) to `FF` (opaque)
+**Format details:**
+- 6 characters for RGB: `#RRGGBB` where each pair is a hexadecimal value (00-FF)
+- 8 characters for RGBA: `#RRGGBBAA` where the last pair is alpha
+- Alpha values: `00` (fully transparent) to `FF` (fully opaque)
+- Case-insensitive: `#FFFFFF` and `#ffffff` are equivalent
 
 ### 2. RGB Array Format
 
-Convenient for programmatic color generation.
+Standard RGB format using familiar 0-255 values. Ideal for programmatic color generation and working with image processing tools.
 
-**Without Alpha (defaults to 1.0):**
+**Without Alpha (defaults to fully opaque):**
 
 ```json
 {
@@ -46,7 +48,7 @@ Convenient for programmatic color generation.
 }
 ```
 
-**With Alpha:**
+**With Alpha (transparency):**
 
 ```json
 {
@@ -56,14 +58,16 @@ Convenient for programmatic color generation.
 }
 ```
 
--	Red, Green, Blue: `0-255`
--	Alpha: `0.0` (transparent) to `1.0` (opaque)
+**Format details:**
+- Red, Green, Blue: Integer values from `0` to `255`
+- Alpha: Decimal value from `0.0` (fully transparent) to `1.0` (fully opaque)
+- Alpha is optional; omitting it defaults to `1.0` (fully opaque)
 
 ### 3. HSL Array Format
 
-Useful for color manipulation and theming.
+Hue-Saturation-Lightness format. Perfect for color manipulation, creating color schemes, and dynamic theming.
 
-**Without Alpha (defaults to 1.0):**
+**Without Alpha (defaults to fully opaque):**
 
 ```json
 {
@@ -73,7 +77,7 @@ Useful for color manipulation and theming.
 }
 ```
 
-**With Alpha:**
+**With Alpha (transparency):**
 
 ```json
 {
@@ -83,14 +87,21 @@ Useful for color manipulation and theming.
 }
 ```
 
--	Hue: `0-360` degrees
--	Saturation: `0.0-1.0` (0% to 100%)
--	Lightness: `0.0-1.0` (0% to 100%)
--	Alpha: `0.0-1.0` (transparent to opaque)
+**Format details:**
+- Hue: Degrees from `0` to `360` on the color wheel (0=red, 120=green, 240=blue)
+- Saturation: Decimal from `0.0` (grayscale) to `1.0` (full color) representing 0% to 100%
+- Lightness: Decimal from `0.0` (black) to `1.0` (white) representing 0% to 100%
+- Alpha: Decimal from `0.0` (fully transparent) to `1.0` (fully opaque)
+- Alpha is optional; omitting it defaults to `1.0` (fully opaque)
+
+**Why use HSL?**
+- Easy to create lighter/darker variants by adjusting lightness
+- Simple to create complementary colors by adjusting hue
+- Intuitive for creating color schemes (monochromatic, analogous, triadic, etc.)
 
 ### 4. Legacy Format (Backward Compatible)
 
-The original internal format, still supported for backward compatibility.
+The original internal format, still fully supported for backward compatibility with existing themes.
 
 ```json
 {
@@ -101,8 +112,12 @@ The original internal format, still supported for backward compatibility.
 }
 ```
 
--	RGB components: `0.0-1.0`
--	Alpha: `0.0-1.0`
+**Format details:**
+- RGB components: Decimal values from `0.0` to `1.0` (normalized)
+- Alpha: Decimal value from `0.0` to `1.0`
+- All four components are required (Red, Green, Blue, Alpha)
+
+**Note:** While this format is still supported, the new user-friendly formats (hex, RGB, HSL) are recommended for better readability and easier theme maintenance.
 
 ## Format Mixing
 
@@ -222,10 +237,26 @@ You can mix different formats within the same theme file:
 
 ## Implementation Details
 
--	All color formats are converted to an internal representation for processing
--	Serialization uses the legacy format for consistency
--	Deserialization accepts all formats automatically
--	RGB values are normalized to `0.0-1.0` internally
--	HSL hue values are normalized using modulo 360
--	Alpha values are clamped to `0.0-1.0`
--	Invalid color formats return descriptive error messages
+### Automatic Format Detection
+
+Engage UX automatically detects which format you're using based on the JSON structure:
+- If it has a `"hex"` key, it's parsed as hex format
+- If it has an `"rgb"` key, it's parsed as RGB array format
+- If it has an `"hsl"` key, it's parsed as HSL array format
+- If it has `"space"` and `"components"` keys, it's parsed as legacy format
+
+### Internal Processing
+
+- All color formats are converted to an internal representation for processing
+- Serialization uses the legacy format for consistency in the codebase
+- Deserialization accepts all formats automatically without configuration
+- RGB values (0-255) are normalized to `0.0-1.0` internally
+- HSL hue values are normalized using modulo 360 (e.g., 380° becomes 20°)
+- Alpha values are clamped to `0.0-1.0` range
+- Invalid color formats return descriptive error messages
+
+### Performance
+
+- Format detection and conversion happens once during theme loading
+- No performance overhead during runtime
+- All conversions are validated for correctness
