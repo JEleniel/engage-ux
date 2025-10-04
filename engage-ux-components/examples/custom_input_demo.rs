@@ -118,28 +118,12 @@ impl Component for GameComponent {
 		self.properties.id
 	}
 
-	fn is_visible(&self) -> bool {
-		self.properties.visible
+	fn properties(&self) -> &ComponentProperties {
+		&self.properties
 	}
 
-	fn set_visible(&mut self, visible: bool) {
-		self.properties.visible = visible;
-	}
-
-	fn is_enabled(&self) -> bool {
-		self.properties.enabled
-	}
-
-	fn set_enabled(&mut self, enabled: bool) {
-		self.properties.enabled = enabled;
-	}
-
-	fn bounds(&self) -> Rect {
-		self.properties.bounds
-	}
-
-	fn set_bounds(&mut self, bounds: Rect) {
-		self.properties.bounds = bounds;
+	fn properties_mut(&mut self) -> &mut ComponentProperties {
+		&mut self.properties
 	}
 }
 
