@@ -11,15 +11,19 @@
 //! - Media support (fonts and images)
 
 pub mod accessibility;
+pub mod animation;
 pub mod color;
 pub mod component;
+pub mod drag_drop;
 pub mod events;
 pub mod input;
 pub mod media;
 pub mod rendering;
 
+pub use animation::{Animation, AnimationController, AnimationState, Easing};
 pub use color::{Color, ColorSpace};
 pub use component::Component;
+pub use drag_drop::{DragData, DragEvent, DragManager, DragOperation, DragSource, DropTarget};
 pub use events::{Event, EventHandler};
 pub use input::{InputEvent, InputHandler};
 pub use rendering::{RenderError, SvgDocument, SvgParser};
