@@ -15,6 +15,9 @@ pub struct Theme {
 	pub spacing: Spacing,
 	pub borders: BorderStyle,
 	pub shadows: ShadowStyle,
+	/// Component-specific layouts mapped by component ID or name
+	#[serde(default)]
+	pub component_layouts: HashMap<String, engage_ux_core::layout::Layout>,
 }
 
 /// Color palette for a theme
@@ -116,6 +119,7 @@ impl Theme {
 				offset_y: 2.0,
 				color: Color::rgb(0.0, 0.0, 0.0, 0.2),
 			},
+			component_layouts: HashMap::new(),
 		}
 	}
 
@@ -162,6 +166,7 @@ impl Theme {
 				offset_y: 2.0,
 				color: Color::rgb(0.0, 0.0, 0.0, 0.4),
 			},
+			component_layouts: HashMap::new(),
 		}
 	}
 

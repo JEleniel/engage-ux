@@ -166,6 +166,7 @@ name = "engage-ux-oal"
 version = "0.1.0-alpha.1"
 dependencies = [
  "engage-ux-core",
+ "serde",
 ]
 
 [[package]]
