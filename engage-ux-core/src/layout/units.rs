@@ -83,8 +83,8 @@ impl Unit {
 		}
 
 		// Try percentage first
-		if s.ends_with('%') {
-			let value = s[..s.len() - 1]
+		if let Some(stripped) = s.strip_suffix('%') {
+			let value = stripped
 				.trim()
 				.parse::<f32>()
 				.map_err(|e| format!("Invalid percentage value: {}", e))?;
@@ -92,8 +92,8 @@ impl Unit {
 		}
 
 		// Try rb
-		if s.ends_with("rb") {
-			let value = s[..s.len() - 2]
+		if let Some(stripped) = s.strip_suffix("rb") {
+			let value = stripped
 				.trim()
 				.parse::<f32>()
 				.map_err(|e| format!("Invalid rb value: {}", e))?;
@@ -101,8 +101,8 @@ impl Unit {
 		}
 
 		// Try rp
-		if s.ends_with("rp") {
-			let value = s[..s.len() - 2]
+		if let Some(stripped) = s.strip_suffix("rp") {
+			let value = stripped
 				.trim()
 				.parse::<f32>()
 				.map_err(|e| format!("Invalid rp value: {}", e))?;
@@ -110,11 +110,7 @@ impl Unit {
 		}
 
 		// Try pixels (with or without "px" suffix)
-		let value_str = if s.ends_with("px") {
-			&s[..s.len() - 2]
-		} else {
-			s
-		};
+		let value_str = s.strip_suffix("px").unwrap_or(s);
 
 		let value = value_str
 			.trim()
