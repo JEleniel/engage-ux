@@ -236,6 +236,81 @@ Themes support multiple color formats for user convenience:
 
 See [docs/color-formats.md](docs/color-formats.md) for more details and examples.
 
+### Example: Layout System
+
+The layout system provides flexible positioning and sizing with relative units:
+
+```rust
+use engage_ux_core::layout::{Layout, Size, Unit};
+
+// Create a layout with relative units
+let layout = Layout::new()
+    .with_left(Unit::rb(1.0))           // 1 × theme base size
+    .with_top(Unit::percent(10.0))      // 10% of parent height
+    .with_width(Size::Fixed(Unit::pixels(200.0)))
+    .with_height(Size::Fill)            // Fill available space
+    .with_min_width(Unit::pixels(150.0))
+    .with_max_width(Unit::pixels(400.0));
+
+// Calculate actual pixel bounds
+let bounds = layout.calculate_bounds(
+    800.0,  // parent width
+    600.0,  // parent height
+    16.0,   // theme base size
+    20.0,   // inherited size
+);
+```
+
+**Relative Units:**
+- `rb` - Relative to theme base (like `em` in CSS)
+- `rp` - Relative to inherited size (like `rem` in CSS)
+- `%` - Percentage of parent dimension
+- `px` - Absolute pixels
+
+**Size Modes:**
+- `Fixed` - Specific size in any unit
+- `Fill` - Fill available space in parent
+- `FitContent` - Size to fit content (calculated later)
+
+See [docs/layout-system.md](docs/layout-system.md) for complete documentation.
+
+### Example: Multi-Monitor Support
+
+Configure multiple monitors with different layout modes:
+
+```rust
+use engage_ux_oal::{Monitor, MonitorConfiguration, MonitorLayoutMode};
+
+// Create configuration with unified virtual screen
+let mut config = MonitorConfiguration::new(MonitorLayoutMode::Unified);
+
+// Add primary monitor
+config.add_monitor(
+    Monitor::new(1, "Primary Display".to_string(), (2560, 1440))
+        .with_position(0, 0)
+        .with_scale_factor(1.5)
+        .as_primary()
+        .with_refresh_rate(144)
+);
+
+// Add secondary monitor
+config.add_monitor(
+    Monitor::new(2, "Secondary Display".to_string(), (1920, 1080))
+        .with_position(2560, 0)
+);
+
+// Get total virtual screen size
+let virtual_bounds = config.virtual_bounds().unwrap();
+
+// Find which monitor contains a point
+let monitor = config.monitor_at_point(3000, 500);
+```
+
+**Monitor Modes:**
+- `Unified` - All monitors as one virtual surface
+- `Separate` - Each monitor independent
+- `Mixed` - Custom groupings for complex setups
+
 ## Design Philosophy
 
 ### What Engage UX Is
@@ -325,21 +400,22 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 - [x] Integration tests for all new features (29 tests total)
 - [x] Comprehensive examples and documentation
 
-**Phase 4 - Planned**
-- [ ] Framework for custom component development
-- [ ] Animation system
-- [ ] Drag and drop support
-- [ ] Custom input handler extensibility
+**Phase 5 - Complete ✅**
+- [x] Relative unit system (rb, rp, %, px)
+- [x] Layout system with positioning and sizing
+- [x] Size constraints (min/max width/height)
+- [x] Multiple sizing modes (Fixed, Fill, FitContent)
+- [x] Theme integration for component layouts
+- [x] Multi-monitor configuration support (Unified, Separate, Mixed modes)
+- [x] 41 new tests (30 layout + 11 monitor)
+- [x] Complete documentation and working examples
 
-**Phase 4 - Planned**
-- [ ] Relative value support for properties (rb, rp, %)
-- [ ] Layout properties in themes
-- [ ] Multi-monitor configuration support
-
-**Future - Platform-Specific**
+**Future - Phase 4 (Platform-Specific)**
 - [ ] Implement platform-specific OAL backends (Direct2D, Core Graphics, Cairo, etc.)
 - [ ] Native window management for each OS
+- [ ] Screen reader integration (MSAA, NSAccessibility, AT-SPI, TalkBack, VoiceOver)
 - [ ] End-to-end functional tests (requires platform backends)
+- [ ] Visual regression testing
 - [ ] Documentation site
 
 ## Support
