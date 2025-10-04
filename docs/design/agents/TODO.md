@@ -91,29 +91,6 @@ All Phase 2 tasks that can be implemented in pure Rust have been completed. The 
 	- Theme integration (2 tests)
 	- All tests passing with 100% success rate
 
-### Future Work (Requires Platform-Specific Implementations)
-
-The following items require OS-specific APIs and external platform libraries:
-
-#### Platform-Specific Backends ⏳
-- **Windows**: Direct2D/Direct3D for rendering, Win32 APIs for windows
-- **macOS**: Core Graphics for rendering, Cocoa for windows
-- **Linux**: Cairo/Skia for rendering, X11/Wayland for windows
-- **Android**: Canvas API, NDK integration
-- **iOS**: Core Graphics, UIKit integration
-
-#### Screen Reader Integration ⏳
-- **Windows**: Microsoft Active Accessibility (MSAA) or UI Automation
-- **macOS**: NSAccessibility APIs
-- **Linux**: AT-SPI (Assistive Technology Service Provider Interface)
-- **Android**: TalkBack integration
-- **iOS**: VoiceOver integration
-
-#### Advanced Testing ⏳
-- End-to-end functional tests (requires working platform backends)
-- Platform-specific testing (requires OS integration)
-- Visual regression testing
-
 ## Phase 3 - COMPLETE ✅
 
 All Phase 3 tasks have been completed with production-ready implementations.
@@ -167,17 +144,38 @@ All Phase 3 tasks have been completed with production-ready implementations.
 	- Input system integration tests (3 tests)
 	- All tests passing with 100% success rate
 
+---
+
 ## Phase 4
 
-1. **Priority Features**
+#### Platform-Specific Backends
+- **Windows**: Direct2D/Direct3D for rendering, Win32 APIs for windows
+- **macOS**: Core Graphics for rendering, Cocoa for windows
+- **Linux**: Cairo/Skia for rendering, X11/Wayland for windows
+- **Android**: Canvas API, NDK integration
+- **iOS**: Core Graphics, UIKit integration
 
-    - Support relative values for properties, e.g. `rb` and `rp`, where `rb` operates similarly to `em` in that it is a scaling relative to the theme's base size, and `rp` operates similarly to `rem` by scaling relative to the inherited size.
-    - Support layout properties in the theme for components mapped to the `id` or a `name` property. Each component should be able to be positioned absolutely or relative to it's direct parent. Support `width`, `height`, `top`, `left`,`bottom`,`right`,`min_width`,`max_width`,`min_height`,`max_height` properties. Support an alternative sizing mode of `fill` that takes no sizes and fills the parent (an enum would be appropriate here). Support relative values, such as `rb`, `rp`, and `%`.
+## Phase 4
 
-2. **Additional Features**
-    - Support for multi-monitor setups, allowing devs to treat them as one pane, multiple separate panes, or a mix (for >2 monitors). Support for runtime configuration is required, as devs may want to allow users to choose.
+#### Screen Reader Integration ⏳
+- **Windows**: Microsoft Active Accessibility (MSAA) or UI Automation
+- **macOS**: NSAccessibility APIs
+- **Linux**: AT-SPI (Assistive Technology Service Provider Interface)
+- **Android**: TalkBack integration
+- **iOS**: VoiceOver integration
+
+#### Advanced Testing ⏳
+- End-to-end functional tests (requires working platform backends)
+- Platform-specific testing (requires OS integration)
+- Visual regression testing
 
 ## Phase 5
+
+- Support relative values for properties, e.g. `rb` and `rp`, where `rb` operates similarly to `em` in that it is a scaling relative to the theme's base size, and `rp` operates similarly to `rem` by scaling relative to the inherited size.
+- Support layout properties in the theme for components mapped to the `id` or a `name` property. Each component should be able to be positioned absolutely or relative to it's direct parent. Support `width`, `height`, `top`, `left`,`bottom`,`right`,`min_width`,`max_width`,`min_height`,`max_height` properties. Support an alternative sizing mode of `fill` that takes no sizes and fills the parent (an enum would be appropriate here). Support relative values, such as `rb`, `rp`, and `%`.
+- Support for multi-monitor setups, allowing devs to treat them as one pane, multiple separate panes, or a mix (for >2 monitors). Support for runtime configuration is required, as devs may want to allow users to choose.
+
+## Phase 6
 
 - Support for client/server rendering.
     - Mode 1 (default): The server renders the image, using the monitor layout of the client, and sends the compressed, rendered view to the client. The client then displays the view, and returns any input to the server. This is meant for use cases where the server has the rendering horsepower.
@@ -186,84 +184,22 @@ All Phase 3 tasks have been completed with production-ready implementations.
     - All connections must be fully authenticated. Support for built in Windows authentication (including Active Directory), Linux PAM, LDAP, and OAuth are required. Support for basic user/password authentication will not be supported.
     - Minimally, the system must be able to render, send, and display 24fps video without noticable stuttering or any degradation. Ideally, it should be able to support 4k 120fps, given sufficient bandwidth.
 
-## Implementation Guidelines
-
-### For Machine Agents
+## Implementation Guidelines For Machine Agents
 
 When implementing features, follow these guidelines:
 
-#### 1. Review Architecture First
+### Review Architecture First
 - Read the relevant architecture documents before coding
 - Understand the requirements and acceptance criteria
 - Review the NFRs to ensure compliance
 - Study the diagrams to understand system interactions
 
-#### 2. Follow Design Patterns
+### Follow Design Patterns
 - Use trait-based architecture (Component, RenderBackend, WindowBackend)
-- Apply factory pattern for platform-specific implementations
+- Apply builder pattern for platform-specific implementations
 - Use observer pattern for events (broadcast channels)
 - Follow strategy pattern for platform-specific behavior
 - Use adapter pattern for OS API integration
-
-#### 3. Ensure Quality
-- All code must pass `cargo clippy` with no warnings
-- All code must be formatted with `rustfmt`
-- Use tabs for indentation (4 spaces width)
-- Add comprehensive unit tests (aim for 90% coverage)
-- Add integration tests for system interactions
-- All public APIs must have documentation comments with examples
-
-#### 4. Maintain Security
-- **NEVER** use `unsafe` code (enforced by `#![forbid(unsafe_code)]`)
-- Validate all external input
-- Clamp all numeric values to safe ranges
-- Block script execution in SVG files
-- Use only actively maintained dependencies (updated within 6 months)
-
-#### 5. Ensure Accessibility
-- All interactive components must implement InputHandler trait
-- Add appropriate ARIA roles and labels
-- Ensure 7:1 contrast ratio for WCAG AAA
-- Support keyboard navigation
-- Implement focus management
-- Add screen reader announcements
-
-#### 6. Optimize Performance
-- Target 60 FPS (16ms per frame)
-- Use lazy loading for media assets
-- Cache layout calculations until invalidated
-- Batch render commands
-- Use async/await for long-running operations
-- Profile and optimize hot paths
-
-#### 7. Platform Abstraction
-- Keep platform-specific code in OAL layer
-- Use factory pattern to create platform backends
-- Implement unified interfaces across platforms
-- Test with stub backends for platform independence
-- Ensure feature parity across all platforms
-
-#### 8. Thread Safety
-- Use Arc<RwLock<T>> for shared component state
-- Use Tokio channels for event distribution
-- Avoid locks in hot paths where possible
-- Prevent deadlocks through proper lock ordering
-- Use atomic types for simple shared state
-
-#### 9. Error Handling
-- Return Result types for fallible operations
-- Provide clear, actionable error messages
-- Handle errors gracefully (no panics in production)
-- Log errors appropriately
-- Implement fallback behavior where possible
-
-#### 10. Testing Strategy
-- Unit tests for all components and systems
-- Integration tests for system interactions
-- Test error conditions and edge cases
-- Mock platform backends for testing
-- Ensure tests are deterministic (no flaky tests)
-- Keep tests fast (complete in under 60 seconds)
 
 ### Component Implementation Checklist
 
@@ -295,5 +231,6 @@ When implementing a platform backend:
 - [ ] Handle errors gracefully
 - [ ] Add platform-specific tests
 - [ ] Document platform-specific requirements
-- [ ] Ensure performance meets targets
-- [ ] Verify memory is released properly
+
+- [ ] 
+- [ ] Ensure performance meets targetsVerify memory is released properly
