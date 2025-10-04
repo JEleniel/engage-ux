@@ -8,6 +8,7 @@ license.workspace = true
 
 [dependencies]
 engage-ux-core = { path = "../engage-ux-core" }
+serde = { workspace = true }
 
 [dev-dependencies]
 
