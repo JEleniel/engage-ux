@@ -76,10 +76,203 @@ pub struct ShadowStyle {
 }
 
 impl Theme {
-	/// Create default light theme
+	/// Create default LCARS light theme (inspired by Star Trek)
+	/// 
+	/// This is the default theme for Engage UX, named after Captain Picard's
+	/// famous "Engage" command. Features vibrant LCARS colors with curved borders.
 	pub fn light() -> Self {
+		Self::lcars_light()
+	}
+
+	/// Create default LCARS dark theme (inspired by Star Trek)
+	pub fn dark() -> Self {
+		Self::lcars_dark()
+	}
+
+	/// Create LCARS light theme - slick futuristic interface inspired by Star Trek
+	pub fn lcars_light() -> Self {
+		let mut custom_colors = HashMap::new();
+		custom_colors.insert(
+			"lcars_orange".to_string(),
+			Color::from_hex("#FF9966").unwrap(),
+		);
+		custom_colors.insert(
+			"lcars_peach".to_string(),
+			Color::from_hex("#FFCC99").unwrap(),
+		);
+		custom_colors.insert(
+			"lcars_violet".to_string(),
+			Color::from_hex("#CC6699").unwrap(),
+		);
+		custom_colors.insert("lcars_blue".to_string(), Color::from_hex("#9999FF").unwrap());
+		custom_colors.insert(
+			"lcars_skyblue".to_string(),
+			Color::from_hex("#99CCFF").unwrap(),
+		);
+		custom_colors.insert(
+			"lcars_lilac".to_string(),
+			Color::from_hex("#CC99CC").unwrap(),
+		);
+		custom_colors.insert("lcars_rose".to_string(), Color::from_hex("#FF9999").unwrap());
+		custom_colors.insert("lcars_tan".to_string(), Color::from_hex("#FFCC66").unwrap());
+		custom_colors.insert(
+			"panel_dark".to_string(),
+			Color::from_hex("#000000").unwrap(),
+		);
+		custom_colors.insert(
+			"panel_medium".to_string(),
+			Color::from_hex("#1A1A1A").unwrap(),
+		);
+		custom_colors.insert(
+			"accent_glow".to_string(),
+			Color::from_hex("#FF9966CC").unwrap(),
+		);
+
 		Self {
-			name: "Light".to_string(),
+			name: "LCARS Light".to_string(),
+			colors: ColorPalette {
+				primary: Color::from_hex("#FF9966").unwrap(),
+				secondary: Color::from_hex("#CC6699").unwrap(),
+				background: Color::from_hex("#000000").unwrap(),
+				surface: Color::from_hex("#1A1A1A").unwrap(),
+				error: Color::from_hex("#CC6666").unwrap(),
+				warning: Color::from_hex("#FFCC99").unwrap(),
+				success: Color::from_hex("#99CCFF").unwrap(),
+				info: Color::from_hex("#9999FF").unwrap(),
+				text_primary: Color::from_hex("#FFCC99").unwrap(),
+				text_secondary: Color::from_hex("#CC99CC").unwrap(),
+				text_disabled: Color::from_hex("#666666").unwrap(),
+				custom: custom_colors,
+			},
+			typography: Typography {
+				font_family: "Helvetica Neue, Arial, sans-serif".to_string(),
+				font_size_base: 16.0,
+				font_size_small: 13.0,
+				font_size_large: 22.0,
+				line_height: 1.4,
+			},
+			spacing: Spacing {
+				unit: 8.0,
+				small: 6.0,
+				medium: 12.0,
+				large: 20.0,
+			},
+			borders: BorderStyle {
+				width: 3.0,
+				radius: 20.0,
+				color: Color::from_hex("#FF9966").unwrap(),
+			},
+			shadows: ShadowStyle {
+				enabled: true,
+				blur_radius: 8.0,
+				offset_x: 0.0,
+				offset_y: 4.0,
+				color: Color::from_hex("#FF996633").unwrap(),
+			},
+			component_layouts: HashMap::new(),
+		}
+	}
+
+	/// Create LCARS dark theme - slick futuristic interface inspired by Star Trek
+	pub fn lcars_dark() -> Self {
+		let mut custom_colors = HashMap::new();
+		custom_colors.insert(
+			"lcars_orange".to_string(),
+			Color::from_hex("#FF9966").unwrap(),
+		);
+		custom_colors.insert(
+			"lcars_peach".to_string(),
+			Color::from_hex("#FFCC99").unwrap(),
+		);
+		custom_colors.insert(
+			"lcars_violet".to_string(),
+			Color::from_hex("#CC6699").unwrap(),
+		);
+		custom_colors.insert("lcars_blue".to_string(), Color::from_hex("#9999FF").unwrap());
+		custom_colors.insert(
+			"lcars_skyblue".to_string(),
+			Color::from_hex("#99CCFF").unwrap(),
+		);
+		custom_colors.insert(
+			"lcars_lilac".to_string(),
+			Color::from_hex("#CC99CC").unwrap(),
+		);
+		custom_colors.insert("lcars_rose".to_string(), Color::from_hex("#FF9999").unwrap());
+		custom_colors.insert("lcars_tan".to_string(), Color::from_hex("#FFCC66").unwrap());
+		custom_colors.insert(
+			"panel_dark".to_string(),
+			Color::from_hex("#000000").unwrap(),
+		);
+		custom_colors.insert(
+			"panel_medium".to_string(),
+			Color::from_hex("#0D0D0D").unwrap(),
+		);
+		custom_colors.insert(
+			"panel_light".to_string(),
+			Color::from_hex("#1A1A1A").unwrap(),
+		);
+		custom_colors.insert(
+			"accent_glow".to_string(),
+			Color::from_hex("#FF9966AA").unwrap(),
+		);
+		custom_colors.insert(
+			"button_inactive".to_string(),
+			Color::from_hex("#333333").unwrap(),
+		);
+		custom_colors.insert(
+			"separator".to_string(),
+			Color::from_hex("#FF996666").unwrap(),
+		);
+
+		Self {
+			name: "LCARS Dark".to_string(),
+			colors: ColorPalette {
+				primary: Color::from_hex("#FF9966").unwrap(),
+				secondary: Color::from_hex("#9999FF").unwrap(),
+				background: Color::from_hex("#000000").unwrap(),
+				surface: Color::from_hex("#0D0D0D").unwrap(),
+				error: Color::from_hex("#FF6666").unwrap(),
+				warning: Color::from_hex("#FFCC99").unwrap(),
+				success: Color::from_hex("#99CCFF").unwrap(),
+				info: Color::from_hex("#CC99CC").unwrap(),
+				text_primary: Color::from_hex("#FFCC99").unwrap(),
+				text_secondary: Color::from_hex("#FF9966").unwrap(),
+				text_disabled: Color::from_hex("#555555").unwrap(),
+				custom: custom_colors,
+			},
+			typography: Typography {
+				font_family: "Helvetica Neue, Arial, sans-serif".to_string(),
+				font_size_base: 16.0,
+				font_size_small: 13.0,
+				font_size_large: 22.0,
+				line_height: 1.4,
+			},
+			spacing: Spacing {
+				unit: 8.0,
+				small: 6.0,
+				medium: 12.0,
+				large: 20.0,
+			},
+			borders: BorderStyle {
+				width: 3.0,
+				radius: 20.0,
+				color: Color::from_hex("#FF9966").unwrap(),
+			},
+			shadows: ShadowStyle {
+				enabled: true,
+				blur_radius: 10.0,
+				offset_x: 0.0,
+				offset_y: 4.0,
+				color: Color::from_hex("#FF996644").unwrap(),
+			},
+			component_layouts: HashMap::new(),
+		}
+	}
+
+	/// Create classic light theme (original design)
+	pub fn classic_light() -> Self {
+		Self {
+			name: "Classic Light".to_string(),
 			colors: ColorPalette {
 				primary: Color::from_hex("#1976D2").unwrap(),
 				secondary: Color::from_hex("#424242").unwrap(),
@@ -123,10 +316,10 @@ impl Theme {
 		}
 	}
 
-	/// Create default dark theme
-	pub fn dark() -> Self {
+	/// Create classic dark theme (original design)
+	pub fn classic_dark() -> Self {
 		Self {
-			name: "Dark".to_string(),
+			name: "Classic Dark".to_string(),
 			colors: ColorPalette {
 				primary: Color::from_hex("#90CAF9").unwrap(),
 				secondary: Color::from_hex("#CE93D8").unwrap(),
@@ -194,22 +387,26 @@ mod tests {
 	#[test]
 	fn test_light_theme() {
 		let theme = Theme::light();
-		assert_eq!(theme.name, "Light");
+		assert_eq!(theme.name, "LCARS Light");
 		assert_eq!(theme.typography.font_size_base, 16.0);
+		// Verify LCARS color palette
+		assert_eq!(theme.colors.primary, Color::from_hex("#FF9966").unwrap());
 	}
 
 	#[test]
 	fn test_dark_theme() {
 		let theme = Theme::dark();
-		assert_eq!(theme.name, "Dark");
+		assert_eq!(theme.name, "LCARS Dark");
 		assert_eq!(theme.typography.font_size_base, 16.0);
+		// Verify LCARS color palette
+		assert_eq!(theme.colors.primary, Color::from_hex("#FF9966").unwrap());
 	}
 
 	#[test]
 	fn test_theme_serialization() {
 		let theme = Theme::light();
 		let json = theme.to_json().unwrap();
-		assert!(json.contains("Light"));
+		assert!(json.contains("LCARS Light"));
 		
 		let deserialized = Theme::from_json(&json).unwrap();
 		assert_eq!(deserialized.name, theme.name);
@@ -219,8 +416,19 @@ mod tests {
 	fn test_spacing() {
 		let theme = Theme::default();
 		assert_eq!(theme.spacing.unit, 8.0);
-		assert_eq!(theme.spacing.small, 8.0);
-		assert_eq!(theme.spacing.medium, 16.0);
+		assert_eq!(theme.spacing.small, 6.0);
+		assert_eq!(theme.spacing.medium, 12.0);
+	}
+
+	#[test]
+	fn test_classic_themes() {
+		let light = Theme::classic_light();
+		assert_eq!(light.name, "Classic Light");
+		assert_eq!(light.colors.primary, Color::from_hex("#1976D2").unwrap());
+
+		let dark = Theme::classic_dark();
+		assert_eq!(dark.name, "Classic Dark");
+		assert_eq!(dark.colors.primary, Color::from_hex("#90CAF9").unwrap());
 	}
 
 	#[test]

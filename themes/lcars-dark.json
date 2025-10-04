@@ -1,0 +1,112 @@
+{
+  "name": "LCARS Dark",
+  "colors": {
+    "primary": {
+      "hex": "#FF9966"
+    },
+    "secondary": {
+      "hex": "#9999FF"
+    },
+    "background": {
+      "hex": "#000000"
+    },
+    "surface": {
+      "hex": "#0D0D0D"
+    },
+    "error": {
+      "hex": "#FF6666"
+    },
+    "warning": {
+      "hex": "#FFCC99"
+    },
+    "success": {
+      "hex": "#99CCFF"
+    },
+    "info": {
+      "hex": "#CC99CC"
+    },
+    "text_primary": {
+      "hex": "#FFCC99"
+    },
+    "text_secondary": {
+      "hex": "#FF9966"
+    },
+    "text_disabled": {
+      "hex": "#555555"
+    },
+    "custom": {
+      "lcars_orange": {
+        "hex": "#FF9966"
+      },
+      "lcars_peach": {
+        "hex": "#FFCC99"
+      },
+      "lcars_violet": {
+        "hex": "#CC6699"
+      },
+      "lcars_blue": {
+        "hex": "#9999FF"
+      },
+      "lcars_skyblue": {
+        "hex": "#99CCFF"
+      },
+      "lcars_lilac": {
+        "hex": "#CC99CC"
+      },
+      "lcars_rose": {
+        "hex": "#FF9999"
+      },
+      "lcars_tan": {
+        "hex": "#FFCC66"
+      },
+      "panel_dark": {
+        "hex": "#000000"
+      },
+      "panel_medium": {
+        "hex": "#0D0D0D"
+      },
+      "panel_light": {
+        "hex": "#1A1A1A"
+      },
+      "accent_glow": {
+        "hex": "#FF9966AA"
+      },
+      "button_inactive": {
+        "hex": "#333333"
+      },
+      "separator": {
+        "hex": "#FF996666"
+      }
+    }
+  },
+  "typography": {
+    "font_family": "Helvetica Neue, Arial, sans-serif",
+    "font_size_base": 16.0,
+    "font_size_small": 13.0,
+    "font_size_large": 22.0,
+    "line_height": 1.4
+  },
+  "spacing": {
+    "unit": 8.0,
+    "small": 6.0,
+    "medium": 12.0,
+    "large": 20.0
+  },
+  "borders": {
+    "width": 3.0,
+    "radius": 20.0,
+    "color": {
+      "hex": "#FF9966"
+    }
+  },
+  "shadows": {
+    "enabled": true,
+    "blur_radius": 10.0,
+    "offset_x": 0.0,
+    "offset_y": 4.0,
+    "color": {
+      "hex": "#FF996644"
+    }
+  },
+  "component_layouts": {}
+}

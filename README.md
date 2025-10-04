@@ -1,6 +1,6 @@
 # Engage UX
 
-A fully cross-platform Rust UI toolkit that provides a themable component library without depending on a browser engine. Engage UX uses an OS Abstraction Layer (OAL) for low-level platform interaction, allowing a single set of components to work across Windows, macOS, Linux, Android, and iOS.
+A fully cross-platform Rust UI toolkit that provides a themable component library without depending on a browser engine. Named after Captain Jean-Luc Picard's famous "Engage!" command, this toolkit features a sleek LCARS-inspired theme by default. Engage UX uses an OS Abstraction Layer (OAL) for low-level platform interaction, allowing a single set of components to work across Windows, macOS, Linux, Android, and iOS.
 
 ## Features
 
@@ -45,7 +45,8 @@ Engage UX is organized as a Cargo workspace with the following crates:
 
 - **engage-ux-themes**: Theme system providing:
 	- JSON-based theme configuration
-	- Default light and dark themes
+	- Default LCARS themes (light and dark) - inspired by Star Trek
+	- Classic themes available for traditional designs
 	- User-friendly color formats (hex, RGB, HSL)
 	- Color palettes, typography, spacing, borders, and shadows
 
@@ -174,11 +175,19 @@ button.set_on_click(|event| {
 ```rust
 use engage_ux_themes::Theme;
 
-// Use default light theme
+// Use default LCARS Light theme (Star Trek inspired)
 let light_theme = Theme::light();
 
-// Use default dark theme
+// Use default LCARS Dark theme
 let dark_theme = Theme::dark();
+
+// Explicitly use LCARS themes
+let lcars_light = Theme::lcars_light();
+let lcars_dark = Theme::lcars_dark();
+
+// Use classic themes (original design)
+let classic_light = Theme::classic_light();
+let classic_dark = Theme::classic_dark();
 
 // Load theme from JSON
 let json = r#"{
@@ -188,6 +197,8 @@ let json = r#"{
 }"#;
 let custom_theme = Theme::from_json(json).unwrap();
 ```
+
+**LCARS Themes**: Named after Captain Picard's "Engage!" command, featuring vibrant orange/peach colors (#FF9966), curved borders (20px radius), and a futuristic aesthetic inspired by Star Trek. See [docs/lcars-theme.md](docs/lcars-theme.md) for complete details.
 
 ### Example: Working with Colors
 
