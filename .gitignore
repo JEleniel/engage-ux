@@ -1,5 +1,6 @@
 # Project specific
 # Add files and directories specific to your project that should be ignored here
+<<<<<<< Updated upstream
 # Rust / Cargo
 .fingerprint/
 *.dSYM/
@@ -72,6 +73,60 @@ target/
 *.ori
 *.orig
 
+=======
+.analyze/
+target/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/*.code-snippets
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.*.json
+!.vscode/settings.json
+!.vscode/tasks.json
+.history/
+.vscode-test
+*.vsix
+
+# Archive Files
+*.7z
+*.bz2
+*.bzip
+*.bzip2
+*.cab
+*.deb
+*.dmg
+*.egg
+*.gem
+*.gz
+*.gzip
+*.iso
+*.jar
+*.lzma
+*.msi
+*.msix
+*.msm
+*.msp
+*.rar
+*.rpm
+*.tar
+*.tgz
+*.txz
+*.tzst
+*.xar
+*.xpi
+*.xz
+*.zip
+*.zst
+
+# Backup Files
+*.bak
+*.gho
+*.ori
+*.orig
+
+>>>>>>> Stashed changes
 # Diff Files
 *.diff
 *.patch
