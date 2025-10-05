@@ -7,11 +7,11 @@
 //! - Android: TalkBack
 //! - iOS: VoiceOver
 
+use engage_ux_components::*;
 use engage_ux_core::accessibility::{
 	AccessibilityProps, Announcement, AnnouncementPriority, AriaRole,
 };
 use engage_ux_core::component::Component;
-use engage_ux_components::*;
 
 /// Get current platform screen reader technology
 fn screen_reader_technology() -> &'static str {
@@ -116,15 +116,13 @@ fn test_screen_reader_live_regions() {
 	println!("Testing with: {}", technology);
 
 	// Polite live region (waits for pause in speech)
-	let props = AccessibilityProps::new()
-		.with_role(AriaRole::Status);
+	let props = AccessibilityProps::new().with_role(AriaRole::Status);
 
 	// In full implementation, would set live: Some(AriaLive::Polite)
 	assert_eq!(props.role, Some(AriaRole::Status));
 
 	// Assertive live region (interrupts speech)
-	let alert_props = AccessibilityProps::new()
-		.with_role(AriaRole::Alert);
+	let alert_props = AccessibilityProps::new().with_role(AriaRole::Alert);
 
 	// In full implementation, would set live: Some(AriaLive::Assertive)
 	assert_eq!(alert_props.role, Some(AriaRole::Alert));

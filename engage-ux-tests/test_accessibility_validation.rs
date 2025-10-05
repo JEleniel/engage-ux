@@ -3,12 +3,12 @@
 //! Tests WCAG AAA compliance, keyboard navigation, focus management,
 //! and accessibility infrastructure across all components.
 
+use engage_ux_components::*;
 use engage_ux_core::accessibility::{
 	AccessibilityProps, AnnouncementPriority, AriaRole, FocusManager,
 };
 use engage_ux_core::color::Color;
 use engage_ux_core::component::{Component, Rect};
-use engage_ux_components::*;
 
 /// Test ARIA role types are available
 #[test]
@@ -47,7 +47,10 @@ fn test_accessibility_props_creation() {
 
 	assert_eq!(props.role, Some(AriaRole::Button));
 	assert_eq!(props.label, Some("Submit Form".to_string()));
-	assert_eq!(props.description, Some("Submits the form data to the server".to_string()));
+	assert_eq!(
+		props.description,
+		Some("Submits the form data to the server".to_string())
+	);
 	assert!(props.focusable);
 	assert_eq!(props.tab_index, Some(0));
 	assert!(!props.disabled);

@@ -3,8 +3,11 @@
 //! Tests that verify visual consistency across platforms and prevent
 //! unintended visual changes. Uses snapshot-based testing approach.
 
-use engage_ux_oal::backends::{RenderCommand, get_backend_factory, renderer::{Color, Rect}};
 use engage_ux_components::*;
+use engage_ux_oal::backends::{
+	RenderCommand, get_backend_factory,
+	renderer::{Color, Rect},
+};
 use engage_ux_themes::Theme;
 
 /// Helper to create a snapshot identifier for cross-platform comparison

@@ -441,7 +441,10 @@ fn test_e2e_window_move_workflow() {
 	// Check that window generates events (may be Move or Resize)
 	// Different platforms may generate different event sequences
 	let event = window.poll_event();
-	assert!(event.is_some(), "Window should generate events on bounds change");
+	assert!(
+		event.is_some(),
+		"Window should generate events on bounds change"
+	);
 }
 
 /// Test rendering with transparency

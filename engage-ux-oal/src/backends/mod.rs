@@ -24,7 +24,7 @@ pub use tiny_skia_renderer::TinySkiaRenderer;
 
 #[cfg(target_os = "linux")]
 pub use linux_accessibility::{
-	AtSpiAccessibilityBridge, AtSpiState, AccessibilityError, aria_role_to_atspi_role,
+	AccessibilityError, AtSpiAccessibilityBridge, AtSpiState, aria_role_to_atspi_role,
 };
 
 /// Platform-specific backend factory
