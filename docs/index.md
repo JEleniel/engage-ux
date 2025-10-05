@@ -134,6 +134,12 @@ Engage UX is dual-licensed under:
 
 Choose the license that best suits your needs.
 
+## ❓ Help and Support
+
+- **[FAQ](faq.md)** - Frequently asked questions
+- **[Troubleshooting Guide](troubleshooting.md)** - Common problems and solutions
+- **[Accessibility Guide](guides/accessibility.md)** - WCAG AAA compliance
+
 ## 🔗 Resources
 
 - [GitHub Repository](https://github.com/JEleniel/engage-ux)
@@ -146,6 +152,7 @@ Choose the license that best suits your needs.
 - **Bug Reports**: [Open an issue](https://github.com/JEleniel/engage-ux/issues/new?template=bug_report.md)
 - **Feature Requests**: [Open an issue](https://github.com/JEleniel/engage-ux/issues/new?template=feature_request.md)
 - **Questions**: [Start a discussion](https://github.com/JEleniel/engage-ux/discussions)
+- **Troubleshooting**: [Read the troubleshooting guide](troubleshooting.md)
 
 ---
 
