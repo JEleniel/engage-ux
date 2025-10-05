@@ -99,9 +99,22 @@ while let Some(event) = window.poll_event() {
 
 ## Graphics Rendering Backend
 
-### SoftbufferRenderer
+### Platform-Specific Renderers
 
-The rendering backend is implemented using the [softbuffer](https://github.com/rust-windowing/softbuffer) crate (v0.4), which provides safe, CPU-based software rendering.
+The rendering backend varies by platform to provide optimal performance and native integration:
+
+#### Linux: TinySkiaRenderer
+
+On Linux, the rendering backend uses [tiny-skia](https://github.com/RazrFalcon/tiny-skia) (v0.11), which provides high-quality 2D graphics rendering with a Cairo/Skia-like API. This offers:
+
+- **High-quality rendering**: Anti-aliased shapes and paths
+- **Cairo/Skia compatibility**: Familiar API for Linux developers
+- **Pure Rust**: Safe implementation without FFI overhead
+- **CPU-based**: Optimized software rendering suitable for UI
+
+### SoftbufferRenderer (Cross-Platform Fallback)
+
+For other platforms, the rendering backend uses [softbuffer](https://github.com/rust-windowing/softbuffer) crate (v0.4), which provides safe, CPU-based software rendering.
 
 #### Features
 
@@ -201,10 +214,13 @@ All platform backends are implemented using 100% safe Rust code:
 - Native menu bar integration
 
 #### Linux
-- Supports both X11 and Wayland
-- Runtime selection based on environment
+- **Renderer**: Tiny-skia for high-quality 2D graphics (Cairo/Skia-like API)
+- **Window Management**: winit with support for both X11 and Wayland
+- **Accessibility**: AT-SPI infrastructure for screen reader integration
+- Runtime selection of X11/Wayland based on environment
 - Full multi-monitor support
 - Desktop environment integration
+- AT-SPI ready for assistive technologies
 
 #### Android
 - Uses winit's Android backend
@@ -218,28 +234,109 @@ All platform backends are implemented using 100% safe Rust code:
 - Lifecycle management
 - Touch input support
 
+## Linux Accessibility (AT-SPI)
+
+### AT-SPI Infrastructure
+
+On Linux, Engage UX provides AT-SPI (Assistive Technology Service Provider Interface) infrastructure for screen reader integration and other assistive technologies.
+
+#### Features
+
+- **AT-SPI Bridge**: Manages connection to the D-Bus accessibility bus
+- **Element Registration**: Expose UI elements to assistive technologies
+- **State Management**: Track and notify element states (focused, checked, expanded, etc.)
+- **Focus Management**: Notify focus changes to screen readers
+- **Property Updates**: Communicate property changes to assistive technologies
+- **ARIA Role Mapping**: Automatic mapping from ARIA roles to AT-SPI roles
+
+#### Example Usage
+
+```rust
+use engage_ux_oal::backends::{AtSpiAccessibilityBridge, AtSpiState};
+use engage_ux_core::accessibility::{AccessibilityProps, AriaRole};
+
+// Initialize the AT-SPI bridge
+let mut bridge = AtSpiAccessibilityBridge::new("My Application");
+bridge.initialize().unwrap();
+
+// Register a UI element
+let button_props = AccessibilityProps::new()
+    .with_role(AriaRole::Button)
+    .with_label("Click Me")
+    .with_description("A clickable button");
+
+bridge.register_element(1, &button_props).unwrap();
+
+// Notify state changes
+bridge.notify_state_changed(1, AtSpiState::Focused, true).unwrap();
+bridge.notify_state_changed(1, AtSpiState::Pressed, true).unwrap();
+
+// Update element properties
+let updated_props = button_props.clone().with_label("Updated Button");
+bridge.update_element(1, &updated_props).unwrap();
+
+// Clean up
+bridge.unregister_element(1).unwrap();
+bridge.shutdown();
+```
+
+#### Supported AT-SPI States
+
+- Enabled, Focusable, Focused
+- Selected, Checked, Expanded
+- Pressed, Visible, Showing
+- Active, Required, ReadOnly
+
+#### Future Implementation
+
+The current implementation provides the infrastructure and API for AT-SPI integration. Full D-Bus integration for actual screen reader communication will be implemented in a future release.
+
 ## Testing
 
 The platform backends include comprehensive test coverage:
 
-### Unit Tests (11 tests)
+### Unit Tests
 
-- Window backend creation and properties (5 tests)
-- Renderer creation and operations (6 tests)
+- **engage-ux-oal**: 48 tests covering all backend components
+  - Window backend creation and properties (5 tests)
+  - Renderer creation and operations (6 tests)
+  - Tiny-skia renderer (5 tests, Linux only)
+  - AT-SPI accessibility (9 tests, Linux only)
+  - Monitor configuration (11 tests)
+  - Platform detection and other utilities
 
-### Integration Tests (14 tests)
+### Integration Tests
 
-- Backend factory creation
-- Renderer operations (shapes, clipping, complex scenes)
-- Window backend properties and state management
-- Event generation and handling
-- Multiple render contexts
-- Hardware acceleration queries
+- **test_platform_backends.rs**: 14 tests for cross-platform backend functionality
+  - Backend factory creation
+  - Renderer operations (shapes, clipping, complex scenes)
+  - Window backend properties and state management
+  - Event generation and handling
+  - Multiple render contexts
+  - Hardware acceleration queries
+
+- **test_linux_backend.rs**: 14 tests for Linux-specific functionality (Linux only)
+  - Tiny-skia renderer operations
+  - Advanced shape rendering with transparency
+  - Clipping operations
+  - Multiple render contexts
+  - AT-SPI bridge initialization and lifecycle
+  - Element registration and management
+  - Focus and state notifications
+  - Property change notifications
+  - Error handling
 
 Run the tests with:
 
 ```bash
+# All platform backend tests
 cargo test --test test_platform_backends
+
+# Linux-specific tests (Linux only)
+cargo test --test test_linux_backend
+
+# All tests including unit tests
+cargo test --package engage-ux-oal
 ```
 
 ## Future Enhancements
@@ -277,7 +374,8 @@ While the current implementation provides solid cross-platform support using saf
 The platform backends rely on these external crates:
 
 - **winit** (v0.30) - Cross-platform window management
-- **softbuffer** (v0.4) - Cross-platform software rendering
+- **softbuffer** (v0.4) - Cross-platform software rendering (Windows, macOS, Android, iOS)
+- **tiny-skia** (v0.11) - High-quality 2D graphics rendering (Linux)
 - **raw-window-handle** (v0.6) - Window handle abstraction
 
 All dependencies are actively maintained and widely used in the Rust ecosystem.

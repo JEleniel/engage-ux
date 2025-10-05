@@ -149,7 +149,10 @@ async fn test_drag_between_targets() {
 
 	// Enter first target
 	let event = manager.update_drag(10.0, 10.0, Some(1)).await;
-	assert!(matches!(event, Some(DragEvent::DragEnter { target: 1, .. })));
+	assert!(matches!(
+		event,
+		Some(DragEvent::DragEnter { target: 1, .. })
+	));
 
 	{
 		let t1 = target1.read().await;
@@ -158,7 +161,10 @@ async fn test_drag_between_targets() {
 
 	// Move to second target
 	let event = manager.update_drag(20.0, 10.0, Some(2)).await;
-	assert!(matches!(event, Some(DragEvent::DragLeave { target: 1, .. })));
+	assert!(matches!(
+		event,
+		Some(DragEvent::DragLeave { target: 1, .. })
+	));
 
 	// Verify first target received leave
 	{
@@ -168,7 +174,10 @@ async fn test_drag_between_targets() {
 
 	// Next update should be enter on second target
 	let event = manager.update_drag(20.0, 10.0, Some(2)).await;
-	assert!(matches!(event, Some(DragEvent::DragEnter { target: 2, .. })));
+	assert!(matches!(
+		event,
+		Some(DragEvent::DragEnter { target: 2, .. })
+	));
 
 	{
 		let t2 = target2.read().await;
@@ -192,7 +201,10 @@ async fn test_drag_cancel() {
 
 	// Cancel
 	let event = manager.cancel_drag();
-	assert!(matches!(event, Some(DragEvent::DragEnd { success: false, .. })));
+	assert!(matches!(
+		event,
+		Some(DragEvent::DragEnd { success: false, .. })
+	));
 
 	// Verify target received leave
 	{
@@ -232,10 +244,7 @@ fn test_drag_data_metadata() {
 		.with_metadata("timestamp", "1234567890");
 
 	assert_eq!(data.metadata("source"), Some(&"component_1".to_string()));
-	assert_eq!(
-		data.metadata("timestamp"),
-		Some(&"1234567890".to_string())
-	);
+	assert_eq!(data.metadata("timestamp"), Some(&"1234567890".to_string()));
 	assert_eq!(data.metadata("nonexistent"), None);
 }
 
