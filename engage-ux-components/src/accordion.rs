@@ -17,7 +17,11 @@ pub struct AccordionPanel {
 
 impl AccordionPanel {
 	/// Create a new accordion panel
-	pub fn new(id: impl Into<String>, title: impl Into<String>, content: impl Into<String>) -> Self {
+	pub fn new(
+		id: impl Into<String>,
+		title: impl Into<String>,
+		content: impl Into<String>,
+	) -> Self {
 		Self {
 			id: id.into(),
 			title: title.into(),
@@ -175,11 +179,11 @@ mod tests {
 		let mut accordion = Accordion::new(1);
 		accordion.add_panel(AccordionPanel::new("1", "Panel 1", "Content 1"));
 		accordion.add_panel(AccordionPanel::new("2", "Panel 2", "Content 2"));
-		
+
 		accordion.expand("1");
 		assert!(accordion.panels()[0].expanded);
 		assert!(!accordion.panels()[1].expanded);
-		
+
 		accordion.expand("2");
 		assert!(!accordion.panels()[0].expanded); // First should be collapsed
 		assert!(accordion.panels()[1].expanded);
@@ -191,7 +195,7 @@ mod tests {
 		accordion.set_allow_multiple(true);
 		accordion.add_panel(AccordionPanel::new("1", "Panel 1", "Content 1"));
 		accordion.add_panel(AccordionPanel::new("2", "Panel 2", "Content 2"));
-		
+
 		accordion.expand("1");
 		accordion.expand("2");
 		assert!(accordion.panels()[0].expanded);
@@ -202,10 +206,10 @@ mod tests {
 	fn test_accordion_toggle() {
 		let mut accordion = Accordion::new(1);
 		accordion.add_panel(AccordionPanel::new("1", "Panel 1", "Content 1"));
-		
+
 		accordion.toggle("1");
 		assert!(accordion.panels()[0].expanded);
-		
+
 		accordion.toggle("1");
 		assert!(!accordion.panels()[0].expanded);
 	}

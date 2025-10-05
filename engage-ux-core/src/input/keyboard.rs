@@ -24,31 +24,42 @@ pub enum KeyCode {
 	Space,
 	Backspace,
 	Delete,
-	
+
 	// Arrow keys
 	ArrowUp,
 	ArrowDown,
 	ArrowLeft,
 	ArrowRight,
-	
+
 	// Page navigation
 	Home,
 	End,
 	PageUp,
 	PageDown,
-	
+
 	// Function keys
-	F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
-	
+	F1,
+	F2,
+	F3,
+	F4,
+	F5,
+	F6,
+	F7,
+	F8,
+	F9,
+	F10,
+	F11,
+	F12,
+
 	// Alphanumeric keys
 	Key(char),
-	
+
 	// Modifier keys
 	Shift,
 	Control,
 	Alt,
 	Meta,
-	
+
 	// Other
 	Unknown,
 }
@@ -286,11 +297,11 @@ mod tests {
 	#[test]
 	fn test_keyboard_state() {
 		let mut state = KeyboardState::new();
-		
+
 		let down = KeyboardEvent::key_down(KeyCode::Enter, KeyModifiers::empty());
 		state.update(&down);
 		assert!(state.is_key_pressed(KeyCode::Enter));
-		
+
 		let up = KeyboardEvent::key_up(KeyCode::Enter, KeyModifiers::empty());
 		state.update(&up);
 		assert!(!state.is_key_pressed(KeyCode::Enter));
@@ -299,11 +310,11 @@ mod tests {
 	#[test]
 	fn test_keyboard_state_modifiers() {
 		let mut state = KeyboardState::new();
-		
+
 		let shift_down = KeyboardEvent::key_down(KeyCode::Shift, KeyModifiers::SHIFT);
 		state.update(&shift_down);
 		assert!(state.modifiers().contains(KeyModifiers::SHIFT));
-		
+
 		let shift_up = KeyboardEvent::key_up(KeyCode::Shift, KeyModifiers::empty());
 		state.update(&shift_up);
 		assert!(!state.modifiers().contains(KeyModifiers::SHIFT));

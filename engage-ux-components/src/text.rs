@@ -141,7 +141,7 @@ mod tests {
 		text.set_font_weight(FontWeight::Bold);
 		text.set_italic(true);
 		text.set_underline(true);
-		
+
 		assert_eq!(text.font_weight(), FontWeight::Bold);
 		assert!(text.is_italic());
 		assert!(text.is_underline());

@@ -262,11 +262,11 @@ mod tests {
 	fn test_console_max_lines() {
 		let mut console = Console::new(1);
 		console.set_max_lines(Some(2));
-		
+
 		console.add_text("Line 1");
 		console.add_text("Line 2");
 		console.add_text("Line 3");
-		
+
 		assert_eq!(console.lines().len(), 2);
 		assert_eq!(console.lines()[0].text, "Line 2");
 	}
@@ -276,7 +276,7 @@ mod tests {
 		let mut console = Console::new(1);
 		console.add_text("Line 1");
 		console.add_text("Line 2");
-		
+
 		console.clear();
 		assert_eq!(console.lines().len(), 0);
 	}
@@ -287,7 +287,7 @@ mod tests {
 		console.set_auto_scroll(false);
 		console.set_show_timestamps(true);
 		console.set_font_size(14.0);
-		
+
 		assert!(!console.is_auto_scroll());
 		assert!(console.shows_timestamps());
 		assert_eq!(console.font_size(), 14.0);

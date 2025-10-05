@@ -2,7 +2,7 @@
 //!
 //! This provides a safe, cross-platform software renderer using the softbuffer crate.
 
-use super::renderer::{Color, RenderBackend, RenderCommand, RenderContext, Rect};
+use super::renderer::{Color, Rect, RenderBackend, RenderCommand, RenderContext};
 
 /// Softbuffer-based renderer that works across all platforms
 #[derive(Debug)]
@@ -60,7 +60,7 @@ impl SoftbufferRenderContext {
 		let g = (color.g.clamp(0.0, 1.0) * 255.0) as u32;
 		let b = (color.b.clamp(0.0, 1.0) * 255.0) as u32;
 		let a = (color.a.clamp(0.0, 1.0) * 255.0) as u32;
-		
+
 		(a << 24) | (r << 16) | (g << 8) | b
 	}
 
@@ -131,7 +131,7 @@ impl SoftbufferRenderContext {
 			// Top and bottom edges
 			self.draw_hline(x1, x2, y1 + i, pixel);
 			self.draw_hline(x1, x2, y2 - i, pixel);
-			
+
 			// Left and right edges
 			self.draw_vline(x1 + i, y1, y2, pixel);
 			self.draw_vline(x2 - i, y1, y2, pixel);
@@ -150,11 +150,11 @@ impl SoftbufferRenderContext {
 
 		loop {
 			self.set_pixel(x, y, pixel);
-			
+
 			if x == x2 && y == y2 {
 				break;
 			}
-			
+
 			let e2 = 2 * err;
 			if e2 > -dy {
 				err -= dy;
@@ -218,11 +218,7 @@ impl RenderContext for SoftbufferRenderContext {
 				let pixel = Self::color_to_pixel(color);
 				self.fill_rect(rect, pixel);
 			}
-			RenderCommand::StrokeRect {
-				rect,
-				color,
-				width,
-			} => {
+			RenderCommand::StrokeRect { rect, color, width } => {
 				let pixel = Self::color_to_pixel(color);
 				self.stroke_rect(rect, pixel, width as i32);
 			}
@@ -303,11 +299,11 @@ mod tests {
 	fn test_softbuffer_clear() {
 		let mut renderer = SoftbufferRenderer::new();
 		let mut context = renderer.create_context(100, 100);
-		
+
 		context.begin_frame();
 		context.execute(RenderCommand::Clear(Color::rgb(1.0, 0.0, 0.0)));
 		context.end_frame();
-		
+
 		// Test passes if no panic occurs
 	}
 
@@ -315,7 +311,7 @@ mod tests {
 	fn test_softbuffer_draw_rect() {
 		let mut renderer = SoftbufferRenderer::new();
 		let mut context = renderer.create_context(100, 100);
-		
+
 		context.begin_frame();
 		context.execute(RenderCommand::FillRect {
 			rect: Rect::new(10.0, 10.0, 50.0, 50.0),
@@ -328,7 +324,7 @@ mod tests {
 	fn test_softbuffer_draw_circle() {
 		let mut renderer = SoftbufferRenderer::new();
 		let mut context = renderer.create_context(100, 100);
-		
+
 		context.begin_frame();
 		context.execute(RenderCommand::Circle {
 			x: 50.0,
@@ -344,7 +340,7 @@ mod tests {
 	fn test_softbuffer_clipping() {
 		let mut renderer = SoftbufferRenderer::new();
 		let mut context = renderer.create_context(100, 100);
-		
+
 		context.begin_frame();
 		context.execute(RenderCommand::SetClip(Rect::new(10.0, 10.0, 50.0, 50.0)));
 		context.execute(RenderCommand::FillRect {

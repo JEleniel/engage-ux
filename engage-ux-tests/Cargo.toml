@@ -57,3 +57,12 @@ path = "test_visual_regression.rs"
 [[test]]
 name = "test_screen_reader_integration"
 path = "test_screen_reader_integration.rs"
+
+[[test]]
+name = "test_linux_backend"
+path = "test_linux_backend.rs"
+
+[[test]]
+name = "test_android_backend"
+path = "test_android_backend.rs"
+

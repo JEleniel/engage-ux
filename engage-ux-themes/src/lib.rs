@@ -77,7 +77,7 @@ pub struct ShadowStyle {
 
 impl Theme {
 	/// Create default LCARS light theme (inspired by Star Trek)
-	/// 
+	///
 	/// This is the default theme for Engage UX, named after Captain Picard's
 	/// famous "Engage" command. Features vibrant LCARS colors with curved borders.
 	pub fn light() -> Self {
@@ -425,7 +425,7 @@ mod tests {
 		let theme = Theme::light();
 		let json = theme.to_json().unwrap();
 		assert!(json.contains("LCARS Light"));
-		
+
 		let deserialized = Theme::from_json(&json).unwrap();
 		assert_eq!(deserialized.name, theme.name);
 	}
@@ -493,7 +493,7 @@ mod tests {
 				"color": {"rgb": [0, 0, 0, 0.2]}
 			}
 		}"##;
-		
+
 		let theme = Theme::from_json(json).unwrap();
 		assert_eq!(theme.name, "Test Theme");
 	}
@@ -542,7 +542,7 @@ mod tests {
 				"color": {"rgb": [0, 0, 0, 0.2]}
 			}
 		}"#;
-		
+
 		let theme = Theme::from_json(json).unwrap();
 		assert_eq!(theme.name, "RGB Test");
 	}
@@ -591,7 +591,7 @@ mod tests {
 				"color": {"hsl": [0, 0, 0, 0.2]}
 			}
 		}"#;
-		
+
 		let theme = Theme::from_json(json).unwrap();
 		assert_eq!(theme.name, "HSL Test");
 	}
@@ -640,7 +640,7 @@ mod tests {
 				"color": {"rgb": [0, 0, 0, 0.2]}
 			}
 		}"##;
-		
+
 		let theme = Theme::from_json(json).unwrap();
 		assert_eq!(theme.name, "Mixed Format Test");
 	}

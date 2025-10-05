@@ -187,7 +187,7 @@ mod tests {
 		let mut progress = Progress::new(1);
 		progress.set_value(150.0); // Over max
 		assert_eq!(progress.value(), 100.0);
-		
+
 		progress.set_value(-10.0); // Under min
 		assert_eq!(progress.value(), 0.0);
 	}
@@ -204,7 +204,7 @@ mod tests {
 	fn test_progress_type() {
 		let mut progress = Progress::new(1);
 		assert_eq!(progress.progress_type(), ProgressType::Linear);
-		
+
 		progress.set_progress_type(ProgressType::Circular);
 		assert_eq!(progress.progress_type(), ProgressType::Circular);
 	}
@@ -213,7 +213,7 @@ mod tests {
 	fn test_progress_label() {
 		let mut progress = Progress::new(1);
 		assert!(!progress.shows_label());
-		
+
 		progress.set_show_label(true);
 		progress.set_label("Loading...");
 		assert!(progress.shows_label());

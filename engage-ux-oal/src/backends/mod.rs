@@ -4,14 +4,28 @@
 //! window management, and input handling.
 
 pub mod renderer;
+pub mod softbuffer_renderer;
 pub mod window_backend;
 pub mod winit_window;
-pub mod softbuffer_renderer;
+
+#[cfg(target_os = "linux")]
+pub mod tiny_skia_renderer;
+
+#[cfg(target_os = "linux")]
+pub mod linux_accessibility;
 
 pub use renderer::{RenderBackend, RenderCommand, RenderContext};
+pub use softbuffer_renderer::SoftbufferRenderer;
 pub use window_backend::{WindowBackend, WindowBackendEvent, WindowBounds, WindowState};
 pub use winit_window::WinitWindowBackend;
-pub use softbuffer_renderer::SoftbufferRenderer;
+
+#[cfg(target_os = "linux")]
+pub use tiny_skia_renderer::TinySkiaRenderer;
+
+#[cfg(target_os = "linux")]
+pub use linux_accessibility::{
+	AtSpiAccessibilityBridge, AtSpiState, AccessibilityError, aria_role_to_atspi_role,
+};
 
 /// Platform-specific backend factory
 pub trait BackendFactory {
@@ -107,12 +121,14 @@ pub mod platforms {
 	#[cfg(target_os = "linux")]
 	impl BackendFactory for LinuxBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// Using softbuffer for safe, cross-platform software rendering
-			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
+			// Using tiny-skia for high-quality 2D graphics rendering on Linux
+			// tiny-skia provides Cairo/Skia-like capabilities with safe Rust
+			Box::new(tiny_skia_renderer::TinySkiaRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
 			// Using winit for safe, cross-platform window management
+			// Winit supports both X11 and Wayland on Linux
 			Box::new(winit_window::WinitWindowBackend::new())
 		}
 	}
@@ -123,12 +139,18 @@ pub mod platforms {
 	#[cfg(target_os = "android")]
 	impl BackendFactory for AndroidBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// Using softbuffer for safe, cross-platform software rendering
+			// Android implementation using softbuffer for software rendering.
+			// Softbuffer provides a safe abstraction over Android's native Canvas API
+			// through winit's Android support layer, ensuring compatibility with
+			// the Android graphics stack while maintaining 100% safe Rust code.
 			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// Using winit for safe, cross-platform window management
+			// Android window management using winit.
+			// Winit integrates with Android's Activity lifecycle and provides
+			// native touch event handling, window state management, and
+			// accessibility support (TalkBack ready through Android's native APIs).
 			Box::new(winit_window::WinitWindowBackend::new())
 		}
 	}

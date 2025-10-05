@@ -9,8 +9,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Date {
 	pub year: i32,
-	pub month: u8,  // 1-12
-	pub day: u8,    // 1-31
+	pub month: u8, // 1-12
+	pub day: u8,   // 1-31
 }
 
 impl Date {
@@ -124,14 +124,18 @@ impl DatePicker {
 				return;
 			}
 			if let Some(min) = self.min_date {
-				if d.year < min.year || (d.year == min.year && d.month < min.month) || 
-				   (d.year == min.year && d.month == min.month && d.day < min.day) {
+				if d.year < min.year
+					|| (d.year == min.year && d.month < min.month)
+					|| (d.year == min.year && d.month == min.month && d.day < min.day)
+				{
 					return;
 				}
 			}
 			if let Some(max) = self.max_date {
-				if d.year > max.year || (d.year == max.year && d.month > max.month) ||
-				   (d.year == max.year && d.month == max.month && d.day > max.day) {
+				if d.year > max.year
+					|| (d.year == max.year && d.month > max.month)
+					|| (d.year == max.year && d.month == max.month && d.day > max.day)
+				{
 					return;
 				}
 			}

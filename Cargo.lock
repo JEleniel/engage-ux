@@ -493,6 +493,7 @@ dependencies = [
  "raw-window-handle",
  "serde",
  "softbuffer",
+ "tiny-skia",
  "winit",
 ]
 
