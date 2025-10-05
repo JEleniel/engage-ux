@@ -8,10 +8,24 @@ pub mod softbuffer_renderer;
 pub mod window_backend;
 pub mod winit_window;
 
+#[cfg(target_os = "linux")]
+pub mod tiny_skia_renderer;
+
+#[cfg(target_os = "linux")]
+pub mod linux_accessibility;
+
 pub use renderer::{RenderBackend, RenderCommand, RenderContext};
 pub use softbuffer_renderer::SoftbufferRenderer;
 pub use window_backend::{WindowBackend, WindowBackendEvent, WindowBounds, WindowState};
 pub use winit_window::WinitWindowBackend;
+
+#[cfg(target_os = "linux")]
+pub use tiny_skia_renderer::TinySkiaRenderer;
+
+#[cfg(target_os = "linux")]
+pub use linux_accessibility::{
+	AtSpiAccessibilityBridge, AtSpiState, AccessibilityError, aria_role_to_atspi_role,
+};
 
 /// Platform-specific backend factory
 pub trait BackendFactory {
