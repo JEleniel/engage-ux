@@ -263,10 +263,10 @@ mod tests {
 	fn test_toast_visibility() {
 		let mut toast = Toast::new(1, "Test");
 		assert!(!toast.is_visible());
-		
+
 		toast.show();
 		assert!(toast.is_visible());
-		
+
 		toast.hide();
 		assert!(!toast.is_visible());
 	}
@@ -275,10 +275,10 @@ mod tests {
 	fn test_toast_duration() {
 		let mut toast = Toast::new(1, "Test");
 		assert_eq!(toast.duration_ms(), Some(3000));
-		
+
 		toast.set_duration_ms(Some(5000));
 		assert_eq!(toast.duration_ms(), Some(5000));
-		
+
 		toast.set_duration_ms(None);
 		assert_eq!(toast.duration_ms(), None);
 	}
@@ -294,7 +294,7 @@ mod tests {
 	fn test_toast_dismissible() {
 		let mut toast = Toast::new(1, "Test");
 		assert!(toast.is_dismissible());
-		
+
 		toast.set_dismissible(false);
 		assert!(!toast.is_dismissible());
 	}

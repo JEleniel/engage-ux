@@ -125,11 +125,7 @@ pub enum DragEvent {
 		y: f32,
 	},
 	/// Drag is moving
-	DragMove {
-		source: ComponentId,
-		x: f32,
-		y: f32,
-	},
+	DragMove { source: ComponentId, x: f32, y: f32 },
 	/// Drag entered a drop target
 	DragEnter {
 		source: ComponentId,
@@ -159,10 +155,7 @@ pub enum DragEvent {
 		y: f32,
 	},
 	/// Drag operation ended (dropped or cancelled)
-	DragEnd {
-		source: ComponentId,
-		success: bool,
-	},
+	DragEnd { source: ComponentId, success: bool },
 }
 
 /// Drag source trait for components that can be dragged
@@ -278,7 +271,12 @@ impl DragManager {
 	}
 
 	/// Update drag position and check for target
-	pub async fn update_drag(&mut self, x: f32, y: f32, target: Option<ComponentId>) -> Option<DragEvent> {
+	pub async fn update_drag(
+		&mut self,
+		x: f32,
+		y: f32,
+		target: Option<ComponentId>,
+	) -> Option<DragEvent> {
 		let drag_state = self.current_drag.as_mut()?;
 
 		// Check if we entered a new target
@@ -489,13 +487,7 @@ mod tests {
 			self.can_accept
 		}
 
-		fn on_drop(
-			&mut self,
-			data: DragData,
-			_operation: DragOperation,
-			_x: f32,
-			_y: f32,
-		) -> bool {
+		fn on_drop(&mut self, data: DragData, _operation: DragOperation, _x: f32, _y: f32) -> bool {
 			self.dropped_data = data.as_text();
 			true
 		}
