@@ -9,6 +9,9 @@ license.workspace = true
 [dependencies]
 engage-ux-core = { path = "../engage-ux-core" }
 serde = { workspace = true }
+winit = "0.30"
+softbuffer = "0.4"
+raw-window-handle = "0.6"
 
 [dev-dependencies]
 

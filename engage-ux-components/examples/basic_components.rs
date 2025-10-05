@@ -46,7 +46,7 @@ fn main() {
 	println!("\nCreated Checkbox:");
 	println!("  ID: {}", checkbox.id());
 	println!("  Checked: {}", checkbox.is_checked());
-	
+
 	checkbox.set_checked(true);
 	println!("  After toggle: {}", checkbox.is_checked());
 
