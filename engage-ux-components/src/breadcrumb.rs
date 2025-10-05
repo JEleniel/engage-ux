@@ -203,7 +203,7 @@ mod tests {
 		breadcrumb.add_item(BreadcrumbItem::new("Home"));
 		breadcrumb.add_item(BreadcrumbItem::new("Products"));
 		breadcrumb.add_item(BreadcrumbItem::new("Laptop"));
-		
+
 		assert_eq!(breadcrumb.items().len(), 3);
 	}
 
@@ -212,11 +212,11 @@ mod tests {
 		let mut breadcrumb = Breadcrumb::new(1);
 		breadcrumb.add_item(BreadcrumbItem::new("Home"));
 		breadcrumb.add_item(BreadcrumbItem::new("Laptop"));
-		
+
 		breadcrumb.insert_item(1, BreadcrumbItem::new("Products"));
 		assert_eq!(breadcrumb.items().len(), 3);
 		assert_eq!(breadcrumb.items()[1].label, "Products");
-		
+
 		breadcrumb.remove_item(1);
 		assert_eq!(breadcrumb.items().len(), 2);
 	}
@@ -233,7 +233,7 @@ mod tests {
 		let mut breadcrumb = Breadcrumb::new(1);
 		breadcrumb.add_item(BreadcrumbItem::new("Home"));
 		breadcrumb.add_item(BreadcrumbItem::new("Products"));
-		
+
 		breadcrumb.clear();
 		assert_eq!(breadcrumb.items().len(), 0);
 	}

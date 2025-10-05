@@ -6,15 +6,15 @@
 //! - Size constraints (min/max)
 //! - Fill sizing mode
 
-pub mod units;
+pub mod constraints;
 pub mod position;
 pub mod size;
-pub mod constraints;
+pub mod units;
 
-pub use units::{Unit, RelativeUnit};
+pub use constraints::Constraints;
 pub use position::{Position, PositionMode};
 pub use size::{Size, SizeMode};
-pub use constraints::Constraints;
+pub use units::{RelativeUnit, Unit};
 
 use serde::{Deserialize, Serialize};
 
@@ -216,7 +216,12 @@ pub struct CalculatedBounds {
 
 impl CalculatedBounds {
 	pub fn new(x: f32, y: f32, width: f32, height: f32) -> Self {
-		Self { x, y, width, height }
+		Self {
+			x,
+			y,
+			width,
+			height,
+		}
 	}
 }
 

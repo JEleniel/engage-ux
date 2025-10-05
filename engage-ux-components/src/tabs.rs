@@ -235,7 +235,7 @@ mod tests {
 		let mut tabs = Tabs::new(1);
 		tabs.add_tab(Tab::new("tab1", "Tab 1"));
 		tabs.add_tab(Tab::new("tab2", "Tab 2"));
-		
+
 		assert_eq!(tabs.tabs().len(), 2);
 		assert_eq!(tabs.active_tab(), Some("tab1")); // First tab is active by default
 	}
@@ -245,10 +245,10 @@ mod tests {
 		let mut tabs = Tabs::new(1);
 		tabs.add_tab(Tab::new("tab1", "Tab 1"));
 		tabs.add_tab(Tab::new("tab2", "Tab 2"));
-		
+
 		tabs.set_active_tab("tab2");
 		assert_eq!(tabs.active_tab(), Some("tab2"));
-		
+
 		tabs.set_active_index(0);
 		assert_eq!(tabs.active_tab(), Some("tab1"));
 	}
@@ -259,10 +259,10 @@ mod tests {
 		tabs.add_tab(Tab::new("tab1", "Tab 1"));
 		tabs.add_tab(Tab::new("tab2", "Tab 2"));
 		tabs.add_tab(Tab::new("tab3", "Tab 3"));
-		
+
 		tabs.set_active_tab("tab2");
 		tabs.remove_tab("tab2");
-		
+
 		assert_eq!(tabs.tabs().len(), 2);
 		assert_eq!(tabs.active_tab(), Some("tab1")); // Should fallback to first tab
 	}
@@ -271,7 +271,7 @@ mod tests {
 	fn test_tabs_position() {
 		let mut tabs = Tabs::new(1);
 		assert_eq!(tabs.position(), TabPosition::Top);
-		
+
 		tabs.set_position(TabPosition::Left);
 		assert_eq!(tabs.position(), TabPosition::Left);
 	}

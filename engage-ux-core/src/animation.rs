@@ -87,10 +87,7 @@ impl Easing {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum AnimationType {
 	/// Fade animation (opacity)
-	Fade {
-		from: f32,
-		to: f32,
-	},
+	Fade { from: f32, to: f32 },
 	/// Slide animation (position)
 	Slide {
 		from_x: f32,
@@ -99,15 +96,9 @@ pub enum AnimationType {
 		to_y: f32,
 	},
 	/// Scale animation (size)
-	Scale {
-		from: f32,
-		to: f32,
-	},
+	Scale { from: f32, to: f32 },
 	/// Rotate animation (angle in degrees)
-	Rotate {
-		from: f32,
-		to: f32,
-	},
+	Rotate { from: f32, to: f32 },
 	/// Color transition
 	Color {
 		from: crate::color::Color,
@@ -345,8 +336,8 @@ impl Animation {
 		}
 
 		// Calculate progress (0.0 to 1.0)
-		let progress = (animation_elapsed.as_secs_f32() / total_duration.as_secs_f32())
-			.clamp(0.0, 1.0);
+		let progress =
+			(animation_elapsed.as_secs_f32() / total_duration.as_secs_f32()).clamp(0.0, 1.0);
 
 		// Apply alternate if needed
 		let adjusted_progress = if self.alternate && self.current_iteration % 2 == 1 {

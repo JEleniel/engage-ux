@@ -180,10 +180,10 @@ mod tests {
 		let mut list = List::new(1);
 		list.add_item(ListItem::new("Item 1", "1"));
 		list.add_item(ListItem::new("Item 2", "2"));
-		
+
 		list.select(0);
 		assert_eq!(list.selected_index(), Some(0));
-		
+
 		list.deselect(0);
 		assert_eq!(list.selected_index(), None);
 	}
@@ -195,7 +195,7 @@ mod tests {
 		list.add_item(ListItem::new("Item 1", "1"));
 		list.add_item(ListItem::new("Item 2", "2"));
 		list.add_item(ListItem::new("Item 3", "3"));
-		
+
 		list.select(0);
 		list.select(2);
 		assert_eq!(list.selected_indices().len(), 2);

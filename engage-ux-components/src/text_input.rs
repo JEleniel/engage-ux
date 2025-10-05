@@ -259,7 +259,7 @@ mod tests {
 		input.set_max_length(Some(5));
 		input.set_value("Too long text");
 		assert_eq!(input.value(), ""); // Value not set due to max length
-		
+
 		input.set_value("Short");
 		assert_eq!(input.value(), "Short");
 	}

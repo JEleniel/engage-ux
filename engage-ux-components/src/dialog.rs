@@ -643,7 +643,10 @@ mod tests {
 	#[test]
 	fn test_file_dialog_filters() {
 		let mut dialog = FileDialog::open(1);
-		dialog.add_filter(FileFilter::new("Images", vec!["png".to_string(), "jpg".to_string()]));
+		dialog.add_filter(FileFilter::new(
+			"Images",
+			vec!["png".to_string(), "jpg".to_string()],
+		));
 		assert_eq!(dialog.filters().len(), 1);
 	}
 

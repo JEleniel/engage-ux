@@ -185,10 +185,10 @@ mod tests {
 		let mut toggle = Toggle::new(1);
 		toggle.set_active(true);
 		assert!(toggle.is_active());
-		
+
 		toggle.toggle();
 		assert!(!toggle.is_active());
-		
+
 		toggle.toggle();
 		assert!(toggle.is_active());
 	}
@@ -205,7 +205,7 @@ mod tests {
 	fn test_toggle_size() {
 		let mut toggle = Toggle::new(1);
 		assert_eq!(toggle.size(), ToggleSize::Medium);
-		
+
 		toggle.set_size(ToggleSize::Large);
 		assert_eq!(toggle.size(), ToggleSize::Large);
 		assert_eq!(toggle.size().width(), 56.0);

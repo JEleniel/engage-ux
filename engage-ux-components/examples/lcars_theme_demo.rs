@@ -119,6 +119,9 @@ fn display_theme(theme: &Theme) {
 	println!("Shadows:");
 	println!("  Enabled:     {}", theme.shadows.enabled);
 	println!("  Blur Radius: {}px", theme.shadows.blur_radius);
-	println!("  Offset:      ({}, {})", theme.shadows.offset_x, theme.shadows.offset_y);
+	println!(
+		"  Offset:      ({}, {})",
+		theme.shadows.offset_x, theme.shadows.offset_y
+	);
 	println!("  Color:       {:?}", theme.shadows.color);
 }

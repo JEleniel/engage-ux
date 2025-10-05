@@ -104,14 +104,16 @@ impl SvgDocument {
 	/// Parse width from root element
 	pub fn parse_dimensions(&mut self) {
 		if let Some(width_str) = self.root.get_attribute("width")
-			&& let Ok(w) = width_str.trim_end_matches("px").parse::<f32>() {
-				self.width = Some(w);
-			}
+			&& let Ok(w) = width_str.trim_end_matches("px").parse::<f32>()
+		{
+			self.width = Some(w);
+		}
 
 		if let Some(height_str) = self.root.get_attribute("height")
-			&& let Ok(h) = height_str.trim_end_matches("px").parse::<f32>() {
-				self.height = Some(h);
-			}
+			&& let Ok(h) = height_str.trim_end_matches("px").parse::<f32>()
+		{
+			self.height = Some(h);
+		}
 
 		if let Some(viewbox_str) = self.root.get_attribute("viewBox") {
 			let parts: Vec<&str> = viewbox_str.split_whitespace().collect();
@@ -122,8 +124,8 @@ impl SvgDocument {
 					parts[2].parse::<f32>(),
 					parts[3].parse::<f32>(),
 				) {
-					self.viewbox = Some((min_x, min_y, width, height));
-				}
+				self.viewbox = Some((min_x, min_y, width, height));
+			}
 		}
 	}
 }
@@ -174,7 +176,12 @@ impl SvgParser {
 
 	fn contains_event_handlers(&self, content: &str) -> bool {
 		let event_handlers = [
-			"onclick", "onload", "onmouseover", "onmouseout", "onerror", "onabort",
+			"onclick",
+			"onload",
+			"onmouseover",
+			"onmouseout",
+			"onerror",
+			"onabort",
 		];
 		event_handlers
 			.iter()

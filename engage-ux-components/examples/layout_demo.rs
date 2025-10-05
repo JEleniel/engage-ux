@@ -150,10 +150,7 @@ fn main() {
 			monitor.position.0, monitor.position.1
 		);
 		println!("     Scale: {}x", monitor.scale_factor);
-		println!(
-			"     Refresh: {}Hz",
-			monitor.refresh_rate.unwrap_or(0)
-		);
+		println!("     Refresh: {}Hz", monitor.refresh_rate.unwrap_or(0));
 		println!(
 			"     Primary: {}",
 			if monitor.is_primary { "Yes" } else { "No" }

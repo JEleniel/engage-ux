@@ -284,10 +284,10 @@ mod tests {
 	fn test_banner_visibility() {
 		let mut banner = Banner::new(1, "Message");
 		assert!(banner.is_visible());
-		
+
 		banner.hide();
 		assert!(!banner.is_visible());
-		
+
 		banner.show();
 		assert!(banner.is_visible());
 	}
@@ -296,7 +296,7 @@ mod tests {
 	fn test_banner_dismissible() {
 		let mut banner = Banner::new(1, "Message");
 		assert!(banner.is_dismissible());
-		
+
 		banner.set_dismissible(false);
 		assert!(!banner.is_dismissible());
 	}
@@ -305,7 +305,7 @@ mod tests {
 	fn test_banner_title() {
 		let mut banner = Banner::new(1, "Message");
 		assert_eq!(banner.title(), None);
-		
+
 		banner.set_title(Some("Title".to_string()));
 		assert_eq!(banner.title(), Some("Title"));
 	}
@@ -314,7 +314,7 @@ mod tests {
 	fn test_banner_position() {
 		let mut banner = Banner::new(1, "Message");
 		assert_eq!(banner.position(), BannerPosition::Top);
-		
+
 		banner.set_position(BannerPosition::Bottom);
 		assert_eq!(banner.position(), BannerPosition::Bottom);
 	}
@@ -323,7 +323,7 @@ mod tests {
 	fn test_banner_action() {
 		let mut banner = Banner::new(1, "Message");
 		assert_eq!(banner.action_text(), None);
-		
+
 		banner.set_action_text(Some("Learn More".to_string()));
 		assert_eq!(banner.action_text(), Some("Learn More"));
 	}
