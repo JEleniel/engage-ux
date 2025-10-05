@@ -132,7 +132,7 @@ impl ImageData {
 	/// Load from file path
 	pub fn load_from_file(path: &str) -> Result<Self, MediaError> {
 		use image::ImageReader;
-		
+
 		let img = ImageReader::open(path)
 			.map_err(|e| MediaError::LoadFailed(format!("Failed to open image: {}", e)))?
 			.decode()
@@ -150,9 +150,7 @@ impl ImageData {
 		let height = img.height();
 
 		let (color_type, data) = match img {
-			image::DynamicImage::ImageLuma8(_) => {
-				(ColorType::Grayscale, img.to_luma8().into_raw())
-			}
+			image::DynamicImage::ImageLuma8(_) => (ColorType::Grayscale, img.to_luma8().into_raw()),
 			image::DynamicImage::ImageRgb8(_) => (ColorType::Rgb, img.to_rgb8().into_raw()),
 			_ => (ColorType::Rgba, img.to_rgba8().into_raw()),
 		};
@@ -172,9 +170,8 @@ impl ImageData {
 		use std::io::Cursor;
 
 		// Detect format
-		let format = ImageFormat::from_bytes(&data).ok_or_else(|| {
-			MediaError::UnsupportedFormat("Unknown image format".to_string())
-		})?;
+		let format = ImageFormat::from_bytes(&data)
+			.ok_or_else(|| MediaError::UnsupportedFormat("Unknown image format".to_string()))?;
 
 		let img = ImageReader::new(Cursor::new(&data))
 			.with_guessed_format()
@@ -186,9 +183,7 @@ impl ImageData {
 		let height = img.height();
 
 		let (color_type, img_data) = match img {
-			image::DynamicImage::ImageLuma8(_) => {
-				(ColorType::Grayscale, img.to_luma8().into_raw())
-			}
+			image::DynamicImage::ImageLuma8(_) => (ColorType::Grayscale, img.to_luma8().into_raw()),
 			image::DynamicImage::ImageRgb8(_) => (ColorType::Rgb, img.to_rgb8().into_raw()),
 			_ => (ColorType::Rgba, img.to_rgba8().into_raw()),
 		};
@@ -235,18 +230,9 @@ mod tests {
 
 	#[test]
 	fn test_image_format_from_extension() {
-		assert_eq!(
-			ImageFormat::from_extension("png"),
-			Some(ImageFormat::Png)
-		);
-		assert_eq!(
-			ImageFormat::from_extension("jpg"),
-			Some(ImageFormat::Jpeg)
-		);
-		assert_eq!(
-			ImageFormat::from_extension("webp"),
-			Some(ImageFormat::WebP)
-		);
+		assert_eq!(ImageFormat::from_extension("png"), Some(ImageFormat::Png));
+		assert_eq!(ImageFormat::from_extension("jpg"), Some(ImageFormat::Jpeg));
+		assert_eq!(ImageFormat::from_extension("webp"), Some(ImageFormat::WebP));
 		assert_eq!(ImageFormat::from_extension("unknown"), None);
 	}
 
@@ -288,13 +274,7 @@ mod tests {
 
 	#[test]
 	fn test_bytes_per_pixel() {
-		let grayscale = ImageData::new(
-			1,
-			1,
-			ImageFormat::Png,
-			ColorType::Grayscale,
-			vec![128],
-		);
+		let grayscale = ImageData::new(1, 1, ImageFormat::Png, ColorType::Grayscale, vec![128]);
 		assert_eq!(grayscale.bytes_per_pixel(), 1);
 
 		let rgb = ImageData::new(1, 1, ImageFormat::Png, ColorType::Rgb, vec![255, 0, 0]);

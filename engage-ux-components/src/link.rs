@@ -188,7 +188,7 @@ mod tests {
 	fn test_link_target() {
 		let mut link = Link::new(1, "Link", "https://example.com");
 		assert_eq!(link.target(), LinkTarget::Self_);
-		
+
 		link.set_target(LinkTarget::Blank);
 		assert_eq!(link.target(), LinkTarget::Blank);
 	}
@@ -197,7 +197,7 @@ mod tests {
 	fn test_link_underline() {
 		let mut link = Link::new(1, "Link", "https://example.com");
 		assert!(link.is_underlined());
-		
+
 		link.set_underline(false);
 		assert!(!link.is_underlined());
 	}

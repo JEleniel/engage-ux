@@ -290,13 +290,13 @@ mod tests {
 	#[test]
 	fn test_video_playback() {
 		let mut video = Video::new(1, "video.mp4");
-		
+
 		video.play();
 		assert_eq!(video.state(), VideoState::Playing);
-		
+
 		video.pause();
 		assert_eq!(video.state(), VideoState::Paused);
-		
+
 		video.stop();
 		assert_eq!(video.state(), VideoState::Stopped);
 		assert_eq!(video.current_time(), 0.0);
@@ -306,10 +306,10 @@ mod tests {
 	fn test_video_seek() {
 		let mut video = Video::new(1, "video.mp4");
 		video.set_duration(120.0);
-		
+
 		video.set_current_time(45.0);
 		assert_eq!(video.current_time(), 45.0);
-		
+
 		// Should clamp to duration
 		video.set_current_time(150.0);
 		assert_eq!(video.current_time(), 120.0);
@@ -319,10 +319,10 @@ mod tests {
 	fn test_video_volume() {
 		let mut video = Video::new(1, "video.mp4");
 		assert_eq!(video.volume(), 1.0);
-		
+
 		video.set_volume(0.5);
 		assert_eq!(video.volume(), 0.5);
-		
+
 		// Should clamp to 0-1
 		video.set_volume(1.5);
 		assert_eq!(video.volume(), 1.0);
@@ -332,10 +332,10 @@ mod tests {
 	fn test_video_mute() {
 		let mut video = Video::new(1, "video.mp4");
 		assert!(!video.is_muted());
-		
+
 		video.set_muted(true);
 		assert!(video.is_muted());
-		
+
 		video.toggle_muted();
 		assert!(!video.is_muted());
 	}
@@ -346,7 +346,7 @@ mod tests {
 		video.set_loop_enabled(true);
 		video.set_autoplay(true);
 		video.set_controls(false);
-		
+
 		assert!(video.is_loop_enabled());
 		assert!(video.is_autoplay());
 		assert!(!video.shows_controls());

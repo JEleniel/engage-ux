@@ -52,26 +52,29 @@ fn display_theme(theme: &Theme) {
 	println!("  Secondary:  {:?}", theme.colors.secondary.components());
 	println!("  Background: {:?}", theme.colors.background.components());
 	println!("  Text:       {:?}", theme.colors.text_primary.components());
-	
+
 	println!("\nTypography:");
 	println!("  Font family: {}", theme.typography.font_family);
 	println!("  Base size:   {}px", theme.typography.font_size_base);
 	println!("  Line height: {}", theme.typography.line_height);
-	
+
 	println!("\nSpacing:");
 	println!("  Unit:   {}px", theme.spacing.unit);
 	println!("  Small:  {}px", theme.spacing.small);
 	println!("  Medium: {}px", theme.spacing.medium);
 	println!("  Large:  {}px", theme.spacing.large);
-	
+
 	println!("\nBorders:");
 	println!("  Width:  {}px", theme.borders.width);
 	println!("  Radius: {}px", theme.borders.radius);
-	
+
 	println!("\nShadows:");
 	println!("  Enabled:     {}", theme.shadows.enabled);
 	println!("  Blur radius: {}px", theme.shadows.blur_radius);
-	println!("  Offset:      ({}, {})", theme.shadows.offset_x, theme.shadows.offset_y);
+	println!(
+		"  Offset:      ({}, {})",
+		theme.shadows.offset_x, theme.shadows.offset_y
+	);
 }
 
 fn demonstrate_colors() {
@@ -79,18 +82,18 @@ fn demonstrate_colors() {
 	let red = Color::rgb(1.0, 0.0, 0.0, 1.0);
 	let green = Color::rgb(0.0, 1.0, 0.0, 1.0);
 	let blue = Color::rgb(0.0, 0.0, 1.0, 1.0);
-	
+
 	println!("RGB Colors:");
 	println!("  Red:   {:?}", red.components());
 	println!("  Green: {:?}", green.components());
 	println!("  Blue:  {:?}", blue.components());
-	
+
 	// HSL colors
 	println!("\nHSL Conversions:");
 	println!("  Red as HSL:   {:?}", red.to_hsl().components());
 	println!("  Green as HSL: {:?}", green.to_hsl().components());
 	println!("  Blue as HSL:  {:?}", blue.to_hsl().components());
-	
+
 	// Hex colors
 	println!("\nFrom Hex:");
 	let cyan = Color::from_hex("#00FFFF").unwrap();
@@ -99,7 +102,7 @@ fn demonstrate_colors() {
 	println!("  Cyan:    {:?}", cyan.components());
 	println!("  Magenta: {:?}", magenta.components());
 	println!("  Yellow:  {:?}", yellow.components());
-	
+
 	// Alpha/transparency
 	println!("\nTransparency:");
 	let opaque = Color::rgb(1.0, 0.0, 0.0, 1.0);

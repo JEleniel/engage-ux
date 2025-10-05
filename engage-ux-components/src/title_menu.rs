@@ -167,18 +167,18 @@ mod tests {
 	#[test]
 	fn test_title_menu_add_menus() {
 		let mut menu = TitleMenu::new(1);
-		
+
 		let mut file_menu = TitleMenuItem::new("file", "File");
 		file_menu.add_item(MenuItem::new("new", "New"));
 		file_menu.add_item(MenuItem::new("open", "Open"));
-		
+
 		let mut edit_menu = TitleMenuItem::new("edit", "Edit");
 		edit_menu.add_item(MenuItem::new("cut", "Cut"));
 		edit_menu.add_item(MenuItem::new("copy", "Copy"));
-		
+
 		menu.add_menu(file_menu);
 		menu.add_menu(edit_menu);
-		
+
 		assert_eq!(menu.menus().len(), 2);
 	}
 
@@ -186,10 +186,10 @@ mod tests {
 	fn test_title_menu_active() {
 		let mut menu = TitleMenu::new(1);
 		menu.add_menu(TitleMenuItem::new("file", "File"));
-		
+
 		menu.open_menu("file");
 		assert_eq!(menu.active_menu(), Some("file"));
-		
+
 		menu.close_menu();
 		assert_eq!(menu.active_menu(), None);
 	}

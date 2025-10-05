@@ -276,12 +276,7 @@ fn test_platform_renderer_complex_scene() {
 
 		context.execute(RenderCommand::FillRect {
 			rect: Rect::new(x, y, 100.0, 100.0),
-			color: Color::rgba(
-				i as f32 * 0.2,
-				1.0 - i as f32 * 0.2,
-				0.5,
-				0.8,
-			),
+			color: Color::rgba(i as f32 * 0.2, 1.0 - i as f32 * 0.2, 0.5, 0.8),
 		});
 
 		context.execute(RenderCommand::Circle {
@@ -320,7 +315,10 @@ fn test_platform_backend_name_reporting() {
 	let window_name = window.name();
 
 	assert!(!renderer_name.is_empty(), "Renderer should report a name");
-	assert!(!window_name.is_empty(), "Window backend should report a name");
+	assert!(
+		!window_name.is_empty(),
+		"Window backend should report a name"
+	);
 
 	println!("Platform renderer: {}", renderer_name);
 	println!("Platform window backend: {}", window_name);
