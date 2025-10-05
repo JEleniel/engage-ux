@@ -129,7 +129,7 @@ mod tests {
 		let mut icon = Icon::new(1, "arrow");
 		icon.set_rotation(90.0);
 		assert_eq!(icon.rotation(), 90.0);
-		
+
 		icon.set_rotation(450.0); // Should wrap to 90
 		assert_eq!(icon.rotation(), 90.0);
 	}
@@ -139,7 +139,7 @@ mod tests {
 		let mut icon = Icon::new(1, "arrow");
 		assert!(!icon.is_flipped_horizontal());
 		assert!(!icon.is_flipped_vertical());
-		
+
 		icon.set_flip_horizontal(true);
 		icon.set_flip_vertical(true);
 		assert!(icon.is_flipped_horizontal());

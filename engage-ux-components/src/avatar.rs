@@ -233,13 +233,13 @@ mod tests {
 	#[test]
 	fn test_avatar_size() {
 		let mut avatar = Avatar::new(1);
-		
+
 		avatar.set_size(AvatarSize::Small);
 		assert_eq!(avatar.size().pixels(), 32);
-		
+
 		avatar.set_size(AvatarSize::Large);
 		assert_eq!(avatar.size().pixels(), 64);
-		
+
 		avatar.set_size(AvatarSize::Custom(100));
 		assert_eq!(avatar.size().pixels(), 100);
 	}
@@ -248,10 +248,10 @@ mod tests {
 	fn test_avatar_border() {
 		let mut avatar = Avatar::new(1);
 		assert_eq!(avatar.border_width(), 0.0);
-		
+
 		avatar.set_border_width(2.0);
 		avatar.set_border_color(Some(Color::from_hex("#000000").unwrap()));
-		
+
 		assert_eq!(avatar.border_width(), 2.0);
 		assert!(avatar.border_color().is_some());
 	}

@@ -220,10 +220,10 @@ mod tests {
 		group.add_child(10);
 		group.add_child(20);
 		group.add_child(30);
-		
+
 		assert_eq!(group.children().len(), 3);
 		assert_eq!(group.children()[0], 10);
-		
+
 		group.remove_child(20);
 		assert_eq!(group.children().len(), 2);
 	}
@@ -232,7 +232,7 @@ mod tests {
 	fn test_group_orientation() {
 		let mut group = Group::new(1);
 		assert_eq!(group.orientation(), GroupOrientation::Vertical);
-		
+
 		group.set_orientation(GroupOrientation::Horizontal);
 		assert_eq!(group.orientation(), GroupOrientation::Horizontal);
 	}
@@ -242,11 +242,11 @@ mod tests {
 		let mut group = Group::new(1);
 		assert!(!group.is_collapsible());
 		assert!(!group.is_collapsed());
-		
+
 		group.set_collapsible(true);
 		group.set_collapsed(true);
 		assert!(group.is_collapsed());
-		
+
 		group.toggle_collapsed();
 		assert!(!group.is_collapsed());
 	}
@@ -256,7 +256,7 @@ mod tests {
 		let mut group = Group::new(1);
 		group.set_spacing(16.0);
 		group.set_padding(20.0);
-		
+
 		assert_eq!(group.spacing(), 16.0);
 		assert_eq!(group.padding(), 20.0);
 	}

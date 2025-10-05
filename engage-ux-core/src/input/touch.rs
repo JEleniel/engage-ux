@@ -222,9 +222,7 @@ impl GestureRecognizer {
 				self.initial_distance = Some(distance);
 				None
 			}
-			TouchPhase::Moved => {
-				self.initial_distance.map(|initial| distance / initial)
-			}
+			TouchPhase::Moved => self.initial_distance.map(|initial| distance / initial),
 			_ => {
 				self.initial_distance = None;
 				None
@@ -246,9 +244,9 @@ impl GestureRecognizer {
 				self.initial_centroid = Some(centroid);
 				None
 			}
-			TouchPhase::Moved => {
-				self.initial_centroid.map(|initial| (centroid.0 - initial.0, centroid.1 - initial.1))
-			}
+			TouchPhase::Moved => self
+				.initial_centroid
+				.map(|initial| (centroid.0 - initial.0, centroid.1 - initial.1)),
 			_ => {
 				self.initial_centroid = None;
 				None

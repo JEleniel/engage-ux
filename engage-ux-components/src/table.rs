@@ -295,7 +295,7 @@ mod tests {
 	fn test_table_cell_access() {
 		let mut table = Table::new(1);
 		table.add_row(vec![TableCell::new("1"), TableCell::new("John")]);
-		
+
 		let cell = table.cell_at(0, 1);
 		assert!(cell.is_some());
 		assert_eq!(cell.unwrap().value, "John");
@@ -307,10 +307,10 @@ mod tests {
 		table.set_selectable(true);
 		table.add_row(vec![TableCell::new("1")]);
 		table.add_row(vec![TableCell::new("2")]);
-		
+
 		table.select_row(0);
 		assert_eq!(table.selected_rows().len(), 1);
-		
+
 		table.deselect_row(0);
 		assert_eq!(table.selected_rows().len(), 0);
 	}
@@ -320,7 +320,7 @@ mod tests {
 		let mut table = Table::new(1);
 		assert!(table.is_striped());
 		assert!(table.is_bordered());
-		
+
 		table.set_striped(false);
 		table.set_bordered(false);
 		assert!(!table.is_striped());

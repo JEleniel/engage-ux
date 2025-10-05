@@ -4,6 +4,7 @@
 //! - Window management
 //! - Graphics rendering
 //! - Input handling
+//! - Screen reader and accessibility APIs
 //! - File system access
 //! - Multi-monitor support
 
@@ -12,7 +13,9 @@ pub mod monitor;
 pub mod platform;
 pub mod window;
 
-pub use backends::{BackendFactory, RenderBackend, WindowBackend, get_backend_factory};
+pub use backends::{
+	BackendFactory, RenderBackend, ScreenReaderBackend, WindowBackend, get_backend_factory,
+};
 pub use monitor::{Monitor, MonitorBounds, MonitorConfiguration, MonitorLayoutMode};
 pub use platform::Platform;
 pub use window::Window;

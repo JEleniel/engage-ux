@@ -294,9 +294,11 @@ fn test_motion_sensor_input() {
 				return false;
 			}
 
-			if let (Some(x), Some(y), Some(z)) =
-				(event.get_float("x"), event.get_float("y"), event.get_float("z"))
-			{
+			if let (Some(x), Some(y), Some(z)) = (
+				event.get_float("x"),
+				event.get_float("y"),
+				event.get_float("z"),
+			) {
 				match event.event_type.as_str() {
 					"accelerometer" => {
 						self.acceleration = (x, y, z);

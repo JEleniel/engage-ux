@@ -227,21 +227,21 @@ mod tests {
 	#[test]
 	fn test_pagination_navigation() {
 		let mut pagination = Pagination::new(1, 10);
-		
+
 		assert!(pagination.next_page());
 		assert_eq!(pagination.current_page(), 2);
-		
+
 		assert!(pagination.prev_page());
 		assert_eq!(pagination.current_page(), 1);
-		
+
 		assert!(!pagination.prev_page()); // Can't go below 1
 		assert_eq!(pagination.current_page(), 1);
-		
+
 		pagination.last();
 		assert_eq!(pagination.current_page(), 10);
-		
+
 		assert!(!pagination.next_page()); // Can't go above total
-		
+
 		pagination.first();
 		assert_eq!(pagination.current_page(), 1);
 	}
@@ -249,10 +249,10 @@ mod tests {
 	#[test]
 	fn test_pagination_set_page() {
 		let mut pagination = Pagination::new(1, 10);
-		
+
 		pagination.set_current_page(5);
 		assert_eq!(pagination.current_page(), 5);
-		
+
 		pagination.set_current_page(15); // Out of range
 		assert_eq!(pagination.current_page(), 5); // Should not change
 	}
@@ -261,7 +261,7 @@ mod tests {
 	fn test_pagination_total_pages_update() {
 		let mut pagination = Pagination::new(1, 10);
 		pagination.set_current_page(8);
-		
+
 		pagination.set_total_pages(5); // Reduce total pages
 		assert_eq!(pagination.current_page(), 5); // Should adjust current
 	}
@@ -270,7 +270,7 @@ mod tests {
 	fn test_pagination_sibling_count() {
 		let mut pagination = Pagination::new(1, 10);
 		assert_eq!(pagination.sibling_count(), 1);
-		
+
 		pagination.set_sibling_count(2);
 		assert_eq!(pagination.sibling_count(), 2);
 	}
@@ -280,7 +280,7 @@ mod tests {
 		let mut pagination = Pagination::new(1, 10);
 		assert!(pagination.shows_first_last());
 		assert!(pagination.shows_prev_next());
-		
+
 		pagination.set_show_first_last(false);
 		pagination.set_show_prev_next(false);
 		assert!(!pagination.shows_first_last());

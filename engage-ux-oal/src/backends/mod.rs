@@ -1,17 +1,34 @@
 //! Platform-specific backend implementations
 //!
 //! This module provides the architecture for platform-specific rendering,
-//! window management, and input handling.
+//! window management, input handling, and accessibility.
 
 pub mod renderer;
+pub mod screen_reader;
+pub mod softbuffer_renderer;
 pub mod window_backend;
 pub mod winit_window;
-pub mod softbuffer_renderer;
+
+#[cfg(target_os = "windows")]
+pub mod screen_reader_windows;
+
+#[cfg(target_os = "macos")]
+pub mod screen_reader_macos;
+
+#[cfg(target_os = "linux")]
+pub mod screen_reader_linux;
+
+#[cfg(target_os = "android")]
+pub mod screen_reader_android;
+
+#[cfg(target_os = "ios")]
+pub mod screen_reader_ios;
 
 pub use renderer::{RenderBackend, RenderCommand, RenderContext};
+pub use screen_reader::{ScreenReaderBackend, StubScreenReader};
+pub use softbuffer_renderer::SoftbufferRenderer;
 pub use window_backend::{WindowBackend, WindowBackendEvent, WindowBounds, WindowState};
 pub use winit_window::WinitWindowBackend;
-pub use softbuffer_renderer::SoftbufferRenderer;
 
 /// Platform-specific backend factory
 pub trait BackendFactory {
@@ -20,6 +37,9 @@ pub trait BackendFactory {
 
 	/// Create a window backend for the current platform
 	fn create_window_backend(&self) -> Box<dyn WindowBackend>;
+
+	/// Create a screen reader backend for the current platform
+	fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend>;
 }
 
 /// Get the backend factory for the current platform
@@ -66,6 +86,10 @@ pub mod platforms {
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
 			Box::new(window_backend::StubWindowBackend::default())
 		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader::StubScreenReader::new())
+		}
 	}
 
 	// Platform-specific factories (to be implemented)
@@ -83,6 +107,10 @@ pub mod platforms {
 			// Using winit for safe, cross-platform window management
 			Box::new(winit_window::WinitWindowBackend::new())
 		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_windows::WindowsScreenReader::new())
+		}
 	}
 
 	#[cfg(target_os = "macos")]
@@ -98,6 +126,10 @@ pub mod platforms {
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
 			// Using winit for safe, cross-platform window management
 			Box::new(winit_window::WinitWindowBackend::new())
+		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_macos::MacOSScreenReader::new())
 		}
 	}
 
@@ -115,6 +147,10 @@ pub mod platforms {
 			// Using winit for safe, cross-platform window management
 			Box::new(winit_window::WinitWindowBackend::new())
 		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_linux::LinuxScreenReader::new())
+		}
 	}
 
 	#[cfg(target_os = "android")]
@@ -130,6 +166,10 @@ pub mod platforms {
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
 			// Using winit for safe, cross-platform window management
 			Box::new(winit_window::WinitWindowBackend::new())
+		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_android::AndroidScreenReader::new())
 		}
 	}
 
@@ -147,6 +187,10 @@ pub mod platforms {
 			// Using winit for safe, cross-platform window management
 			Box::new(winit_window::WinitWindowBackend::new())
 		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_ios::IOSScreenReader::new())
+		}
 	}
 }
 
@@ -159,6 +203,7 @@ mod tests {
 		let factory = get_backend_factory();
 		let _renderer = factory.create_renderer();
 		let _window = factory.create_window_backend();
+		let _screen_reader = factory.create_screen_reader();
 		// Test passes if backends can be created without panic
 	}
 }

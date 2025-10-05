@@ -19,9 +19,15 @@ pub enum EventType {
 	/// Mouse wheel scrolled
 	MouseWheel { delta_x: f32, delta_y: f32 },
 	/// Key pressed
-	KeyDown { key: String, modifiers: KeyModifiers },
+	KeyDown {
+		key: String,
+		modifiers: KeyModifiers,
+	},
 	/// Key released
-	KeyUp { key: String, modifiers: KeyModifiers },
+	KeyUp {
+		key: String,
+		modifiers: KeyModifiers,
+	},
 	/// Text input
 	TextInput { text: String },
 	/// Component gained focus
@@ -131,10 +137,10 @@ mod tests {
 	fn test_event_handler() {
 		let handler = EventHandler::new();
 		let _receiver = handler.subscribe();
-		
+
 		let event = Event::new(1, EventType::Click);
 		handler.emit(event.clone());
-		
+
 		// Note: In a real test, we'd use tokio runtime to test async
 		// For now, just verify the handler was created
 		assert!(handler.sender.receiver_count() > 0);
