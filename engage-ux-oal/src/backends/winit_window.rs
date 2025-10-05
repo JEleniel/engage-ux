@@ -172,10 +172,10 @@ mod tests {
 	#[test]
 	fn test_winit_window_state_changes() {
 		let mut window = WinitWindowBackend::new();
-		
+
 		window.set_state(WindowState::Maximized);
 		assert_eq!(window.state(), WindowState::Maximized);
-		
+
 		// Should generate a Maximized event
 		let event = window.poll_event();
 		assert!(matches!(event, Some(WindowBackendEvent::Maximized)));
@@ -184,7 +184,7 @@ mod tests {
 	#[test]
 	fn test_winit_window_events() {
 		let mut window = WinitWindowBackend::new();
-		
+
 		// Test focus event
 		window.request_focus();
 		assert!(window.is_focused());
@@ -196,10 +196,10 @@ mod tests {
 	fn test_winit_window_visibility() {
 		let mut window = WinitWindowBackend::new();
 		assert!(window.is_visible());
-		
+
 		window.hide();
 		assert!(!window.is_visible());
-		
+
 		window.show();
 		assert!(window.is_visible());
 	}

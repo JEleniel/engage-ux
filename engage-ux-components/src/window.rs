@@ -432,16 +432,16 @@ mod tests {
 	#[test]
 	fn test_window_states() {
 		let mut window = Window::new(1, "Test");
-		
+
 		window.minimize();
 		assert!(window.is_minimized());
-		
+
 		window.restore();
 		assert_eq!(window.state(), WindowState::Normal);
-		
+
 		window.maximize();
 		assert!(window.is_maximized());
-		
+
 		window.set_fullscreen(true);
 		assert!(window.is_fullscreen());
 	}
@@ -449,15 +449,15 @@ mod tests {
 	#[test]
 	fn test_window_properties() {
 		let mut window = Window::new(1, "Test");
-		
+
 		assert!(window.is_resizable());
 		assert!(window.is_movable());
 		assert!(window.is_closable());
-		
+
 		window.set_resizable(false);
 		window.set_movable(false);
 		window.set_closable(false);
-		
+
 		assert!(!window.is_resizable());
 		assert!(!window.is_movable());
 		assert!(!window.is_closable());
@@ -466,12 +466,12 @@ mod tests {
 	#[test]
 	fn test_window_size_constraints() {
 		let mut window = Window::new(1, "Test");
-		
+
 		window.set_min_width(Some(400.0));
 		window.set_min_height(Some(300.0));
 		window.set_max_width(Some(1920.0));
 		window.set_max_height(Some(1080.0));
-		
+
 		assert_eq!(window.min_width(), Some(400.0));
 		assert_eq!(window.min_height(), Some(300.0));
 		assert_eq!(window.max_width(), Some(1920.0));
@@ -484,9 +484,9 @@ mod tests {
 		window.add_child(10);
 		window.add_child(20);
 		window.add_child(30);
-		
+
 		assert_eq!(window.children().len(), 3);
-		
+
 		window.remove_child(20);
 		assert_eq!(window.children().len(), 2);
 	}
@@ -495,7 +495,7 @@ mod tests {
 	fn test_window_modal() {
 		let mut window = Window::new(1, "Test");
 		assert!(!window.is_modal());
-		
+
 		window.set_modal(true);
 		assert!(window.is_modal());
 	}

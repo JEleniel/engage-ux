@@ -41,3 +41,7 @@ path = "test_custom_input_system.rs"
 [[test]]
 name = "test_platform_backends"
 path = "test_platform_backends.rs"
+
+[[test]]
+name = "test_macos_backend"
+path = "test_macos_backend.rs"

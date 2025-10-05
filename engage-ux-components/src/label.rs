@@ -121,7 +121,7 @@ mod tests {
 		let mut label = Label::new(1, "Text");
 		label.set_font_size(24.0);
 		assert_eq!(label.font_size(), 24.0);
-		
+
 		// Test minimum size enforcement
 		label.set_font_size(0.5);
 		assert_eq!(label.font_size(), 1.0);
@@ -131,7 +131,7 @@ mod tests {
 	fn test_label_alignment() {
 		let mut label = Label::new(1, "Text");
 		assert_eq!(label.align(), TextAlign::Left);
-		
+
 		label.set_align(TextAlign::Center);
 		assert_eq!(label.align(), TextAlign::Center);
 	}
@@ -141,7 +141,7 @@ mod tests {
 		let mut label = Label::new(1, "Text");
 		assert!(label.is_visible());
 		assert!(label.is_enabled());
-		
+
 		label.set_visible(false);
 		assert!(!label.is_visible());
 	}

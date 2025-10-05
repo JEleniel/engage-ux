@@ -4,14 +4,14 @@
 //! window management, and input handling.
 
 pub mod renderer;
+pub mod softbuffer_renderer;
 pub mod window_backend;
 pub mod winit_window;
-pub mod softbuffer_renderer;
 
 pub use renderer::{RenderBackend, RenderCommand, RenderContext};
+pub use softbuffer_renderer::SoftbufferRenderer;
 pub use window_backend::{WindowBackend, WindowBackendEvent, WindowBounds, WindowState};
 pub use winit_window::WinitWindowBackend;
-pub use softbuffer_renderer::SoftbufferRenderer;
 
 /// Platform-specific backend factory
 pub trait BackendFactory {

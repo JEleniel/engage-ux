@@ -165,7 +165,10 @@ mod tests {
 			.with_min_height(Unit::pixels(50.0))
 			.with_max_height(Unit::pixels(300.0));
 
-		assert_eq!(constraints.constrain_height(200.0, 600.0, 16.0, 16.0), 200.0);
+		assert_eq!(
+			constraints.constrain_height(200.0, 600.0, 16.0, 16.0),
+			200.0
+		);
 		assert_eq!(constraints.constrain_height(30.0, 600.0, 16.0, 16.0), 50.0);
 		assert_eq!(
 			constraints.constrain_height(400.0, 600.0, 16.0, 16.0),

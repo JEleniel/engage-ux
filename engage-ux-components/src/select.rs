@@ -204,7 +204,7 @@ mod tests {
 		let mut select = Select::new(1);
 		select.add_option(SelectOption::new("Option 1", "1"));
 		select.add_option(SelectOption::new("Option 2", "2"));
-		
+
 		select.select(0);
 		assert_eq!(select.selected_index(), Some(0));
 		assert_eq!(select.selected_value(), Some("1"));
@@ -217,7 +217,7 @@ mod tests {
 		let mut option = SelectOption::new("Disabled", "disabled");
 		option.disabled = true;
 		select.add_option(option);
-		
+
 		select.select(0);
 		assert_eq!(select.selected_index(), None); // Should not select disabled option
 	}
@@ -226,10 +226,10 @@ mod tests {
 	fn test_select_toggle() {
 		let mut select = Select::new(1);
 		assert!(!select.is_open());
-		
+
 		select.toggle();
 		assert!(select.is_open());
-		
+
 		select.toggle();
 		assert!(!select.is_open());
 	}
