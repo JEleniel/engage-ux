@@ -1,6 +1,6 @@
 # Component Reference
 
-Engage UX provides 50 fully-implemented, production-ready components organized into 9 categories.
+Engage UX provides 40 fully-documented components organized into 9 categories.
 
 ## Component Categories
 
@@ -8,9 +8,9 @@ Engage UX provides 50 fully-implemented, production-ready components organized i
 - [Interactive Components](#interactive-components) (14)
 - [Layout Components](#layout-components) (4)
 - [Notification Components](#notification-components) (3)
-- [Menu Components](#menu-components) (4)
-- [Dialog Components](#dialog-components) (5)
-- [Window Controls](#window-controls) (3)
+- [Menu Components](#menu-components) (2)
+- [Dialog Components](#dialog-components) (1)
+- [Window Controls](#window-controls) (1)
 - [Pane Groups](#pane-groups) (2)
 - [Graphic & Display](#graphic--display) (2)
 
@@ -31,7 +31,7 @@ Display information to users.
 | [Progress](progress.md) | Progress indicator | Linear/circular/indeterminate, labels, colors |
 | [Tooltip](tooltip.md) | Contextual help | Positioning, delays, custom styling |
 | [Breadcrumb](breadcrumb.md) | Navigation path | Custom separators, clickable items |
-| [Line Numbers](line-numbers.md) | Code editor line numbers | Highlighting, custom colors |
+| [Line Numbers](line_numbers.md) | Code editor line numbers | Highlighting, custom colors |
 | [Ruler](ruler.md) | Measurement ruler | Pixels/cm/inches/points, orientation |
 
 ## Interactive Components
@@ -45,14 +45,14 @@ Allow user interaction.
 | [Radio Button](radio.md) | Single selection | Radio groups, values, colors |
 | [Toggle](toggle.md) | On/off switch | Sizes, labels, colors |
 | [Slider](slider.md) | Range selector | Min/max/step, value display, tooltips |
-| [Text Input](text-input.md) | Single-line text | Types, validation, max length, placeholder |
-| [Text Area](text-area.md) | Multi-line text | Rows/cols, max length, read-only, resize |
+| [Text Input](text_input.md) | Single-line text | Types, validation, max length, placeholder |
+| [Text Area](text_area.md) | Multi-line text | Rows/cols, max length, read-only, resize |
 | [Select](select.md) | Dropdown selection | Options, search, multi-select, custom render |
 | [Link](link.md) | Navigation link | Targets, underline, colors, external indicator |
 | [Pagination](pagination.md) | Page navigation | Total pages, current page, page size options |
 | [Carousel](carousel.md) | Image/content carousel | Auto-play, indicators, navigation, transitions |
-| [Date Picker](date-picker.md) | Date selection | Min/max dates, custom formats, inline/popup |
-| [Text Editor](text-editor.md) | Rich text editing | Formatting, undo/redo, custom toolbar |
+| [Date Picker](date_picker.md) | Date selection | Min/max dates, custom formats, inline/popup |
+| [Text Editor](text_editor.md) | Rich text editing | Formatting, undo/redo, custom toolbar |
 | [Console](console.md) | Terminal-like display | ANSI colors, scrolling, line wrapping |
 
 ## Layout Components
@@ -82,10 +82,8 @@ Navigation and command menus.
 
 | Component | Description | Key Features |
 |-----------|-------------|--------------|
-| [Drawer](drawer.md) | Side drawer | Left/right/top/bottom, overlay/push modes |
-| [Dropdown](dropdown.md) | Dropdown menu | Nested items, icons, shortcuts, separators |
-| [Hamburger Menu](hamburger-menu.md) | Mobile menu | Animated icon, slide-in drawer |
-| [Title Menu](title-menu.md) | Application menu bar | File/Edit/View menus, shortcuts |
+| [Menu](menu.md) | Navigation menus | Dropdown, Drawer, Hamburger, nested items |
+| [Title Menu](title_menu.md) | Application menu bar | File/Edit/View menus, shortcuts |
 
 ## Dialog Components
 
@@ -93,11 +91,7 @@ Modal dialogs and overlays.
 
 | Component | Description | Key Features |
 |-----------|-------------|--------------|
-| [Alert Dialog](alert.md) | Simple alert | Title, message, single action |
-| [Confirm Dialog](confirm.md) | Confirmation prompt | Title, message, confirm/cancel |
-| [Custom Modal](modal.md) | Custom modal dialog | Custom content, backdrop, sizing |
-| [Open Dialog](open-dialog.md) | File open dialog | File types, multi-select, preview |
-| [Save-As Dialog](save-as-dialog.md) | File save dialog | Default name, file types, overwrite confirm |
+| [Dialog](dialog.md) | Modal dialogs | Alert, Confirm, Custom Modal, File Open/Save |
 
 ## Window Controls
 
@@ -105,9 +99,7 @@ Window management buttons.
 
 | Component | Description | Key Features |
 |-----------|-------------|--------------|
-| [Close Button](close.md) | Close window | Custom icon, confirmation |
-| [Maximize/Restore](maximize.md) | Maximize/restore window | State toggle, animations |
-| [Minimize/Restore](minimize.md) | Minimize/restore window | Taskbar integration |
+| [Window Controls](window_controls.md) | Window control buttons | Close, Minimize, Maximize/Restore |
 
 ## Pane Groups
 
