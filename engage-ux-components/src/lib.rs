@@ -65,11 +65,17 @@ pub mod window_controls;
 // Re-exports
 pub use label::Label;
 pub use text::Text;
+pub use icon::Icon;
+pub use image::Image;
 pub use button::Button;
 pub use text_input::TextInput;
 pub use text_area::TextArea;
 pub use checkbox::Checkbox;
+pub use radio::Radio;
+pub use toggle::Toggle;
+pub use slider::Slider;
 pub use container::Container;
+pub use card::Card;
 pub use list::{List, ListItem};
 pub use select::{Select, SelectOption};
 pub use link::Link;
