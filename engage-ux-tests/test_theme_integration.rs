@@ -62,8 +62,9 @@ fn test_theme_defaults() {
 	let light = Theme::light();
 	let dark = Theme::dark();
 
-	assert_eq!(light.name, "Light");
-	assert_eq!(dark.name, "Dark");
+	// Default themes are now LCARS themes
+	assert_eq!(light.name, "LCARS Light");
+	assert_eq!(dark.name, "LCARS Dark");
 
 	// Verify both themes have all required properties
 	assert_eq!(light.typography.font_size_base, 16.0);
