@@ -5,9 +5,13 @@
 
 pub mod renderer;
 pub mod window_backend;
+pub mod winit_window;
+pub mod softbuffer_renderer;
 
 pub use renderer::{RenderBackend, RenderCommand, RenderContext};
-pub use window_backend::{WindowBackend, WindowBackendEvent};
+pub use window_backend::{WindowBackend, WindowBackendEvent, WindowBounds, WindowState};
+pub use winit_window::WinitWindowBackend;
+pub use softbuffer_renderer::SoftbufferRenderer;
 
 /// Platform-specific backend factory
 pub trait BackendFactory {
@@ -71,13 +75,13 @@ pub mod platforms {
 	#[cfg(target_os = "windows")]
 	impl BackendFactory for WindowsBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement Windows Direct2D/Direct3D renderer
-			Box::new(renderer::StubRenderer)
+			// Using softbuffer for safe, cross-platform software rendering
+			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement Windows Win32 window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Using winit for safe, cross-platform window management
+			Box::new(winit_window::WinitWindowBackend::new())
 		}
 	}
 
@@ -87,13 +91,13 @@ pub mod platforms {
 	#[cfg(target_os = "macos")]
 	impl BackendFactory for MacOSBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement macOS Core Graphics renderer
-			Box::new(renderer::StubRenderer)
+			// Using softbuffer for safe, cross-platform software rendering
+			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement macOS Cocoa window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Using winit for safe, cross-platform window management
+			Box::new(winit_window::WinitWindowBackend::new())
 		}
 	}
 
@@ -103,13 +107,13 @@ pub mod platforms {
 	#[cfg(target_os = "linux")]
 	impl BackendFactory for LinuxBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement Linux Cairo/Skia renderer
-			Box::new(renderer::StubRenderer)
+			// Using softbuffer for safe, cross-platform software rendering
+			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement Linux X11/Wayland window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Using winit for safe, cross-platform window management
+			Box::new(winit_window::WinitWindowBackend::new())
 		}
 	}
 
@@ -119,13 +123,13 @@ pub mod platforms {
 	#[cfg(target_os = "android")]
 	impl BackendFactory for AndroidBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement Android Canvas renderer
-			Box::new(renderer::StubRenderer)
+			// Using softbuffer for safe, cross-platform software rendering
+			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement Android Activity window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Using winit for safe, cross-platform window management
+			Box::new(winit_window::WinitWindowBackend::new())
 		}
 	}
 
@@ -135,13 +139,13 @@ pub mod platforms {
 	#[cfg(target_os = "ios")]
 	impl BackendFactory for IOSBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement iOS Core Graphics renderer
-			Box::new(renderer::StubRenderer)
+			// Using softbuffer for safe, cross-platform software rendering
+			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement iOS UIKit window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Using winit for safe, cross-platform window management
+			Box::new(winit_window::WinitWindowBackend::new())
 		}
 	}
 }

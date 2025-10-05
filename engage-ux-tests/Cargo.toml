@@ -37,3 +37,7 @@ path = "test_drag_drop_system.rs"
 [[test]]
 name = "test_custom_input_system"
 path = "test_custom_input_system.rs"
+
+[[test]]
+name = "test_platform_backends"
+path = "test_platform_backends.rs"
