@@ -89,32 +89,41 @@ impl Theme {
 		Self::lcars_dark()
 	}
 
-	/// Create LCARS light theme - slick futuristic interface inspired by Star Trek
+	/// Create LCARS light theme - slick futuristic interface inspired by Star Trek Voyager
 	pub fn lcars_light() -> Self {
 		let mut custom_colors = HashMap::new();
 		custom_colors.insert(
-			"lcars_orange".to_string(),
-			Color::from_hex("#FF9966").unwrap(),
+			"voyager_indigo".to_string(),
+			Color::from_hex("#5566CC").unwrap(),
 		);
 		custom_colors.insert(
-			"lcars_peach".to_string(),
-			Color::from_hex("#FFCC99").unwrap(),
+			"voyager_blue".to_string(),
+			Color::from_hex("#6699FF").unwrap(),
 		);
 		custom_colors.insert(
-			"lcars_violet".to_string(),
-			Color::from_hex("#CC6699").unwrap(),
-		);
-		custom_colors.insert("lcars_blue".to_string(), Color::from_hex("#9999FF").unwrap());
-		custom_colors.insert(
-			"lcars_skyblue".to_string(),
-			Color::from_hex("#99CCFF").unwrap(),
+			"voyager_cyan".to_string(),
+			Color::from_hex("#66CCFF").unwrap(),
 		);
 		custom_colors.insert(
-			"lcars_lilac".to_string(),
-			Color::from_hex("#CC99CC").unwrap(),
+			"voyager_teal".to_string(),
+			Color::from_hex("#66CCCC").unwrap(),
 		);
-		custom_colors.insert("lcars_rose".to_string(), Color::from_hex("#FF9999").unwrap());
-		custom_colors.insert("lcars_tan".to_string(), Color::from_hex("#FFCC66").unwrap());
+		custom_colors.insert(
+			"voyager_purple".to_string(),
+			Color::from_hex("#9966CC").unwrap(),
+		);
+		custom_colors.insert(
+			"voyager_lavender".to_string(),
+			Color::from_hex("#9999FF").unwrap(),
+		);
+		custom_colors.insert(
+			"voyager_periwinkle".to_string(),
+			Color::from_hex("#AAAAFF").unwrap(),
+		);
+		custom_colors.insert(
+			"voyager_steel".to_string(),
+			Color::from_hex("#8899CC").unwrap(),
+		);
 		custom_colors.insert(
 			"panel_dark".to_string(),
 			Color::from_hex("#000000").unwrap(),
@@ -125,22 +134,22 @@ impl Theme {
 		);
 		custom_colors.insert(
 			"accent_glow".to_string(),
-			Color::from_hex("#FF9966CC").unwrap(),
+			Color::from_hex("#6699FFCC").unwrap(),
 		);
 
 		Self {
 			name: "LCARS Light".to_string(),
 			colors: ColorPalette {
-				primary: Color::from_hex("#FF9966").unwrap(),
-				secondary: Color::from_hex("#CC6699").unwrap(),
+				primary: Color::from_hex("#6699FF").unwrap(),
+				secondary: Color::from_hex("#9966CC").unwrap(),
 				background: Color::from_hex("#000000").unwrap(),
 				surface: Color::from_hex("#1A1A1A").unwrap(),
 				error: Color::from_hex("#CC6666").unwrap(),
-				warning: Color::from_hex("#FFCC99").unwrap(),
-				success: Color::from_hex("#99CCFF").unwrap(),
-				info: Color::from_hex("#9999FF").unwrap(),
-				text_primary: Color::from_hex("#FFCC99").unwrap(),
-				text_secondary: Color::from_hex("#CC99CC").unwrap(),
+				warning: Color::from_hex("#FFAA66").unwrap(),
+				success: Color::from_hex("#66CCAA").unwrap(),
+				info: Color::from_hex("#66CCFF").unwrap(),
+				text_primary: Color::from_hex("#AAAAFF").unwrap(),
+				text_secondary: Color::from_hex("#9999FF").unwrap(),
 				text_disabled: Color::from_hex("#666666").unwrap(),
 				custom: custom_colors,
 			},
@@ -160,45 +169,54 @@ impl Theme {
 			borders: BorderStyle {
 				width: 3.0,
 				radius: 20.0,
-				color: Color::from_hex("#FF9966").unwrap(),
+				color: Color::from_hex("#6699FF").unwrap(),
 			},
 			shadows: ShadowStyle {
 				enabled: true,
 				blur_radius: 8.0,
 				offset_x: 0.0,
 				offset_y: 4.0,
-				color: Color::from_hex("#FF996633").unwrap(),
+				color: Color::from_hex("#6699FF33").unwrap(),
 			},
 			component_layouts: HashMap::new(),
 		}
 	}
 
-	/// Create LCARS dark theme - slick futuristic interface inspired by Star Trek
+	/// Create LCARS dark theme - slick futuristic interface inspired by Star Trek Voyager
 	pub fn lcars_dark() -> Self {
 		let mut custom_colors = HashMap::new();
 		custom_colors.insert(
-			"lcars_orange".to_string(),
-			Color::from_hex("#FF9966").unwrap(),
+			"voyager_indigo".to_string(),
+			Color::from_hex("#5566CC").unwrap(),
 		);
 		custom_colors.insert(
-			"lcars_peach".to_string(),
-			Color::from_hex("#FFCC99").unwrap(),
+			"voyager_blue".to_string(),
+			Color::from_hex("#6699FF").unwrap(),
 		);
 		custom_colors.insert(
-			"lcars_violet".to_string(),
-			Color::from_hex("#CC6699").unwrap(),
-		);
-		custom_colors.insert("lcars_blue".to_string(), Color::from_hex("#9999FF").unwrap());
-		custom_colors.insert(
-			"lcars_skyblue".to_string(),
-			Color::from_hex("#99CCFF").unwrap(),
+			"voyager_cyan".to_string(),
+			Color::from_hex("#66CCFF").unwrap(),
 		);
 		custom_colors.insert(
-			"lcars_lilac".to_string(),
-			Color::from_hex("#CC99CC").unwrap(),
+			"voyager_teal".to_string(),
+			Color::from_hex("#66CCCC").unwrap(),
 		);
-		custom_colors.insert("lcars_rose".to_string(), Color::from_hex("#FF9999").unwrap());
-		custom_colors.insert("lcars_tan".to_string(), Color::from_hex("#FFCC66").unwrap());
+		custom_colors.insert(
+			"voyager_purple".to_string(),
+			Color::from_hex("#9966CC").unwrap(),
+		);
+		custom_colors.insert(
+			"voyager_lavender".to_string(),
+			Color::from_hex("#9999FF").unwrap(),
+		);
+		custom_colors.insert(
+			"voyager_periwinkle".to_string(),
+			Color::from_hex("#AAAAFF").unwrap(),
+		);
+		custom_colors.insert(
+			"voyager_steel".to_string(),
+			Color::from_hex("#8899CC").unwrap(),
+		);
 		custom_colors.insert(
 			"panel_dark".to_string(),
 			Color::from_hex("#000000").unwrap(),
@@ -213,7 +231,7 @@ impl Theme {
 		);
 		custom_colors.insert(
 			"accent_glow".to_string(),
-			Color::from_hex("#FF9966AA").unwrap(),
+			Color::from_hex("#6699FFAA").unwrap(),
 		);
 		custom_colors.insert(
 			"button_inactive".to_string(),
@@ -221,22 +239,22 @@ impl Theme {
 		);
 		custom_colors.insert(
 			"separator".to_string(),
-			Color::from_hex("#FF996666").unwrap(),
+			Color::from_hex("#6699FF66").unwrap(),
 		);
 
 		Self {
 			name: "LCARS Dark".to_string(),
 			colors: ColorPalette {
-				primary: Color::from_hex("#FF9966").unwrap(),
+				primary: Color::from_hex("#6699FF").unwrap(),
 				secondary: Color::from_hex("#9999FF").unwrap(),
 				background: Color::from_hex("#000000").unwrap(),
 				surface: Color::from_hex("#0D0D0D").unwrap(),
 				error: Color::from_hex("#FF6666").unwrap(),
-				warning: Color::from_hex("#FFCC99").unwrap(),
-				success: Color::from_hex("#99CCFF").unwrap(),
-				info: Color::from_hex("#CC99CC").unwrap(),
-				text_primary: Color::from_hex("#FFCC99").unwrap(),
-				text_secondary: Color::from_hex("#FF9966").unwrap(),
+				warning: Color::from_hex("#FFAA66").unwrap(),
+				success: Color::from_hex("#66CCAA").unwrap(),
+				info: Color::from_hex("#66CCFF").unwrap(),
+				text_primary: Color::from_hex("#AAAAFF").unwrap(),
+				text_secondary: Color::from_hex("#9999FF").unwrap(),
 				text_disabled: Color::from_hex("#555555").unwrap(),
 				custom: custom_colors,
 			},
@@ -256,14 +274,14 @@ impl Theme {
 			borders: BorderStyle {
 				width: 3.0,
 				radius: 20.0,
-				color: Color::from_hex("#FF9966").unwrap(),
+				color: Color::from_hex("#6699FF").unwrap(),
 			},
 			shadows: ShadowStyle {
 				enabled: true,
 				blur_radius: 10.0,
 				offset_x: 0.0,
 				offset_y: 4.0,
-				color: Color::from_hex("#FF996644").unwrap(),
+				color: Color::from_hex("#6699FF44").unwrap(),
 			},
 			component_layouts: HashMap::new(),
 		}
@@ -389,8 +407,8 @@ mod tests {
 		let theme = Theme::light();
 		assert_eq!(theme.name, "LCARS Light");
 		assert_eq!(theme.typography.font_size_base, 16.0);
-		// Verify LCARS color palette
-		assert_eq!(theme.colors.primary, Color::from_hex("#FF9966").unwrap());
+		// Verify Voyager-style indigo/blue color palette
+		assert_eq!(theme.colors.primary, Color::from_hex("#6699FF").unwrap());
 	}
 
 	#[test]
@@ -398,8 +416,8 @@ mod tests {
 		let theme = Theme::dark();
 		assert_eq!(theme.name, "LCARS Dark");
 		assert_eq!(theme.typography.font_size_base, 16.0);
-		// Verify LCARS color palette
-		assert_eq!(theme.colors.primary, Color::from_hex("#FF9966").unwrap());
+		// Verify Voyager-style indigo/blue color palette
+		assert_eq!(theme.colors.primary, Color::from_hex("#6699FF").unwrap());
 	}
 
 	#[test]

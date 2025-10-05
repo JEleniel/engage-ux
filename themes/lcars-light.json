@@ -2,10 +2,10 @@
   "name": "LCARS Light",
   "colors": {
     "primary": {
-      "hex": "#FF9966"
+      "hex": "#6699FF"
     },
     "secondary": {
-      "hex": "#CC6699"
+      "hex": "#9966CC"
     },
     "background": {
       "hex": "#000000"
@@ -17,47 +17,47 @@
       "hex": "#CC6666"
     },
     "warning": {
-      "hex": "#FFCC99"
+      "hex": "#FFAA66"
     },
     "success": {
-      "hex": "#99CCFF"
+      "hex": "#66CCAA"
     },
     "info": {
-      "hex": "#9999FF"
+      "hex": "#66CCFF"
     },
     "text_primary": {
-      "hex": "#FFCC99"
+      "hex": "#AAAAFF"
     },
     "text_secondary": {
-      "hex": "#CC99CC"
+      "hex": "#9999FF"
     },
     "text_disabled": {
       "hex": "#666666"
     },
     "custom": {
-      "lcars_orange": {
-        "hex": "#FF9966"
+      "voyager_indigo": {
+        "hex": "#5566CC"
       },
-      "lcars_peach": {
-        "hex": "#FFCC99"
+      "voyager_blue": {
+        "hex": "#6699FF"
       },
-      "lcars_violet": {
-        "hex": "#CC6699"
+      "voyager_cyan": {
+        "hex": "#66CCFF"
       },
-      "lcars_blue": {
+      "voyager_teal": {
+        "hex": "#66CCCC"
+      },
+      "voyager_purple": {
+        "hex": "#9966CC"
+      },
+      "voyager_lavender": {
         "hex": "#9999FF"
       },
-      "lcars_skyblue": {
-        "hex": "#99CCFF"
+      "voyager_periwinkle": {
+        "hex": "#AAAAFF"
       },
-      "lcars_lilac": {
-        "hex": "#CC99CC"
-      },
-      "lcars_rose": {
-        "hex": "#FF9999"
-      },
-      "lcars_tan": {
-        "hex": "#FFCC66"
+      "voyager_steel": {
+        "hex": "#8899CC"
       },
       "panel_dark": {
         "hex": "#000000"
@@ -66,7 +66,7 @@
         "hex": "#1A1A1A"
       },
       "accent_glow": {
-        "hex": "#FF9966CC"
+        "hex": "#6699FFCC"
       }
     }
   },
@@ -87,7 +87,7 @@
     "width": 3.0,
     "radius": 20.0,
     "color": {
-      "hex": "#FF9966"
+      "hex": "#6699FF"
     }
   },
   "shadows": {
@@ -96,7 +96,7 @@
     "offset_x": 0.0,
     "offset_y": 4.0,
     "color": {
-      "hex": "#FF996633"
+      "hex": "#6699FF33"
     }
   },
   "component_layouts": {}

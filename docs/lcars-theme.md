@@ -1,15 +1,15 @@
 # LCARS Theme - "Engage!"
 
-The LCARS (Library Computer Access/Retrieval System) theme is the default theme for Engage UX, inspired by the iconic user interface from Star Trek: The Next Generation. Named after Captain Jean-Luc Picard's famous command "Engage," this theme embodies a sleek, futuristic aesthetic that honors the project's name and spirit.
+The LCARS (Library Computer Access/Retrieval System) theme is the default theme for Engage UX, inspired by the iconic user interface from Star Trek Voyager. Named after Captain Jean-Luc Picard's famous command "Engage," this theme embodies a sleek, futuristic aesthetic with Voyager's distinctive indigo and blue color scheme.
 
 ## Overview
 
 LCARS themes feature:
-- **Vibrant Orange/Peach Colors**: Distinctive #FF9966 (LCARS Orange) and #FFCC99 (LCARS Peach)
+- **Voyager Indigo/Blue Colors**: Distinctive #6699FF (Voyager Blue) and #5566CC (Voyager Indigo)
 - **Curved Borders**: Signature 20px radius for that iconic LCARS look
 - **Bold Elements**: 3px border width for prominent UI elements
-- **Rich Color Palette**: 11+ custom colors including violet, blue, skyblue, lilac, rose, and tan
-- **Glowing Effects**: Subtle shadow effects for depth and the "glowing" LCARS appearance
+- **Rich Color Palette**: 11+ custom colors including indigo, blue, cyan, teal, purple, lavender, periwinkle, and steel
+- **Glowing Effects**: Subtle blue shadow effects for depth and the "glowing" LCARS appearance
 - **Clean Typography**: Helvetica Neue for crisp, readable text
 - **Compact Spacing**: Efficient use of space for information-dense interfaces
 
@@ -40,41 +40,41 @@ let theme = Theme::lcars_dark();
 ## Color Palette
 
 ### Primary Colors
-- **Primary**: `#FF9966` - LCARS Orange (signature color)
-- **Secondary**: Light - `#CC6699` (LCARS Violet), Dark - `#9999FF` (LCARS Blue)
+- **Primary**: `#6699FF` - Voyager Blue (signature color)
+- **Secondary**: Light - `#9966CC` (Voyager Purple), Dark - `#9999FF` (Voyager Lavender)
 - **Background**: `#000000` - Pure black
 - **Surface**: Light - `#1A1A1A`, Dark - `#0D0D0D` (very dark gray)
 
 ### Semantic Colors
 - **Error**: Light - `#CC6666`, Dark - `#FF6666` (soft red)
-- **Warning**: `#FFCC99` (LCARS Peach)
-- **Success**: `#99CCFF` (LCARS Skyblue)
-- **Info**: Light - `#9999FF`, Dark - `#CC99CC` (LCARS Lilac)
+- **Warning**: `#FFAA66` (warm orange)
+- **Success**: `#66CCAA` (teal)
+- **Info**: `#66CCFF` (Voyager Cyan)
 
 ### Text Colors
-- **Primary Text**: `#FFCC99` (LCARS Peach) - high contrast on black
-- **Secondary Text**: Light - `#CC99CC`, Dark - `#FF9966` (varying accents)
+- **Primary Text**: `#AAAAFF` (Voyager Periwinkle) - high contrast on black
+- **Secondary Text**: `#9999FF` (Voyager Lavender)
 - **Disabled Text**: Light - `#666666`, Dark - `#555555` (muted gray)
 
 ### Custom Colors
 Both themes include these custom colors for extended palette usage:
 
-- `lcars_orange`: `#FF9966`
-- `lcars_peach`: `#FFCC99`
-- `lcars_violet`: `#CC6699`
-- `lcars_blue`: `#9999FF`
-- `lcars_skyblue`: `#99CCFF`
-- `lcars_lilac`: `#CC99CC`
-- `lcars_rose`: `#FF9999`
-- `lcars_tan`: `#FFCC66`
+- `voyager_indigo`: `#5566CC`
+- `voyager_blue`: `#6699FF`
+- `voyager_cyan`: `#66CCFF`
+- `voyager_teal`: `#66CCCC`
+- `voyager_purple`: `#9966CC`
+- `voyager_lavender`: `#9999FF`
+- `voyager_periwinkle`: `#AAAAFF`
+- `voyager_steel`: `#8899CC`
 - `panel_dark`: `#000000`
 - `panel_medium`: Light - `#1A1A1A`, Dark - `#0D0D0D`
-- `accent_glow`: Light - `#FF9966CC`, Dark - `#FF9966AA` (with alpha)
+- `accent_glow`: Light - `#6699FFCC`, Dark - `#6699FFAA` (with alpha)
 
 Dark theme also includes:
 - `panel_light`: `#1A1A1A`
 - `button_inactive`: `#333333`
-- `separator`: `#FF996666`
+- `separator`: `#6699FF66`
 
 ## Typography
 
@@ -109,7 +109,7 @@ Distinctive LCARS curved borders:
 BorderStyle {
     width: 3.0,        // Bold borders
     radius: 20.0,      // Signature curves
-    color: #FF9966,    // LCARS Orange
+    color: #6699FF,    // Voyager Blue
 }
 ```
 
@@ -124,7 +124,7 @@ ShadowStyle {
     blur_radius: 8.0,
     offset_x: 0.0,
     offset_y: 4.0,
-    color: #FF996633,  // Translucent orange
+    color: #6699FF33,  // Translucent blue
 }
 
 // Dark theme
@@ -133,7 +133,7 @@ ShadowStyle {
     blur_radius: 10.0,
     offset_x: 0.0,
     offset_y: 4.0,
-    color: #FF996644,  // Translucent orange
+    color: #6699FF44,  // Translucent blue
 }
 ```
 
@@ -151,9 +151,9 @@ let theme = Theme::light();
 let primary_color = theme.colors.primary;
 let background = theme.colors.background;
 
-// Access custom LCARS colors
-if let Some(lcars_orange) = theme.colors.custom.get("lcars_orange") {
-    // Use the signature LCARS orange color
+// Access custom Voyager colors
+if let Some(voyager_blue) = theme.colors.custom.get("voyager_blue") {
+    // Use the signature Voyager blue color
 }
 ```
 

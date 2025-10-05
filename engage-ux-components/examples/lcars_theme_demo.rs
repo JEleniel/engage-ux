@@ -29,47 +29,47 @@ fn main() {
 
 	println!("\n");
 	println!("═══════════════════════════════════════════════════════════════");
-	println!("  LCARS Design Elements");
+	println!("  LCARS Design Elements - Voyager Style");
 	println!("═══════════════════════════════════════════════════════════════\n");
 
 	println!("Key Features:");
-	println!("  • Vibrant orange/peach primary colors (#FF9966, #FFCC99)");
+	println!("  • Voyager-inspired indigo/blue colors (#6699FF, #5566CC)");
 	println!("  • Distinctive curved borders (radius: 20.0)");
 	println!("  • Bold border width (3.0px)");
 	println!("  • Rich custom color palette:");
-	println!("    - LCARS Orange, Peach, Violet, Blue");
-	println!("    - Skyblue, Lilac, Rose, Tan");
-	println!("  • Glowing shadow effects for depth");
+	println!("    - Voyager Indigo, Blue, Cyan, Teal");
+	println!("    - Purple, Lavender, Periwinkle, Steel");
+	println!("  • Glowing blue shadow effects for depth");
 	println!("  • Clean Helvetica Neue typography");
 	println!("  • Compact spacing for information density\n");
 
 	println!("═══════════════════════════════════════════════════════════════\n");
 
 	// Display custom colors
-	println!("Custom LCARS Color Palette:");
-	if let Some(lcars_orange) = lcars_light.colors.custom.get("lcars_orange") {
-		println!("  LCARS Orange:  {:?}", lcars_orange);
+	println!("Custom Voyager Color Palette:");
+	if let Some(voyager_indigo) = lcars_light.colors.custom.get("voyager_indigo") {
+		println!("  Voyager Indigo:     {:?}", voyager_indigo);
 	}
-	if let Some(lcars_peach) = lcars_light.colors.custom.get("lcars_peach") {
-		println!("  LCARS Peach:   {:?}", lcars_peach);
+	if let Some(voyager_blue) = lcars_light.colors.custom.get("voyager_blue") {
+		println!("  Voyager Blue:       {:?}", voyager_blue);
 	}
-	if let Some(lcars_violet) = lcars_light.colors.custom.get("lcars_violet") {
-		println!("  LCARS Violet:  {:?}", lcars_violet);
+	if let Some(voyager_cyan) = lcars_light.colors.custom.get("voyager_cyan") {
+		println!("  Voyager Cyan:       {:?}", voyager_cyan);
 	}
-	if let Some(lcars_blue) = lcars_light.colors.custom.get("lcars_blue") {
-		println!("  LCARS Blue:    {:?}", lcars_blue);
+	if let Some(voyager_teal) = lcars_light.colors.custom.get("voyager_teal") {
+		println!("  Voyager Teal:       {:?}", voyager_teal);
 	}
-	if let Some(lcars_skyblue) = lcars_light.colors.custom.get("lcars_skyblue") {
-		println!("  LCARS Skyblue: {:?}", lcars_skyblue);
+	if let Some(voyager_purple) = lcars_light.colors.custom.get("voyager_purple") {
+		println!("  Voyager Purple:     {:?}", voyager_purple);
 	}
-	if let Some(lcars_lilac) = lcars_light.colors.custom.get("lcars_lilac") {
-		println!("  LCARS Lilac:   {:?}", lcars_lilac);
+	if let Some(voyager_lavender) = lcars_light.colors.custom.get("voyager_lavender") {
+		println!("  Voyager Lavender:   {:?}", voyager_lavender);
 	}
-	if let Some(lcars_rose) = lcars_light.colors.custom.get("lcars_rose") {
-		println!("  LCARS Rose:    {:?}", lcars_rose);
+	if let Some(voyager_periwinkle) = lcars_light.colors.custom.get("voyager_periwinkle") {
+		println!("  Voyager Periwinkle: {:?}", voyager_periwinkle);
 	}
-	if let Some(lcars_tan) = lcars_light.colors.custom.get("lcars_tan") {
-		println!("  LCARS Tan:     {:?}", lcars_tan);
+	if let Some(voyager_steel) = lcars_light.colors.custom.get("voyager_steel") {
+		println!("  Voyager Steel:      {:?}", voyager_steel);
 	}
 
 	println!("\n═══════════════════════════════════════════════════════════════");

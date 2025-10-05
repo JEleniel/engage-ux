@@ -45,7 +45,7 @@ Engage UX is organized as a Cargo workspace with the following crates:
 
 - **engage-ux-themes**: Theme system providing:
 	- JSON-based theme configuration
-	- Default LCARS themes (light and dark) - inspired by Star Trek
+	- Default LCARS themes (light and dark) - inspired by Star Trek Voyager
 	- Classic themes available for traditional designs
 	- User-friendly color formats (hex, RGB, HSL)
 	- Color palettes, typography, spacing, borders, and shadows
@@ -175,7 +175,7 @@ button.set_on_click(|event| {
 ```rust
 use engage_ux_themes::Theme;
 
-// Use default LCARS Light theme (Star Trek inspired)
+// Use default LCARS Light theme (Star Trek Voyager inspired)
 let light_theme = Theme::light();
 
 // Use default LCARS Dark theme
@@ -198,7 +198,7 @@ let json = r#"{
 let custom_theme = Theme::from_json(json).unwrap();
 ```
 
-**LCARS Themes**: Named after Captain Picard's "Engage!" command, featuring vibrant orange/peach colors (#FF9966), curved borders (20px radius), and a futuristic aesthetic inspired by Star Trek. See [docs/lcars-theme.md](docs/lcars-theme.md) for complete details.
+**LCARS Themes**: Named after Captain Picard's "Engage!" command, featuring Voyager-inspired indigo/blue colors (#6699FF, #5566CC), curved borders (20px radius), and a futuristic aesthetic inspired by Star Trek Voyager. See [docs/lcars-theme.md](docs/lcars-theme.md) for complete details.
 
 ### Example: Working with Colors
 
