@@ -43,5 +43,9 @@ name = "test_platform_backends"
 path = "test_platform_backends.rs"
 
 [[test]]
+name = "test_linux_backend"
+path = "test_linux_backend.rs"
+
+[[test]]
 name = "test_android_backend"
 path = "test_android_backend.rs"
