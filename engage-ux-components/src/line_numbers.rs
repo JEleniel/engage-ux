@@ -163,7 +163,7 @@ mod tests {
 	fn test_line_numbers_current_line() {
 		let mut line_numbers = LineNumbers::new(1, 100);
 		assert_eq!(line_numbers.current_line(), None);
-		
+
 		line_numbers.set_current_line(Some(42));
 		assert_eq!(line_numbers.current_line(), Some(42));
 	}
@@ -174,7 +174,7 @@ mod tests {
 		line_numbers.set_width(60.0);
 		line_numbers.set_padding(10.0);
 		line_numbers.set_font_size(14.0);
-		
+
 		assert_eq!(line_numbers.width(), 60.0);
 		assert_eq!(line_numbers.padding(), 10.0);
 		assert_eq!(line_numbers.font_size(), 14.0);

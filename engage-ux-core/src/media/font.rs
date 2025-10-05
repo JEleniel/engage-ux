@@ -88,10 +88,7 @@ impl FontFamily {
 	}
 
 	/// Create with fallbacks
-	pub fn with_fallbacks(
-		name: impl Into<String>,
-		fallbacks: Vec<impl Into<String>>,
-	) -> Self {
+	pub fn with_fallbacks(name: impl Into<String>, fallbacks: Vec<impl Into<String>>) -> Self {
 		Self {
 			name: name.into(),
 			fallbacks: fallbacks.into_iter().map(|s| s.into()).collect(),
@@ -132,12 +129,7 @@ impl Font {
 	}
 
 	/// Create with weight and style
-	pub fn with_style(
-		family: FontFamily,
-		size: f32,
-		weight: FontWeight,
-		style: FontStyle,
-	) -> Self {
+	pub fn with_style(family: FontFamily, size: f32, weight: FontWeight, style: FontStyle) -> Self {
 		Self {
 			family,
 			weight,
@@ -197,17 +189,15 @@ impl FontRegistry {
 	/// Register a font
 	pub fn register(&mut self, font: Font) {
 		let family_name = font.family.name.clone();
-		self.fonts
-			.entry(family_name)
-			.or_default()
-			.push(font);
+		self.fonts.entry(family_name).or_default().push(font);
 	}
 
 	/// Get font by family and style
 	pub fn get(&self, family: &str, weight: FontWeight, style: FontStyle) -> Option<&Font> {
-		self.fonts.get(family)?.iter().find(|f| {
-			f.weight == weight && f.style == style
-		})
+		self.fonts
+			.get(family)?
+			.iter()
+			.find(|f| f.weight == weight && f.style == style)
 	}
 
 	/// Get all fonts for a family
@@ -278,7 +268,7 @@ mod tests {
 		let data = vec![1, 2, 3, 4]; // Fake font data
 		let result = Font::load_from_bytes(data, 14.0);
 		assert!(result.is_err());
-		
+
 		// Empty data should also fail
 		let empty_data = vec![];
 		let result = Font::load_from_bytes(empty_data, 14.0);

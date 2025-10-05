@@ -3,8 +3,8 @@
 //! This module provides full support for both RGB and HSL color spaces
 //! with conversion between them and various utility methods.
 
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 /// Represents a color space (RGB or HSL)
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
@@ -66,7 +66,7 @@ impl Color {
 	/// Create color from hex string (e.g., "#RRGGBB" or "#RRGGBBAA")
 	pub fn from_hex(hex: &str) -> Result<Self, String> {
 		let hex = hex.trim_start_matches('#');
-		
+
 		let (r, g, b, a) = match hex.len() {
 			6 => {
 				let r = u8::from_str_radix(&hex[0..2], 16).map_err(|e| e.to_string())?;
@@ -217,24 +217,38 @@ impl<'de> Deserialize<'de> for Color {
 				components: [f32; 4],
 			},
 			// RGB array format: {"rgb": [r, g, b]} or {"rgb": [r, g, b, a]}
-			Rgb { rgb: Vec<f32> },
+			Rgb {
+				rgb: Vec<f32>,
+			},
 			// Hex format: {"hex": "#RRGGBB"} or {"hex": "#RRGGBBAA"}
-			Hex { hex: String },
+			Hex {
+				hex: String,
+			},
 			// HSL format: {"hsl": [h, s, l]} or {"hsl": [h, s, l, a]}
-			Hsl { hsl: Vec<f32> },
+			Hsl {
+				hsl: Vec<f32>,
+			},
 		}
 
 		let format = ColorFormat::deserialize(deserializer)?;
-		
+
 		match format {
-			ColorFormat::Legacy { space, components } => {
-				Ok(Color { space, components })
-			}
+			ColorFormat::Legacy { space, components } => Ok(Color { space, components }),
 			ColorFormat::Rgb { rgb } => {
 				if rgb.len() == 3 {
-					Ok(Color::rgb(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0, 1.0))
+					Ok(Color::rgb(
+						rgb[0] / 255.0,
+						rgb[1] / 255.0,
+						rgb[2] / 255.0,
+						1.0,
+					))
 				} else if rgb.len() == 4 {
-					Ok(Color::rgb(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0, rgb[3]))
+					Ok(Color::rgb(
+						rgb[0] / 255.0,
+						rgb[1] / 255.0,
+						rgb[2] / 255.0,
+						rgb[3],
+					))
 				} else {
 					Err(de::Error::custom(format!(
 						"RGB array must have 3 or 4 components, got {}",
@@ -242,9 +256,7 @@ impl<'de> Deserialize<'de> for Color {
 					)))
 				}
 			}
-			ColorFormat::Hex { hex } => {
-				Color::from_hex(&hex).map_err(de::Error::custom)
-			}
+			ColorFormat::Hex { hex } => Color::from_hex(&hex).map_err(de::Error::custom),
 			ColorFormat::Hsl { hsl } => {
 				if hsl.len() == 3 {
 					Ok(Color::hsl(hsl[0], hsl[1], hsl[2], 1.0))
@@ -328,9 +340,9 @@ mod tests {
 		let rgb = color.to_rgb();
 		let components = rgb.components();
 		assert!((components[0] - 0.502).abs() < 0.01); // 128/255 ≈ 0.502
-		assert!((components[1] - 1.0).abs() < 0.01);   // 255/255 = 1.0
-		assert!((components[2] - 1.0).abs() < 0.01);   // 255/255 = 1.0
-		assert_eq!(components[3], 1.0);                 // Alpha = 1.0
+		assert!((components[1] - 1.0).abs() < 0.01); // 255/255 = 1.0
+		assert!((components[2] - 1.0).abs() < 0.01); // 255/255 = 1.0
+		assert_eq!(components[3], 1.0); // Alpha = 1.0
 	}
 
 	#[test]

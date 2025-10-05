@@ -46,8 +46,7 @@ pub enum AriaRole {
 }
 
 /// Accessibility properties for a component
-#[derive(Debug, Clone)]
-#[derive(Default)]
+#[derive(Debug, Clone, Default)]
 pub struct AccessibilityProps {
 	/// ARIA role
 	pub role: Option<AriaRole>,
@@ -72,7 +71,6 @@ pub struct AccessibilityProps {
 	/// ARIA live region setting
 	pub live: Option<AriaLive>,
 }
-
 
 impl AccessibilityProps {
 	/// Create new accessibility properties

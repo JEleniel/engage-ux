@@ -3,8 +3,8 @@
 //! Shows how to create and handle custom input events from devices
 //! like gamepads, stylus, motion sensors, etc.
 
-use engage_ux_core::input::{CustomInputEvent, InputEvent, InputHandler};
 use engage_ux_core::component::{Component, ComponentId, ComponentProperties, Rect};
+use engage_ux_core::input::{CustomInputEvent, InputEvent, InputHandler};
 
 // Example component that handles custom input
 struct GameComponent {
@@ -70,10 +70,15 @@ impl GameComponent {
 	fn handle_stylus(&mut self, event: &CustomInputEvent) {
 		match event.event_type.as_str() {
 			"press" => {
-				if let (Some(x), Some(y), Some(pressure)) =
-					(event.get_float("x"), event.get_float("y"), event.get_float("pressure"))
-				{
-					println!("  Stylus press at ({:.1}, {:.1}) with pressure {:.2}", x, y, pressure);
+				if let (Some(x), Some(y), Some(pressure)) = (
+					event.get_float("x"),
+					event.get_float("y"),
+					event.get_float("pressure"),
+				) {
+					println!(
+						"  Stylus press at ({:.1}, {:.1}) with pressure {:.2}",
+						x, y, pressure
+					);
 				}
 			}
 			"move" => {
@@ -95,16 +100,20 @@ impl GameComponent {
 	fn handle_motion(&mut self, event: &CustomInputEvent) {
 		match event.event_type.as_str() {
 			"accelerometer" => {
-				if let (Some(x), Some(y), Some(z)) =
-					(event.get_float("x"), event.get_float("y"), event.get_float("z"))
-				{
+				if let (Some(x), Some(y), Some(z)) = (
+					event.get_float("x"),
+					event.get_float("y"),
+					event.get_float("z"),
+				) {
 					println!("  Accelerometer: x={:.2}, y={:.2}, z={:.2}", x, y, z);
 				}
 			}
 			"gyroscope" => {
-				if let (Some(x), Some(y), Some(z)) =
-					(event.get_float("x"), event.get_float("y"), event.get_float("z"))
-				{
+				if let (Some(x), Some(y), Some(z)) = (
+					event.get_float("x"),
+					event.get_float("y"),
+					event.get_float("z"),
+				) {
 					println!("  Gyroscope: x={:.2}, y={:.2}, z={:.2}", x, y, z);
 				}
 			}
@@ -298,6 +307,9 @@ fn main() {
 
 	println!("Custom input demo complete!");
 	println!("\nFinal game state:");
-	println!("  Player position: ({:.1}, {:.1})", game.player_x, game.player_y);
+	println!(
+		"  Player position: ({:.1}, {:.1})",
+		game.player_x, game.player_y
+	);
 	println!("  Score: {}", game.score);
 }

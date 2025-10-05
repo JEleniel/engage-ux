@@ -202,12 +202,14 @@ All platform backends are implemented using 100% safe Rust code:
 ### Platform-Specific Notes
 
 #### Windows
+
 - Uses winit's Win32 backend
 - Supports Windows 7 and later
 - DPI awareness enabled by default
 - Native taskbar integration
 
 #### macOS
+
 - Uses winit's Cocoa backend
 - Supports macOS 10.11 and later
 - Retina display support
@@ -218,21 +220,30 @@ All platform backends are implemented using 100% safe Rust code:
 - **Window Management**: winit with support for both X11 and Wayland
 - **Accessibility**: AT-SPI infrastructure for screen reader integration
 - Runtime selection of X11/Wayland based on environment
+
+- Supports both X11 and Wayland
+- Runtime selection based on environment
 - Full multi-monitor support
 - Desktop environment integration
 - AT-SPI ready for assistive technologies
 
 #### Android
+
 - Uses winit's Android backend
 - Supports Android 5.0 (API 21) and later
 - Lifecycle management
 - Touch input support
 
 #### iOS
+
 - Uses winit's UIKit backend
 - Supports iOS 11 and later
 - Lifecycle management
 - Touch input support
+- VoiceOver accessibility
+- Safe area inset handling
+
+For detailed iOS implementation information, see [iOS Backend Documentation](ios-backend.md).
 
 ## Linux Accessibility (AT-SPI)
 

@@ -164,14 +164,14 @@ mod tests {
 		let mut button = Button::new(1, "Button");
 		let clicked = Arc::new(std::sync::atomic::AtomicBool::new(false));
 		let clicked_clone = clicked.clone();
-		
+
 		button.set_on_click(move |_event| {
 			clicked_clone.store(true, std::sync::atomic::Ordering::Relaxed);
 		});
-		
+
 		let event = Event::new(1, EventType::Click);
 		button.handle_click(&event);
-		
+
 		assert!(clicked.load(std::sync::atomic::Ordering::Relaxed));
 	}
 
@@ -180,7 +180,7 @@ mod tests {
 		let mut button = Button::new(1, "Button");
 		assert!(button.is_visible());
 		assert!(button.is_enabled());
-		
+
 		button.set_enabled(false);
 		assert!(!button.is_enabled());
 	}

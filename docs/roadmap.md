@@ -21,19 +21,20 @@ Implement platform-specific backends for full native rendering and window manage
 
 #### Window Backends
 
-- [ ] Windows backend (Win32 API)
-- [ ] macOS backend (Cocoa/AppKit)
-- [ ] Linux backend (X11/Wayland)
-- [ ] Android backend (NDK)
-- [ ] iOS backend (UIKit)
+- [x] Windows backend (via winit's Win32 integration)
+- [x] macOS backend (via winit's Cocoa integration)
+- [x] Linux backend (via winit's X11/Wayland integration)
+- [x] Android backend (via winit's Android integration)
+- [x] iOS backend (via winit's UIKit integration)
 
 #### Rendering Backends
 
-- [ ] Direct2D backend (Windows)
-- [ ] Core Graphics backend (macOS)
-- [ ] Cairo/Skia backend (Linux)
-- [ ] Canvas backend (Android/iOS)
-- [ ] OpenGL ES fallback
+- [x] Software rendering backend (via softbuffer, cross-platform)
+- [ ] Direct2D backend (Windows) - future enhancement
+- [ ] Core Graphics backend (macOS) - future enhancement
+- [ ] Cairo/Skia backend (Linux) - future enhancement
+- [ ] Hardware-accelerated backend (wgpu) - future enhancement
+- [ ] OpenGL ES fallback - future enhancement
 
 #### Integration
 
@@ -180,19 +181,20 @@ Components under consideration for future releases:
 
 Current and planned platform support:
 
-| Platform | Architecture | Window | Rendering | Input | Status |
-|----------|--------------|--------|-----------|-------|--------|
-| Windows 10+ | x86_64 | 🚧 | 🚧 | ✅ | Phase 3 |
-| Windows 10+ | ARM64 | 🚧 | 🚧 | ✅ | Phase 3 |
-| macOS 10.15+ | x86_64 | 🚧 | 🚧 | ✅ | Phase 3 |
-| macOS 11+ | ARM64 | 🚧 | 🚧 | ✅ | Phase 3 |
-| Linux | x86_64 | 🚧 | 🚧 | ✅ | Phase 3 |
-| Linux | ARM64 | 🚧 | 🚧 | ✅ | Phase 3 |
-| Android 8+ | ARM64 | 🚧 | 🚧 | ✅ | Phase 3 |
-| iOS 13+ | ARM64 | 🚧 | 🚧 | ✅ | Phase 3 |
-| Web (WASM) | WASM32 | ⏳ | ⏳ | ⏳ | Phase 5 |
+| Platform     | Architecture | Window | Rendering | Input | Status  |
+| ------------ | ------------ | ------ | --------- | ----- | ------- |
+| Windows 10+  | x86_64       | 🚧     | 🚧        | ✅    | Phase 3 |
+| Windows 10+  | ARM64        | 🚧     | 🚧        | ✅    | Phase 3 |
+| macOS 10.15+ | x86_64       | 🚧     | 🚧        | ✅    | Phase 3 |
+| macOS 11+    | ARM64        | 🚧     | 🚧        | ✅    | Phase 3 |
+| Linux        | x86_64       | 🚧     | 🚧        | ✅    | Phase 3 |
+| Linux        | ARM64        | 🚧     | 🚧        | ✅    | Phase 3 |
+| Android 8+   | ARM64        | 🚧     | 🚧        | ✅    | Phase 3 |
+| iOS 13+      | ARM64        | 🚧     | 🚧        | ✅    | Phase 3 |
+| Web (WASM)   | WASM32       | ⏳     | ⏳        | ⏳    | Phase 5 |
 
 Legend:
+
 - ✅ Implemented
 - 🚧 Architecture ready, implementation in progress
 - ⏳ Planned
@@ -200,12 +202,14 @@ Legend:
 ## Version Timeline
 
 ### v0.1.0 (Released)
+
 - Initial release
 - All 50 components
 - Basic theme system
 - Core functionality
 
 ### v0.2.0 (Current)
+
 - Enhanced input system
 - Animation framework
 - Accessibility infrastructure
@@ -214,17 +218,20 @@ Legend:
 - Drag and drop
 
 ### v0.3.0 (Q1 2025)
+
 - Windows platform backend
 - macOS platform backend
 - Linux platform backend
 - Native rendering
 
 ### v0.4.0 (Q2 2025)
+
 - Mobile platform backends
 - Touch optimization
 - Performance improvements
 
 ### v1.0.0 (Q3 2025)
+
 - Stable API
 - Complete documentation
 - Production ready
