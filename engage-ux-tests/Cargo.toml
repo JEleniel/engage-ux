@@ -1,0 +1,39 @@
+[package]
+name = "engage-ux-tests"
+version.workspace = true
+edition.workspace = true
+publish = false
+
+[dependencies]
+engage-ux-core = { path = "../engage-ux-core" }
+engage-ux-components = { path = "../engage-ux-components" }
+engage-ux-themes = { path = "../engage-ux-themes" }
+engage-ux-oal = { path = "../engage-ux-oal" }
+tokio = { workspace = true }
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[[test]]
+name = "test_input_system"
+path = "test_input_system.rs"
+
+[[test]]
+name = "test_rendering_pipeline"
+path = "test_rendering_pipeline.rs"
+
+[[test]]
+name = "test_theme_integration"
+path = "test_theme_integration.rs"
+
+[[test]]
+name = "test_animation_system"
+path = "test_animation_system.rs"
+
+[[test]]
+name = "test_drag_drop_system"
+path = "test_drag_drop_system.rs"
+
+[[test]]
+name = "test_custom_input_system"
+path = "test_custom_input_system.rs"

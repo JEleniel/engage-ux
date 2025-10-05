@@ -1,172 +1,70 @@
-# Contributing to Engage UX
+# Contributing
 
-Thank you for your interest in contributing to Engage UX! This document provides guidelines and requirements for contributions.
+## Modifying the code
 
-## Code of Conduct
+- All contributors agree to the [Developer's Certificate of Origin](DCO.md)
+- Follow the GitHub guide for [Contributing to a project](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project)
 
-Please be respectful and constructive in all interactions with the project and its community.
+## Code Standards
 
-## Development Requirements
+- Follow the official style guide for your programming language
+- Write clear, documented, and testable code
+- Include comments for complex logic
+- Keep functions focused and concise
+- Write meaningful variable and function names
+- Add unit tests for new functionality
+- Ensure all tests pass before submitting
 
-### Rust Version
+## Pull Requests
 
-Engage UX requires Rust 1.70 or later.
+- Create a branch with a descriptive name
+- Make focused, single-purpose changes
+- Include comprehensive test coverage
+- Update documentation!
+- Follow the pull request template
+- Respond to review feedback promptly
+- Rebase your branch before merging
 
-### Code Style
+## Issues
 
-1. **Indentation**: Use **tabs** for indentation (not spaces)
-2. **Formatting**: Follow the Rust style guide for all other formatting
-3. **Comments**: Use `//!` for module/crate documentation, `///` for item documentation
-4. **Line Length**: Try to keep lines under 100 characters when practical
+- Check existing issues before creating new ones
+- Use issue templates when available
+- Provide clear reproduction steps for bugs
+- Include system/environment details
+- Add relevant logs or screenshots
+- Tag issues appropriately
 
-The project includes:
-- `rustfmt.toml` - Rust formatting configuration (enforces hard tabs)
-- `.editorconfig` - Editor configuration for consistent formatting
+## Commits
 
-### Safety
+- All commits must be linked to one or more Issues or Discussions. Feel free to [open a new issue](/issues/new) if necessary
+- Write clear commit messages in the imperative mood
+- Keep commits atomic and focused
+- Sign your commits
+- Reference related issues in commit messages
 
-- **No unsafe code**: All crates have `#![forbid(unsafe_code)]`
-- Never introduce `unsafe` blocks or remove the `unsafe_code = "forbid"` lint
+### Commit Message Examples
 
-### Dependencies
-
-- Only use crates that have been updated within the past **6 months**
-- Avoid adding new dependencies unless absolutely necessary
-- Prefer crates that are well-maintained and widely used
-
-## Project Structure
+Good examples:
 
 ```
-engage-ux/
-├── engage-ux-core/         # Core functionality (colors, events, components)
-├── engage-ux-oal/          # OS Abstraction Layer
-├── engage-ux-components/   # UI components
-└── engage-ux-themes/       # Theme system
+feat: add user authentication system (#123)
+fix: resolve memory leak in data processing (#456)
+docs: update API documentation for new endpoints (#789)
 ```
 
-## Building and Testing
+Bad examples:
 
-### Build
-
-```bash
-cargo build --all
+```
+fixed stuff
+updated code
+WIP
+quick fix for #123
 ```
 
-### Test
+## Code Review
 
-```bash
-cargo test --all
-```
-
-### Run Examples
-
-```bash
-cargo run --example basic_components -p engage-ux-components
-cargo run --example theme_demo -p engage-ux-components
-```
-
-### Check Formatting
-
-```bash
-cargo fmt --all -- --check
-```
-
-### Run Linter
-
-```bash
-cargo clippy --all -- -D warnings
-```
-
-## Testing Requirements
-
-- All new features must include unit tests
-- Aim for **90% code coverage**
-- Tests should be comprehensive and test edge cases
-- Use descriptive test names that explain what is being tested
-
-Example test:
-
-```rust
-#[test]
-fn test_button_handles_click_event() {
-    let mut button = Button::new(1, "Click");
-    let clicked = Arc::new(AtomicBool::new(false));
-    let clicked_clone = clicked.clone();
-    
-    button.set_on_click(move |_| {
-        clicked_clone.store(true, Ordering::Relaxed);
-    });
-    
-    let event = Event::new(1, EventType::Click);
-    button.handle_click(&event);
-    
-    assert!(clicked.load(Ordering::Relaxed));
-}
-```
-
-## Documentation
-
-- All public APIs must have documentation comments
-- Include examples in documentation when helpful
-- Update README.md if adding major features
-
-## Pull Request Process
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes following the guidelines above
-4. Ensure all tests pass
-5. Ensure code is properly formatted
-6. Commit your changes with clear, descriptive messages
-7. Push to your fork
-8. Open a Pull Request with a clear description of the changes
-
-### PR Description Should Include
-
-- What problem does this solve?
-- What changes were made?
-- Are there any breaking changes?
-- Screenshots (if UI changes)
-- Test coverage information
-
-## Platform-Specific Code
-
-When adding platform-specific code:
-
-1. Use conditional compilation (`#[cfg(target_os = "...")]`)
-2. Place platform-specific code in the `engage-ux-oal` crate
-3. Ensure the code works on all supported platforms or use feature gates
-4. Add tests for each platform when possible
-
-Example:
-
-```rust
-#[cfg(target_os = "windows")]
-fn platform_specific_function() {
-    // Windows implementation
-}
-
-#[cfg(target_os = "macos")]
-fn platform_specific_function() {
-    // macOS implementation
-}
-```
-
-## Accessibility
-
-- Follow WCAG AAA guidelines
-- Ensure all components are keyboard navigable
-- Provide appropriate ARIA labels and roles
-- Test with screen readers when possible
-
-## License
-
-By contributing to Engage UX, you agree that your contributions will be licensed under the GPL-3.0 license.
-
-## Questions?
-
-If you have questions about contributing, please open an issue for discussion.
-
-## Recognition
-
-Contributors will be recognized in the project's documentation and release notes.
+- Be respectful and constructive
+- Review changes thoroughly
+- Test the changes locally
+- Provide specific feedback
+- Approve only when satisfied

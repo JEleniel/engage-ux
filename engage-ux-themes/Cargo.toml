@@ -2,14 +2,9 @@
 name = "engage-ux-themes"
 version.workspace = true
 edition.workspace = true
-authors.workspace = true
-license.workspace = true
-repository.workspace = true
-rust-version.workspace = true
 description = "Theme system for Engage UX with JSON configuration support"
-
-[lints.rust]
-unsafe_code = "forbid"
+repository.workspace = true
+license.workspace = true
 
 [dependencies]
 engage-ux-core = { path = "../engage-ux-core" }
@@ -17,3 +12,6 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 
 [dev-dependencies]
+
+[lints.rust]
+unsafe_code = "forbid"

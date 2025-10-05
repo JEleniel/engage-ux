@@ -3,7 +3,8 @@
 //! This module provides full support for both RGB and HSL color spaces
 //! with conversion between them and various utility methods.
 
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use serde::de;
 
 /// Represents a color space (RGB or HSL)
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
@@ -15,7 +16,7 @@ pub enum ColorSpace {
 }
 
 /// A color with RGBA or HSLA representation
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Color {
 	space: ColorSpace,
 	// For RGB: r, g, b (0.0-1.0), a (0.0-1.0)
@@ -187,6 +188,79 @@ impl Default for Color {
 	}
 }
 
+// Custom serialization - keep backward compatibility with current format
+impl Serialize for Color {
+	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: Serializer,
+	{
+		use serde::ser::SerializeStruct;
+		let mut state = serializer.serialize_struct("Color", 2)?;
+		state.serialize_field("space", &self.space)?;
+		state.serialize_field("components", &self.components)?;
+		state.end()
+	}
+}
+
+// Custom deserialization - support multiple user-friendly formats
+impl<'de> Deserialize<'de> for Color {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: Deserializer<'de>,
+	{
+		#[derive(Deserialize)]
+		#[serde(untagged)]
+		enum ColorFormat {
+			// Legacy format: {"space": "RGB", "components": [r, g, b, a]}
+			Legacy {
+				space: ColorSpace,
+				components: [f32; 4],
+			},
+			// RGB array format: {"rgb": [r, g, b]} or {"rgb": [r, g, b, a]}
+			Rgb { rgb: Vec<f32> },
+			// Hex format: {"hex": "#RRGGBB"} or {"hex": "#RRGGBBAA"}
+			Hex { hex: String },
+			// HSL format: {"hsl": [h, s, l]} or {"hsl": [h, s, l, a]}
+			Hsl { hsl: Vec<f32> },
+		}
+
+		let format = ColorFormat::deserialize(deserializer)?;
+		
+		match format {
+			ColorFormat::Legacy { space, components } => {
+				Ok(Color { space, components })
+			}
+			ColorFormat::Rgb { rgb } => {
+				if rgb.len() == 3 {
+					Ok(Color::rgb(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0, 1.0))
+				} else if rgb.len() == 4 {
+					Ok(Color::rgb(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0, rgb[3]))
+				} else {
+					Err(de::Error::custom(format!(
+						"RGB array must have 3 or 4 components, got {}",
+						rgb.len()
+					)))
+				}
+			}
+			ColorFormat::Hex { hex } => {
+				Color::from_hex(&hex).map_err(de::Error::custom)
+			}
+			ColorFormat::Hsl { hsl } => {
+				if hsl.len() == 3 {
+					Ok(Color::hsl(hsl[0], hsl[1], hsl[2], 1.0))
+				} else if hsl.len() == 4 {
+					Ok(Color::hsl(hsl[0], hsl[1], hsl[2], hsl[3]))
+				} else {
+					Err(de::Error::custom(format!(
+						"HSL array must have 3 or 4 components, got {}",
+						hsl.len()
+					)))
+				}
+			}
+		}
+	}
+}
+
 #[cfg(test)]
 mod tests {
 	use super::*;
@@ -245,5 +319,105 @@ mod tests {
 		assert_eq!(components[0], 1.0);
 		assert_eq!(components[1], 0.0);
 		assert_eq!(components[3], 1.0);
+	}
+
+	#[test]
+	fn test_deserialize_rgb_array_without_alpha() {
+		let json = r#"{"rgb": [128, 255, 255]}"#;
+		let color: Color = serde_json::from_str(json).unwrap();
+		let rgb = color.to_rgb();
+		let components = rgb.components();
+		assert!((components[0] - 0.502).abs() < 0.01); // 128/255 ≈ 0.502
+		assert!((components[1] - 1.0).abs() < 0.01);   // 255/255 = 1.0
+		assert!((components[2] - 1.0).abs() < 0.01);   // 255/255 = 1.0
+		assert_eq!(components[3], 1.0);                 // Alpha = 1.0
+	}
+
+	#[test]
+	fn test_deserialize_rgb_array_with_alpha() {
+		let json = r#"{"rgb": [128, 255, 255, 0.5]}"#;
+		let color: Color = serde_json::from_str(json).unwrap();
+		let rgb = color.to_rgb();
+		let components = rgb.components();
+		assert!((components[0] - 0.502).abs() < 0.01);
+		assert!((components[1] - 1.0).abs() < 0.01);
+		assert!((components[2] - 1.0).abs() < 0.01);
+		assert_eq!(components[3], 0.5);
+	}
+
+	#[test]
+	fn test_deserialize_hex_without_alpha() {
+		let json = r##"{"hex": "#80FFFF"}"##;
+		let color: Color = serde_json::from_str(json).unwrap();
+		let rgb = color.to_rgb();
+		let components = rgb.components();
+		assert!((components[0] - 0.502).abs() < 0.01);
+		assert!((components[1] - 1.0).abs() < 0.01);
+		assert!((components[2] - 1.0).abs() < 0.01);
+		assert_eq!(components[3], 1.0);
+	}
+
+	#[test]
+	fn test_deserialize_hex_with_alpha() {
+		let json = r##"{"hex": "#80FFFF80"}"##;
+		let color: Color = serde_json::from_str(json).unwrap();
+		let rgb = color.to_rgb();
+		let components = rgb.components();
+		assert!((components[0] - 0.502).abs() < 0.01);
+		assert!((components[1] - 1.0).abs() < 0.01);
+		assert!((components[2] - 1.0).abs() < 0.01);
+		assert!((components[3] - 0.502).abs() < 0.01); // 128/255 ≈ 0.502
+	}
+
+	#[test]
+	fn test_deserialize_hsl_without_alpha() {
+		let json = r#"{"hsl": [180, 0.5, 0.8]}"#;
+		let color: Color = serde_json::from_str(json).unwrap();
+		assert_eq!(color.color_space(), ColorSpace::HSL);
+		let components = color.components();
+		assert_eq!(components[0], 180.0);
+		assert_eq!(components[1], 0.5);
+		assert_eq!(components[2], 0.8);
+		assert_eq!(components[3], 1.0);
+	}
+
+	#[test]
+	fn test_deserialize_hsl_with_alpha() {
+		let json = r#"{"hsl": [180, 0.5, 0.8, 0.5]}"#;
+		let color: Color = serde_json::from_str(json).unwrap();
+		assert_eq!(color.color_space(), ColorSpace::HSL);
+		let components = color.components();
+		assert_eq!(components[0], 180.0);
+		assert_eq!(components[1], 0.5);
+		assert_eq!(components[2], 0.8);
+		assert_eq!(components[3], 0.5);
+	}
+
+	#[test]
+	fn test_deserialize_legacy_format() {
+		let json = r#"{"space": "RGB", "components": [0.5, 1.0, 1.0, 1.0]}"#;
+		let color: Color = serde_json::from_str(json).unwrap();
+		assert_eq!(color.color_space(), ColorSpace::RGB);
+		let components = color.components();
+		assert_eq!(components[0], 0.5);
+		assert_eq!(components[1], 1.0);
+		assert_eq!(components[2], 1.0);
+		assert_eq!(components[3], 1.0);
+	}
+
+	#[test]
+	fn test_serialize_maintains_legacy_format() {
+		let color = Color::rgb(0.5, 1.0, 1.0, 1.0);
+		let json = serde_json::to_string(&color).unwrap();
+		assert!(json.contains("\"space\""));
+		assert!(json.contains("\"components\""));
+	}
+
+	#[test]
+	fn test_roundtrip_serialization() {
+		let original = Color::rgb(0.5, 0.75, 0.25, 0.8);
+		let json = serde_json::to_string(&original).unwrap();
+		let deserialized: Color = serde_json::from_str(&json).unwrap();
+		assert_eq!(original, deserialized);
 	}
 }

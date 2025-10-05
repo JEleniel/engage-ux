@@ -1,0 +1,103 @@
+{
+  "name": "LCARS Light",
+  "colors": {
+    "primary": {
+      "hex": "#6699FF"
+    },
+    "secondary": {
+      "hex": "#9966CC"
+    },
+    "background": {
+      "hex": "#000000"
+    },
+    "surface": {
+      "hex": "#1A1A1A"
+    },
+    "error": {
+      "hex": "#CC6666"
+    },
+    "warning": {
+      "hex": "#FFAA66"
+    },
+    "success": {
+      "hex": "#66CCAA"
+    },
+    "info": {
+      "hex": "#66CCFF"
+    },
+    "text_primary": {
+      "hex": "#AAAAFF"
+    },
+    "text_secondary": {
+      "hex": "#9999FF"
+    },
+    "text_disabled": {
+      "hex": "#666666"
+    },
+    "custom": {
+      "voyager_indigo": {
+        "hex": "#5566CC"
+      },
+      "voyager_blue": {
+        "hex": "#6699FF"
+      },
+      "voyager_cyan": {
+        "hex": "#66CCFF"
+      },
+      "voyager_teal": {
+        "hex": "#66CCCC"
+      },
+      "voyager_purple": {
+        "hex": "#9966CC"
+      },
+      "voyager_lavender": {
+        "hex": "#9999FF"
+      },
+      "voyager_periwinkle": {
+        "hex": "#AAAAFF"
+      },
+      "voyager_steel": {
+        "hex": "#8899CC"
+      },
+      "panel_dark": {
+        "hex": "#000000"
+      },
+      "panel_medium": {
+        "hex": "#1A1A1A"
+      },
+      "accent_glow": {
+        "hex": "#6699FFCC"
+      }
+    }
+  },
+  "typography": {
+    "font_family": "Helvetica Neue, Arial, sans-serif",
+    "font_size_base": 16.0,
+    "font_size_small": 13.0,
+    "font_size_large": 22.0,
+    "line_height": 1.4
+  },
+  "spacing": {
+    "unit": 8.0,
+    "small": 6.0,
+    "medium": 12.0,
+    "large": 20.0
+  },
+  "borders": {
+    "width": 3.0,
+    "radius": 20.0,
+    "color": {
+      "hex": "#6699FF"
+    }
+  },
+  "shadows": {
+    "enabled": true,
+    "blur_radius": 8.0,
+    "offset_x": 0.0,
+    "offset_y": 4.0,
+    "color": {
+      "hex": "#6699FF33"
+    }
+  },
+  "component_layouts": {}
+}

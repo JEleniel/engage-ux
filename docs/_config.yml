@@ -1,0 +1,59 @@
+# GitHub Pages Configuration for Engage UX
+
+# Theme
+theme: jekyll-theme-cayman
+title: Engage UX
+description: A fully cross-platform Rust UI toolkit with 50+ components
+baseurl: ""
+url: "https://jeleniel.github.io/engage-ux"
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Getting Started
+    url: /getting-started
+  - title: Components
+    url: /components/
+  - title: Themes
+    url: /guides/theming
+  - title: API Reference
+    url: /api/
+  - title: Architecture
+    url: /design/architecture/
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Include/Exclude
+include:
+  - _config.yml
+exclude:
+  - design/agents/
+
+# Plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO
+lang: en-US
+author:
+  name: Engage UX Team
+  email: support@engage-ux.dev
+social:
+  links:
+    - https://github.com/JEleniel/engage-ux
+
+# Collections
+collections:
+  components:
+    output: true
+    permalink: /components/:name/
+  guides:
+    output: true
+    permalink: /guides/:name/
+  examples:
+    output: true
+    permalink: /examples/:name/

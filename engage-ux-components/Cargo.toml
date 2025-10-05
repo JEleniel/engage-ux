@@ -2,21 +2,19 @@
 name = "engage-ux-components"
 version.workspace = true
 edition.workspace = true
-authors.workspace = true
-license.workspace = true
-repository.workspace = true
-rust-version.workspace = true
 description = "UI components for Engage UX"
-
-[lints.rust]
-unsafe_code = "forbid"
+repository.workspace = true
+license.workspace = true
 
 [dependencies]
 engage-ux-core = { path = "../engage-ux-core" }
 engage-ux-oal = { path = "../engage-ux-oal" }
 engage-ux-themes = { path = "../engage-ux-themes" }
-tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+tokio = { workspace = true }
 
 [dev-dependencies]
+
+[lints.rust]
+unsafe_code = "forbid"

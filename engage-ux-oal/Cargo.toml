@@ -2,26 +2,25 @@
 name = "engage-ux-oal"
 version.workspace = true
 edition.workspace = true
-authors.workspace = true
-license.workspace = true
-repository.workspace = true
-rust-version.workspace = true
 description = "OS Abstraction Layer for Engage UX - provides cross-platform support"
-
-[lints.rust]
-unsafe_code = "forbid"
+repository.workspace = true
+license.workspace = true
 
 [dependencies]
 engage-ux-core = { path = "../engage-ux-core" }
+serde = { workspace = true }
 
-[target.'cfg(target_os = "windows")'.dependencies]
-
-[target.'cfg(target_os = "macos")'.dependencies]
-
-[target.'cfg(target_os = "linux")'.dependencies]
+[dev-dependencies]
 
 [target.'cfg(target_os = "android")'.dependencies]
 
 [target.'cfg(target_os = "ios")'.dependencies]
 
-[dev-dependencies]
+[target.'cfg(target_os = "linux")'.dependencies]
+
+[target.'cfg(target_os = "macos")'.dependencies]
+
+[target.'cfg(target_os = "windows")'.dependencies]
+
+[lints.rust]
+unsafe_code = "forbid"
