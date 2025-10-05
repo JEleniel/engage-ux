@@ -37,7 +37,9 @@ impl WindowControlButton {
 				Color::from_hex("#FFFFFF").unwrap(),
 				Color::from_hex("#E81123").unwrap(),
 			),
-			WindowControlType::Minimize | WindowControlType::Maximize | WindowControlType::Restore => (
+			WindowControlType::Minimize
+			| WindowControlType::Maximize
+			| WindowControlType::Restore => (
 				Color::from_hex("#000000").unwrap(),
 				Color::from_hex("#000000").unwrap(),
 				Color::from_hex("#E0E0E0").unwrap(),
@@ -155,8 +157,14 @@ impl WindowControls {
 	pub fn new(id: ComponentId) -> Self {
 		Self {
 			properties: ComponentProperties::new(id),
-			minimize_button: Some(WindowControlButton::new(id + 1, WindowControlType::Minimize)),
-			maximize_button: Some(WindowControlButton::new(id + 2, WindowControlType::Maximize)),
+			minimize_button: Some(WindowControlButton::new(
+				id + 1,
+				WindowControlType::Minimize,
+			)),
+			maximize_button: Some(WindowControlButton::new(
+				id + 2,
+				WindowControlType::Maximize,
+			)),
 			restore_button: Some(WindowControlButton::new(id + 3, WindowControlType::Restore)),
 			close_button: WindowControlButton::new(id + 4, WindowControlType::Close),
 			is_maximized: false,
@@ -307,10 +315,10 @@ mod tests {
 	fn test_window_controls_maximize_state() {
 		let mut controls = WindowControls::new(1);
 		assert!(!controls.is_maximized());
-		
+
 		controls.set_maximized(true);
 		assert!(controls.is_maximized());
-		
+
 		controls.toggle_maximized();
 		assert!(!controls.is_maximized());
 	}
@@ -318,16 +326,16 @@ mod tests {
 	#[test]
 	fn test_window_controls_button_enabling() {
 		let mut controls = WindowControls::new(1);
-		
+
 		controls.set_minimize_enabled(false);
 		assert!(controls.minimize_button().is_none());
-		
+
 		controls.set_minimize_enabled(true);
 		assert!(controls.minimize_button().is_some());
-		
+
 		controls.set_maximize_enabled(false);
 		assert!(controls.maximize_restore_button().is_none());
-		
+
 		controls.set_maximize_enabled(true);
 		assert!(controls.maximize_restore_button().is_some());
 	}
@@ -336,7 +344,7 @@ mod tests {
 	fn test_window_controls_spacing() {
 		let mut controls = WindowControls::new(1);
 		assert_eq!(controls.spacing(), 0.0);
-		
+
 		controls.set_spacing(4.0);
 		assert_eq!(controls.spacing(), 4.0);
 	}

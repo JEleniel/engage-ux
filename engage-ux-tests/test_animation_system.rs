@@ -1,6 +1,8 @@
 //! Integration tests for the animation system
 
-use engage_ux_core::animation::{Animation, AnimationController, AnimationState, AnimationValue, Easing};
+use engage_ux_core::animation::{
+	Animation, AnimationController, AnimationState, AnimationValue, Easing,
+};
 use engage_ux_core::color::Color;
 use std::time::Duration;
 
@@ -10,9 +12,12 @@ fn test_animation_integration() {
 	let mut controller = AnimationController::new();
 
 	// Add various animations (with repeat count so they complete)
-	let _fade_idx = controller.add(Animation::fade(0.0, 1.0, Duration::from_secs(1)).with_repeat(Some(1)));
-	let _scale_idx = controller.add(Animation::scale(1.0, 2.0, Duration::from_secs(1)).with_repeat(Some(1)));
-	let _rotate_idx = controller.add(Animation::rotate(0.0, 360.0, Duration::from_secs(1)).with_repeat(Some(1)));
+	let _fade_idx =
+		controller.add(Animation::fade(0.0, 1.0, Duration::from_secs(1)).with_repeat(Some(1)));
+	let _scale_idx =
+		controller.add(Animation::scale(1.0, 2.0, Duration::from_secs(1)).with_repeat(Some(1)));
+	let _rotate_idx =
+		controller.add(Animation::rotate(0.0, 360.0, Duration::from_secs(1)).with_repeat(Some(1)));
 
 	assert_eq!(controller.len(), 3);
 
@@ -122,7 +127,7 @@ fn test_animation_sequence() {
 	// Both animations may return values
 	assert!(results.len() >= 1 && results.len() <= 2);
 
-	// At 750ms: first might be on second iteration, second animation active  
+	// At 750ms: first might be on second iteration, second animation active
 	let results = controller.update(Duration::from_millis(250));
 	assert!(results.len() >= 1); // At least second anim active
 

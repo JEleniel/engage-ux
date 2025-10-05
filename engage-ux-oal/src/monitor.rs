@@ -83,7 +83,12 @@ pub struct MonitorBounds {
 
 impl MonitorBounds {
 	pub fn new(x: i32, y: i32, width: u32, height: u32) -> Self {
-		Self { x, y, width, height }
+		Self {
+			x,
+			y,
+			width,
+			height,
+		}
 	}
 
 	/// Check if this bounds contains a point
@@ -249,8 +254,7 @@ mod tests {
 
 	#[test]
 	fn test_monitor_bounds() {
-		let monitor = Monitor::new(1, "Test".to_string(), (1920, 1080))
-			.with_position(100, 50);
+		let monitor = Monitor::new(1, "Test".to_string(), (1920, 1080)).with_position(100, 50);
 
 		let bounds = monitor.bounds();
 		assert_eq!(bounds.x, 100);
@@ -291,8 +295,8 @@ mod tests {
 			.with_position(0, 0)
 			.as_primary();
 
-		let monitor2 = Monitor::new(2, "Monitor 2".to_string(), (1920, 1080))
-			.with_position(1920, 0);
+		let monitor2 =
+			Monitor::new(2, "Monitor 2".to_string(), (1920, 1080)).with_position(1920, 0);
 
 		config.add_monitor(monitor1);
 		config.add_monitor(monitor2);
@@ -305,12 +309,9 @@ mod tests {
 	fn test_virtual_bounds() {
 		let mut config = MonitorConfiguration::new(MonitorLayoutMode::Unified);
 
-		config.add_monitor(
-			Monitor::new(1, "Left".to_string(), (1920, 1080)).with_position(0, 0),
-		);
-		config.add_monitor(
-			Monitor::new(2, "Right".to_string(), (1920, 1080)).with_position(1920, 0),
-		);
+		config.add_monitor(Monitor::new(1, "Left".to_string(), (1920, 1080)).with_position(0, 0));
+		config
+			.add_monitor(Monitor::new(2, "Right".to_string(), (1920, 1080)).with_position(1920, 0));
 
 		let bounds = config.virtual_bounds().unwrap();
 		assert_eq!(bounds.x, 0);
@@ -323,12 +324,9 @@ mod tests {
 	fn test_monitor_at_point() {
 		let mut config = MonitorConfiguration::new(MonitorLayoutMode::Separate);
 
-		config.add_monitor(
-			Monitor::new(1, "Left".to_string(), (1920, 1080)).with_position(0, 0),
-		);
-		config.add_monitor(
-			Monitor::new(2, "Right".to_string(), (1920, 1080)).with_position(1920, 0),
-		);
+		config.add_monitor(Monitor::new(1, "Left".to_string(), (1920, 1080)).with_position(0, 0));
+		config
+			.add_monitor(Monitor::new(2, "Right".to_string(), (1920, 1080)).with_position(1920, 0));
 
 		let monitor = config.monitor_at_point(100, 100);
 		assert!(monitor.is_some());
@@ -364,9 +362,7 @@ mod tests {
 		let mut config = MonitorConfiguration::new(MonitorLayoutMode::Unified);
 
 		config.add_monitor(Monitor::new(1, "M1".to_string(), (1920, 1080)));
-		config.add_monitor(
-			Monitor::new(2, "M2".to_string(), (1920, 1080)).as_primary(),
-		);
+		config.add_monitor(Monitor::new(2, "M2".to_string(), (1920, 1080)).as_primary());
 
 		let primary = config.primary_monitor();
 		assert!(primary.is_some());

@@ -77,7 +77,7 @@ impl Unit {
 	/// - "50%" -> Percentage(50.0)
 	pub fn parse(s: &str) -> Result<Self, String> {
 		let s = s.trim();
-		
+
 		if s.is_empty() {
 			return Err("Empty string".to_string());
 		}
