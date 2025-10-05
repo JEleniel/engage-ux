@@ -71,7 +71,7 @@ pub use button::Button;
 pub use text_input::TextInput;
 pub use text_area::TextArea;
 pub use checkbox::Checkbox;
-pub use radio::Radio;
+pub use radio::{RadioButton, RadioGroup};
 pub use toggle::Toggle;
 pub use slider::Slider;
 pub use container::Container;
