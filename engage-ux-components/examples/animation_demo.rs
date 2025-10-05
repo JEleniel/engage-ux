@@ -39,14 +39,22 @@ fn main() {
 
 	// Demo 3: Scale animation with delay
 	println!("3. Scale Animation with 500ms Delay");
-	let mut scale = Animation::scale(1.0, 2.0, Duration::from_secs(1))
-		.with_delay(Duration::from_millis(500));
+	let mut scale =
+		Animation::scale(1.0, 2.0, Duration::from_secs(1)).with_delay(Duration::from_millis(500));
 	scale.start();
 
 	println!("   During delay:");
 	for i in 0..3 {
 		let result = scale.update(Duration::from_millis(200));
-		println!("   Frame {}: {:?}", i, if result.is_none() { "None (delayed)" } else { "Value" });
+		println!(
+			"   Frame {}: {:?}",
+			i,
+			if result.is_none() {
+				"None (delayed)"
+			} else {
+				"Value"
+			}
+		);
 	}
 
 	println!("   After delay:");
@@ -123,7 +131,10 @@ fn main() {
 	}
 
 	controller.cleanup();
-	println!("   After cleanup: {} animations remaining", controller.len());
+	println!(
+		"   After cleanup: {} animations remaining",
+		controller.len()
+	);
 	println!();
 
 	// Demo 8: Alternate mode
