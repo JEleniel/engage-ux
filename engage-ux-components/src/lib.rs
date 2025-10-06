@@ -89,8 +89,6 @@ pub use progress::Progress;
 pub use ruler::{Ruler, RulerOrientation, RulerUnit};
 pub use select::{Select, SelectOption};
 pub use radio::{RadioButton, RadioGroup};
-pub use ruler::{Ruler, RulerOrientation, RulerUnit};
-pub use select::{Select, SelectOption};
 pub use slider::Slider;
 pub use table::Table;
 pub use tabs::{Tab, Tabs};
