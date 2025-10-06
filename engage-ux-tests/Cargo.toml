@@ -43,6 +43,10 @@ name = "test_platform_backends"
 path = "test_platform_backends.rs"
 
 [[test]]
+name = "test_screen_reader_integration"
+path = "test_screen_reader_integration.rs"
+
+[[test]
 name = "test_e2e_platform_backends"
 path = "test_e2e_platform_backends.rs"
 

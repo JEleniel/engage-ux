@@ -86,6 +86,8 @@ pub use list::{List, ListItem};
 pub use menu::{Drawer, Dropdown, HamburgerMenu, MenuItem};
 pub use pagination::Pagination;
 pub use progress::Progress;
+pub use ruler::{Ruler, RulerOrientation, RulerUnit};
+pub use select::{Select, SelectOption};
 pub use radio::{RadioButton, RadioGroup};
 pub use ruler::{Ruler, RulerOrientation, RulerUnit};
 pub use select::{Select, SelectOption};
