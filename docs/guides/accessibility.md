@@ -194,30 +194,98 @@ button.set_focus_style(FocusStyle::Outline);
 
 ## Screen Reader Support
 
+Engage UX provides native screen reader integration for all supported platforms through the OS Abstraction Layer (OAL).
+
+### Platform Support
+
+- **Windows**: MSAA/UI Automation integration
+- **macOS**: NSAccessibility API integration
+- **Linux**: AT-SPI (Assistive Technology Service Provider Interface)
+- **Android**: TalkBack integration
+- **iOS**: VoiceOver integration
+
+### Screen Reader Backend
+
+The screen reader backend is automatically selected based on your platform:
+
+```rust
+use engage_ux_oal::{get_backend_factory, ScreenReaderBackend};
+
+// Get the platform-appropriate screen reader backend
+let factory = get_backend_factory();
+let mut screen_reader = factory.create_screen_reader();
+
+// Check if a screen reader is enabled
+if screen_reader.is_enabled() {
+    println!("Screen reader detected: {}", screen_reader.backend_name());
+}
+```
+
 ### Screen Reader Announcements
 
 ```rust
-use engage_ux_core::accessibility::{ScreenReader, AnnouncementPriority};
+use engage_ux_core::accessibility::{Announcement, AnnouncementPriority};
 
-// Create announcements
-ScreenReader::announce(
-    "Form submitted successfully",
-    AnnouncementPriority::Polite
-);
+// Create announcements with different priorities
+let mut screen_reader = factory.create_screen_reader();
 
-// Urgent announcements (interrupts current speech)
-ScreenReader::announce(
-    "Error: Invalid email address",
-    AnnouncementPriority::Assertive
-);
+// Polite - waits for pause in speech
+screen_reader.announce(Announcement::low("Form submitted successfully"));
+
+// Medium priority
+screen_reader.announce(Announcement::medium("New message received"));
+
+// Assertive - interrupts current speech
+screen_reader.announce(Announcement::high("Error: Invalid email address"));
+
+// Stop current announcement
+screen_reader.stop();
+```
+
+### Component Accessibility Tree
+
+Components are automatically added to the accessibility tree:
+
+```rust
+use engage_ux_core::accessibility::{AccessibilityProps, AriaRole};
+
+// Create accessibility properties
+let button_props = AccessibilityProps::new()
+    .with_role(AriaRole::Button)
+    .with_label("Submit Form")
+    .with_description("Submits the form data to the server")
+    .with_focusable(true);
+
+// Update component in accessibility tree
+screen_reader.update_component(button_id, button_props);
+
+// Remove component when destroyed
+screen_reader.remove_component(button_id);
+```
+
+### Focus Management
+
+Screen readers track focus changes:
+
+```rust
+// Set focus to a component
+screen_reader.set_focus(component_id);
+
+// Clear focus
+screen_reader.clear_focus();
 ```
 
 ### Live Regions
 
 ```rust
-let props = AccessibilityProps::new(status_id)
-    .with_live_region(LiveRegion::Polite)
-    .with_atomic(true);  // Read entire region on change
+let props = AccessibilityProps::new()
+    .with_role(AriaRole::Status)
+    .with_label("Loading Status");
+
+screen_reader.update_component(status_id, props);
+
+// Announce updates to live regions
+screen_reader.announce(Announcement::medium("Loading complete"));
 ```
 
 ### Component Labels

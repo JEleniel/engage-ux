@@ -187,7 +187,7 @@ mod tests {
 		textarea.set_max_length(Some(10));
 		textarea.set_value("This is too long");
 		assert_eq!(textarea.value(), ""); // Value not set due to max length
-		
+
 		textarea.set_value("Short");
 		assert_eq!(textarea.value(), "Short");
 	}

@@ -1,13 +1,52 @@
 //! Platform-specific backend implementations
 //!
 //! This module provides the architecture for platform-specific rendering,
-//! window management, and input handling.
+//! window management, input handling, and accessibility.
 
 pub mod renderer;
+pub mod screen_reader;
+pub mod softbuffer_renderer;
 pub mod window_backend;
+pub mod winit_window;
+
+#[cfg(target_os = "windows")]
+pub mod screen_reader_windows;
+
+#[cfg(target_os = "macos")]
+pub mod screen_reader_macos;
+
+#[cfg(target_os = "linux")]
+pub mod screen_reader_linux;
+
+#[cfg(target_os = "android")]
+pub mod screen_reader_android;
+
+#[cfg(target_os = "ios")]
+pub mod screen_reader_ios;
 
 pub use renderer::{RenderBackend, RenderCommand, RenderContext};
-pub use window_backend::{WindowBackend, WindowBackendEvent};
+pub use screen_reader::{ScreenReaderBackend, StubScreenReader};
+pub use softbuffer_renderer::SoftbufferRenderer;
+pub use window_backend::{WindowBackend, WindowBackendEvent, WindowBounds, WindowState};
+pub use winit_window::WinitWindowBackend;
+#[cfg(target_os = "linux")]
+pub mod tiny_skia_renderer;
+
+#[cfg(target_os = "linux")]
+pub mod linux_accessibility;
+
+pub use renderer::{RenderBackend, RenderCommand, RenderContext};
+pub use softbuffer_renderer::SoftbufferRenderer;
+pub use window_backend::{WindowBackend, WindowBackendEvent, WindowBounds, WindowState};
+pub use winit_window::WinitWindowBackend;
+
+#[cfg(target_os = "linux")]
+pub use tiny_skia_renderer::TinySkiaRenderer;
+
+#[cfg(target_os = "linux")]
+pub use linux_accessibility::{
+	AccessibilityError, AtSpiAccessibilityBridge, AtSpiState, aria_role_to_atspi_role,
+};
 
 /// Platform-specific backend factory
 pub trait BackendFactory {
@@ -16,6 +55,9 @@ pub trait BackendFactory {
 
 	/// Create a window backend for the current platform
 	fn create_window_backend(&self) -> Box<dyn WindowBackend>;
+
+	/// Create a screen reader backend for the current platform
+	fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend>;
 }
 
 /// Get the backend factory for the current platform
@@ -62,6 +104,10 @@ pub mod platforms {
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
 			Box::new(window_backend::StubWindowBackend::default())
 		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader::StubScreenReader::new())
+		}
 	}
 
 	// Platform-specific factories (to be implemented)
@@ -71,13 +117,17 @@ pub mod platforms {
 	#[cfg(target_os = "windows")]
 	impl BackendFactory for WindowsBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement Windows Direct2D/Direct3D renderer
-			Box::new(renderer::StubRenderer)
+			// Using softbuffer for safe, cross-platform software rendering
+			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement Windows Win32 window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Using winit for safe, cross-platform window management
+			Box::new(winit_window::WinitWindowBackend::new())
+		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_windows::WindowsScreenReader::new())
 		}
 	}
 
@@ -87,13 +137,17 @@ pub mod platforms {
 	#[cfg(target_os = "macos")]
 	impl BackendFactory for MacOSBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement macOS Core Graphics renderer
-			Box::new(renderer::StubRenderer)
+			// Using softbuffer for safe, cross-platform software rendering
+			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement macOS Cocoa window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Using winit for safe, cross-platform window management
+			Box::new(winit_window::WinitWindowBackend::new())
+		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_macos::MacOSScreenReader::new())
 		}
 	}
 
@@ -103,13 +157,19 @@ pub mod platforms {
 	#[cfg(target_os = "linux")]
 	impl BackendFactory for LinuxBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement Linux Cairo/Skia renderer
-			Box::new(renderer::StubRenderer)
+			// Using tiny-skia for high-quality 2D graphics rendering on Linux
+			// tiny-skia provides Cairo/Skia-like capabilities with safe Rust
+			Box::new(tiny_skia_renderer::TinySkiaRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement Linux X11/Wayland window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Using winit for safe, cross-platform window management
+			// Winit supports both X11 and Wayland on Linux
+			Box::new(winit_window::WinitWindowBackend::new())
+		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_linux::LinuxScreenReader::new())
 		}
 	}
 
@@ -119,13 +179,23 @@ pub mod platforms {
 	#[cfg(target_os = "android")]
 	impl BackendFactory for AndroidBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement Android Canvas renderer
-			Box::new(renderer::StubRenderer)
+			// Android implementation using softbuffer for software rendering.
+			// Softbuffer provides a safe abstraction over Android's native Canvas API
+			// through winit's Android support layer, ensuring compatibility with
+			// the Android graphics stack while maintaining 100% safe Rust code.
+			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement Android Activity window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Android window management using winit.
+			// Winit integrates with Android's Activity lifecycle and provides
+			// native touch event handling, window state management, and
+			// accessibility support (TalkBack ready through Android's native APIs).
+			Box::new(winit_window::WinitWindowBackend::new())
+		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_android::AndroidScreenReader::new())
 		}
 	}
 
@@ -135,13 +205,17 @@ pub mod platforms {
 	#[cfg(target_os = "ios")]
 	impl BackendFactory for IOSBackendFactory {
 		fn create_renderer(&self) -> Box<dyn RenderBackend> {
-			// TODO: Implement iOS Core Graphics renderer
-			Box::new(renderer::StubRenderer)
+			// Using softbuffer for safe, cross-platform software rendering
+			Box::new(softbuffer_renderer::SoftbufferRenderer::new())
 		}
 
 		fn create_window_backend(&self) -> Box<dyn WindowBackend> {
-			// TODO: Implement iOS UIKit window backend
-			Box::new(window_backend::StubWindowBackend::default())
+			// Using winit for safe, cross-platform window management
+			Box::new(winit_window::WinitWindowBackend::new())
+		}
+
+		fn create_screen_reader(&self) -> Box<dyn ScreenReaderBackend> {
+			Box::new(screen_reader_ios::IOSScreenReader::new())
 		}
 	}
 }
@@ -155,6 +229,7 @@ mod tests {
 		let factory = get_backend_factory();
 		let _renderer = factory.create_renderer();
 		let _window = factory.create_window_backend();
+		let _screen_reader = factory.create_screen_reader();
 		// Test passes if backends can be created without panic
 	}
 }

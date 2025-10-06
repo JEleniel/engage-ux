@@ -7,33 +7,33 @@
 //! - Complex components (Menu, Dialog, etc.)
 
 // Informational components
-pub mod label;
-pub mod text;
+pub mod avatar;
+pub mod breadcrumb;
 pub mod icon;
 pub mod image;
+pub mod label;
+pub mod line_numbers;
 pub mod list;
 pub mod progress;
-pub mod tooltip;
-pub mod breadcrumb;
-pub mod avatar;
-pub mod line_numbers;
 pub mod ruler;
+pub mod text;
+pub mod tooltip;
 
 // Interactive components
 pub mod button;
-pub mod text_input;
-pub mod text_area;
+pub mod carousel;
 pub mod checkbox;
-pub mod radio;
-pub mod toggle;
-pub mod slider;
-pub mod select;
+pub mod console;
+pub mod date_picker;
 pub mod link;
 pub mod pagination;
-pub mod carousel;
-pub mod date_picker;
+pub mod radio;
+pub mod select;
+pub mod slider;
+pub mod text_area;
 pub mod text_editor;
-pub mod console;
+pub mod text_input;
+pub mod toggle;
 
 // Graphic and Display components
 pub mod group;
@@ -41,14 +41,14 @@ pub mod video;
 
 // Notification components
 pub mod badge;
-pub mod toast;
 pub mod banner;
+pub mod toast;
 
 // Layout components
-pub mod container;
-pub mod card;
-pub mod table;
 pub mod accordion;
+pub mod card;
+pub mod container;
+pub mod table;
 pub mod tabs;
 pub mod window;
 
@@ -63,40 +63,48 @@ pub mod dialog;
 pub mod window_controls;
 
 // Re-exports
-pub use label::Label;
-pub use text::Text;
-pub use button::Button;
-pub use text_input::TextInput;
-pub use text_area::TextArea;
-pub use checkbox::Checkbox;
-pub use container::Container;
-pub use list::{List, ListItem};
-pub use select::{Select, SelectOption};
-pub use link::Link;
-pub use progress::Progress;
-pub use tooltip::{Tooltip, Popover};
-pub use badge::Badge;
-pub use toast::Toast;
-pub use banner::Banner;
-pub use table::Table;
-pub use window_controls::{WindowControlButton, WindowControls};
 pub use accordion::{Accordion, AccordionPanel};
-pub use tabs::{Tabs, Tab};
-pub use breadcrumb::{Breadcrumb, BreadcrumbItem};
 pub use avatar::Avatar;
-pub use menu::{Dropdown, Drawer, HamburgerMenu, MenuItem};
-pub use dialog::{AlertDialog, ConfirmDialog, Modal, FileDialog};
-pub use pagination::Pagination;
-pub use line_numbers::LineNumbers;
-pub use ruler::{Ruler, RulerOrientation, RulerUnit};
+pub use badge::Badge;
+pub use banner::Banner;
+pub use breadcrumb::{Breadcrumb, BreadcrumbItem};
+pub use button::Button;
+pub use card::Card;
 pub use carousel::{Carousel, CarouselItem};
-pub use date_picker::{DatePicker, Date};
-pub use text_editor::TextEditor;
-pub use console::{Console, ConsoleLine, AnsiColor};
+pub use checkbox::Checkbox;
+pub use console::{AnsiColor, Console, ConsoleLine};
+pub use container::Container;
+pub use date_picker::{Date, DatePicker};
+pub use dialog::{AlertDialog, ConfirmDialog, FileDialog, Modal};
 pub use group::Group;
-pub use video::Video;
+pub use icon::Icon;
+pub use image::Image;
+pub use label::Label;
+pub use line_numbers::LineNumbers;
+pub use link::Link;
+pub use list::{List, ListItem};
+pub use menu::{Drawer, Dropdown, HamburgerMenu, MenuItem};
+pub use pagination::Pagination;
+pub use progress::Progress;
+pub use ruler::{Ruler, RulerOrientation, RulerUnit};
+pub use select::{Select, SelectOption};
+pub use radio::{RadioButton, RadioGroup};
+pub use ruler::{Ruler, RulerOrientation, RulerUnit};
+pub use select::{Select, SelectOption};
+pub use slider::Slider;
+pub use table::Table;
+pub use tabs::{Tab, Tabs};
+pub use text::Text;
+pub use text_area::TextArea;
+pub use text_editor::TextEditor;
+pub use text_input::TextInput;
 pub use title_menu::{TitleMenu, TitleMenuItem};
+pub use toast::Toast;
+pub use toggle::Toggle;
+pub use tooltip::{Popover, Tooltip};
+pub use video::Video;
 pub use window::Window;
+pub use window_controls::{WindowControlButton, WindowControls};
 
 #[cfg(test)]
 mod tests {
