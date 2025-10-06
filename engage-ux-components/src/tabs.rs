@@ -140,10 +140,10 @@ impl Tabs {
 
 	/// Set active tab by index
 	pub fn set_active_index(&mut self, index: usize) {
-		if let Some(tab) = self.tabs.get(index) {
-			if !tab.disabled {
-				self.active_tab = Some(tab.id.clone());
-			}
+		if let Some(tab) = self.tabs.get(index)
+			&& !tab.disabled
+		{
+			self.active_tab = Some(tab.id.clone());
 		}
 	}
 

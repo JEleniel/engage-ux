@@ -2,9 +2,7 @@
 //!
 //! Shows drag sources, drop targets, and drag events.
 
-use engage_ux_core::drag_drop::{
-	DragData, DragEvent, DragManager, DragOperation, DragSource, DropTarget,
-};
+use engage_ux_core::drag_drop::{DragData, DragManager, DragOperation, DragSource, DropTarget};
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
@@ -37,7 +35,6 @@ impl DragSource for DraggableItem {
 
 // Example drop target component
 struct DropZone {
-	id: u64,
 	name: String,
 	accepted_items: Vec<String>,
 }
@@ -92,13 +89,11 @@ async fn main() {
 
 	// Create drop zones
 	let zone1 = Arc::new(RwLock::new(DropZone {
-		id: 1,
 		name: "Zone 1".to_string(),
 		accepted_items: vec!["Item A".to_string(), "Item B".to_string()],
 	}));
 
 	let zone2 = Arc::new(RwLock::new(DropZone {
-		id: 2,
 		name: "Zone 2".to_string(),
 		accepted_items: vec!["Item B".to_string(), "Item C".to_string()],
 	}));

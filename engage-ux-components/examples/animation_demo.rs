@@ -17,7 +17,6 @@ fn main() {
 
 	// Simulate frame updates
 	for i in 0..=10 {
-		let progress = i as f32 / 10.0;
 		if let Some(value) = fade.update(Duration::from_millis(100)) {
 			println!("   Frame {}: {:?}", i, value);
 		}
@@ -115,9 +114,9 @@ fn main() {
 	println!("7. Animation Controller (Multiple Animations)");
 	let mut controller = AnimationController::new();
 
-	let fade_idx = controller.add(Animation::fade(0.0, 1.0, Duration::from_secs(1)));
-	let scale_idx = controller.add(Animation::scale(1.0, 2.0, Duration::from_secs(1)));
-	let rotate_idx = controller.add(Animation::rotate(0.0, 180.0, Duration::from_secs(1)));
+	let _fade_idx = controller.add(Animation::fade(0.0, 1.0, Duration::from_secs(1)));
+	let _scale_idx = controller.add(Animation::scale(1.0, 2.0, Duration::from_secs(1)));
+	let _rotate_idx = controller.add(Animation::rotate(0.0, 180.0, Duration::from_secs(1)));
 
 	controller.start_all();
 

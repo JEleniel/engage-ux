@@ -8,7 +8,6 @@ use tokio::sync::RwLock;
 
 // Test drag source
 struct TestSource {
-	id: u64,
 	data: String,
 	drag_started: bool,
 	drag_ended: bool,
@@ -16,9 +15,8 @@ struct TestSource {
 }
 
 impl TestSource {
-	fn new(id: u64, data: impl Into<String>) -> Self {
+	fn new(_id: u64, data: impl Into<String>) -> Self {
 		Self {
-			id,
 			data: data.into(),
 			drag_started: false,
 			drag_ended: false,
@@ -44,7 +42,6 @@ impl DragSource for TestSource {
 
 // Test drop target
 struct TestTarget {
-	id: u64,
 	accepted_types: Vec<DragDataType>,
 	enter_count: usize,
 	over_count: usize,
@@ -54,9 +51,8 @@ struct TestTarget {
 }
 
 impl TestTarget {
-	fn new(id: u64) -> Self {
+	fn new(_id: u64) -> Self {
 		Self {
-			id,
 			accepted_types: vec![DragDataType::Text],
 			enter_count: 0,
 			over_count: 0,

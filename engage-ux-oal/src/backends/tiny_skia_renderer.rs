@@ -72,6 +72,7 @@ impl TinySkiaRenderContext {
 	}
 
 	/// Get the current clip mask
+	#[allow(dead_code)]
 	fn get_clip_mask(&self) -> Option<tiny_skia::Mask> {
 		if let Some(clip) = self.clip_stack.last() {
 			if let Some(rect) = Self::to_skia_rect(*clip) {
@@ -268,7 +269,7 @@ mod tests {
 
 	#[test]
 	fn test_tiny_skia_renderer_creation() {
-		let mut renderer = TinySkiaRenderer::new();
+		let renderer = TinySkiaRenderer::new();
 		assert_eq!(renderer.name(), "Tiny-Skia Renderer");
 		assert!(!renderer.is_hardware_accelerated());
 	}
