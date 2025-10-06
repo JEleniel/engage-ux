@@ -210,6 +210,12 @@ You should see output like:
    platform-specific window and rendering backends.
 ```
 
+> **⚠️ Important**: The "Hello World" example above uses stub backends for testing and does not display a window. To see **actual visual rendering** with a real window, run:
+> ```bash
+> cargo run --example visual_window_demo -p engage-ux-oal
+> ```
+> See [Actual Rendering Documentation](actual-rendering.md) for details.
+
 ## Understanding the Architecture
 
 Engage UX is organized into four main crates:
@@ -360,6 +366,15 @@ Now that you have the basics, explore:
 ### Run the Examples
 
 Engage UX includes several examples:
+
+#### Visual Window Example (ACTUAL RENDERING)
+```bash
+# Creates a real window with visual graphics!
+cargo run --example visual_window_demo -p engage-ux-oal
+```
+
+#### Component Examples (Console Output Only)
+> **Note**: These examples use stub backends and print to console only (no window):
 
 ```bash
 # Basic component usage
