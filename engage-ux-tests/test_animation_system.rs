@@ -132,8 +132,8 @@ fn test_animation_sequence() {
 	assert!(results.len() >= 1); // At least second anim active
 
 	// At 1000ms: both complete their iterations
-	let results = controller.update(Duration::from_millis(250));
-	assert!(results.len() >= 0); // May or may not return values
+	let _results = controller.update(Duration::from_millis(250));
+	// May or may not return values
 }
 
 #[test]
@@ -227,7 +227,7 @@ fn test_animation_controller_management() {
 	let mut controller = AnimationController::new();
 
 	// Add multiple animations
-	for i in 0..5 {
+	for _i in 0..5 {
 		let anim = Animation::fade(0.0, 1.0, Duration::from_secs(1));
 		controller.add(anim);
 	}

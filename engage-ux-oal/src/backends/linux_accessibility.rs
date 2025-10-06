@@ -14,6 +14,7 @@ pub struct AtSpiAccessibilityBridge {
 	/// Whether the bridge is initialized
 	initialized: bool,
 	/// Application name for AT-SPI
+	#[allow(dead_code)]
 	app_name: String,
 }
 

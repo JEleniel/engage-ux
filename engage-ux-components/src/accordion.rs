@@ -84,10 +84,10 @@ impl Accordion {
 		}
 
 		// Expand requested panel
-		if let Some(panel) = self.panels.iter_mut().find(|p| p.id == panel_id) {
-			if !panel.disabled {
-				panel.expanded = true;
-			}
+		if let Some(panel) = self.panels.iter_mut().find(|p| p.id == panel_id)
+			&& !panel.disabled
+		{
+			panel.expanded = true;
 		}
 	}
 

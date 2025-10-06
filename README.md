@@ -360,6 +360,16 @@ cargo test --all
 cargo test --all -- --test-threads=1
 ```
 
+### Visual Rendering Example
+
+⚠️ **Note**: Most examples use stub backends for testing and do not display windows. For **actual visual rendering** with real windows:
+
+```bash
+cargo run --example visual_window_demo -p engage-ux-oal
+```
+
+This example demonstrates real window creation and graphics rendering using winit and softbuffer. See [docs/actual-rendering.md](docs/actual-rendering.md) for details.
+
 ## Non-Functional Requirements
 
 - **WCAG AAA Compliance**: Full accessibility support (in progress)
