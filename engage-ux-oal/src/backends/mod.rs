@@ -29,16 +29,12 @@ pub use screen_reader::{ScreenReaderBackend, StubScreenReader};
 pub use softbuffer_renderer::SoftbufferRenderer;
 pub use window_backend::{WindowBackend, WindowBackendEvent, WindowBounds, WindowState};
 pub use winit_window::WinitWindowBackend;
+
 #[cfg(target_os = "linux")]
 pub mod tiny_skia_renderer;
 
 #[cfg(target_os = "linux")]
 pub mod linux_accessibility;
-
-pub use renderer::{RenderBackend, RenderCommand, RenderContext};
-pub use softbuffer_renderer::SoftbufferRenderer;
-pub use window_backend::{WindowBackend, WindowBackendEvent, WindowBounds, WindowState};
-pub use winit_window::WinitWindowBackend;
 
 #[cfg(target_os = "linux")]
 pub use tiny_skia_renderer::TinySkiaRenderer;
