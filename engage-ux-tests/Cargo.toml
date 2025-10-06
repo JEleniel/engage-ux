@@ -46,7 +46,7 @@ path = "test_platform_backends.rs"
 name = "test_screen_reader_integration"
 path = "test_screen_reader_integration.rs"
 
-[[test]
+[[test]]
 name = "test_e2e_platform_backends"
 path = "test_e2e_platform_backends.rs"
 
@@ -57,10 +57,6 @@ path = "test_accessibility_validation.rs"
 [[test]]
 name = "test_visual_regression"
 path = "test_visual_regression.rs"
-
-[[test]]
-name = "test_screen_reader_integration"
-path = "test_screen_reader_integration.rs"
 
 [[test]]
 name = "test_linux_backend"
