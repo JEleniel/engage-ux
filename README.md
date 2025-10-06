@@ -6,7 +6,7 @@ A fully cross-platform Rust UI toolkit that provides a themable component librar
 
 - **Cross-Platform Support**: Windows, MacOS, Linux, Android, and iOS
 - **Feature Parity**: Consistent behavior and appearance across all platforms
-- **Native Integration**: Uses native controls and styles whenever possible
+- **Native Integration**: Platform-specific renderers (tiny-skia on Linux, softbuffer elsewhere)
 - **100% Rust**: All source code is written in Rust with `unsafe_code = "forbid"`
 - **JSON Configuration**: Theme and configuration files use JSON with full schemas
 - **Rich Media Support**: Support for common font and image formats (including SVG)
@@ -421,14 +421,14 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 - [x] 41 new tests (30 layout + 11 monitor)
 - [x] Complete documentation and working examples
 
-**Phase 6 - In Progress**
-- [x] Screen reader integration (MSAA, NSAccessibility, AT-SPI, TalkBack, VoiceOver)
-- [x] 10 comprehensive screen reader integration tests
-- [x] Platform-specific backend factories for all supported platforms
-
-**Future - Phase 4 (Platform-Specific)**
-- [ ] Implement platform-specific OAL backends (Direct2D, Core Graphics, Cairo, etc.)
-- [ ] Native window management for each OS
+**Phase 4 - In Progress (Platform-Specific)**
+- [x] Linux backend implementation (tiny-skia renderer, AT-SPI infrastructure)
+- [x] Linux-specific integration tests (14 tests)
+- [ ] Complete AT-SPI D-Bus integration for screen readers
+- [ ] Windows backend (Direct2D renderer, MSAA accessibility)
+- [ ] macOS backend (Core Graphics renderer, NSAccessibility)
+- [ ] Android backend (native rendering, TalkBack)
+- [ ] iOS backend (Core Graphics, VoiceOver)
 - [ ] End-to-end functional tests (requires platform backends)
 - [ ] Visual regression testing
 - [ ] Documentation site
