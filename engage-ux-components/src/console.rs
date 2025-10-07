@@ -109,10 +109,10 @@ impl Console {
 	/// Add a line
 	pub fn add_line(&mut self, line: ConsoleLine) {
 		self.lines.push(line);
-		if let Some(max) = self.max_lines {
-			if self.lines.len() > max {
-				self.lines.remove(0);
-			}
+		if let Some(max) = self.max_lines
+			&& self.lines.len() > max
+		{
+			self.lines.remove(0);
 		}
 	}
 

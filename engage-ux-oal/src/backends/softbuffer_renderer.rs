@@ -283,7 +283,7 @@ mod tests {
 
 	#[test]
 	fn test_softbuffer_renderer_creation() {
-		let mut renderer = SoftbufferRenderer::new();
+		let renderer = SoftbufferRenderer::new();
 		assert_eq!(renderer.name(), "Softbuffer Renderer");
 		assert!(!renderer.is_hardware_accelerated());
 	}

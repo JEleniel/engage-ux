@@ -3,7 +3,7 @@
 //! Shows how to create and handle custom input events from devices
 //! like gamepads, stylus, motion sensors, etc.
 
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties, Rect};
+use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
 use engage_ux_core::input::{CustomInputEvent, InputEvent, InputHandler};
 
 // Example component that handles custom input

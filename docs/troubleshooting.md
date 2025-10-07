@@ -2,6 +2,23 @@
 
 Solutions to common problems when using Engage UX.
 
+## Understanding Rendering Behavior
+
+⚠️ **IMPORTANT**: Most examples use **stub backends** that do not display visual windows!
+
+**Expected Behavior**:
+- Examples like `basic_components`, `theme_demo`, `lcars_theme_demo` print console output only
+- They do NOT open windows or show graphics on screen
+- This is **intentional** for testing in headless environments
+
+**For Actual Visual Rendering**:
+See the working example that creates real windows:
+```bash
+cargo run --example visual_window_demo -p engage-ux-oal
+```
+
+For complete details, see [Actual Rendering Documentation](actual-rendering.md).
+
 ## Installation Issues
 
 ### Linker Errors During Build

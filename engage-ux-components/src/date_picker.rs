@@ -123,21 +123,19 @@ impl DatePicker {
 			if !d.is_valid() {
 				return;
 			}
-			if let Some(min) = self.min_date {
-				if d.year < min.year
+			if let Some(min) = self.min_date
+				&& (d.year < min.year
 					|| (d.year == min.year && d.month < min.month)
-					|| (d.year == min.year && d.month == min.month && d.day < min.day)
-				{
-					return;
-				}
+					|| (d.year == min.year && d.month == min.month && d.day < min.day))
+			{
+				return;
 			}
-			if let Some(max) = self.max_date {
-				if d.year > max.year
+			if let Some(max) = self.max_date
+				&& (d.year > max.year
 					|| (d.year == max.year && d.month > max.month)
-					|| (d.year == max.year && d.month == max.month && d.day > max.day)
-				{
-					return;
-				}
+					|| (d.year == max.year && d.month == max.month && d.day > max.day))
+			{
+				return;
 			}
 		}
 		self.selected_date = date;
