@@ -1,56 +1,11 @@
----
 name: Pull Request
 description: Submit changes to the project
-title: ''
-labels: ''
-assignees: ''
 
 body:
   - type: markdown
     attributes:
       value: |
         Please fill out this pull request template completely. Fields marked as required must be filled.
-
-        **Example of a good PR:**
-
-        ```text
-        Type of Change:
-        New Feature
-
-        Breaking Changes:
-        No
-
-        Description:
-        Added user authentication feature with JWT tokens.
-        - Implemented login/logout endpoints
-        - Added middleware for token validation
-        - Created user authentication service
-        - Added password hashing with bcrypt
-
-        Related Issues:
-        - Fixes #123
-        - Implements #456
-        - Updates #789
-
-        Implementation Details:
-        - Using jsonwebtoken library for JWT handling
-        - Passwords are hashed with 10 salt rounds
-        - Token expiration set to 24h
-        - Added proper error handling for auth failures
-
-        Testing:
-        - Added unit tests for auth service
-        - Integration tests for endpoints
-        - Manual testing with Postman
-        - All tests passing
-
-        Checklist:
-        - [x] Code adheres to style guidelines
-        - [x] Code is well-commented
-        - [x] Documentation has been updated
-        - [x] Commit messages follow guidelines
-        - [x] Changes reviewed locally
-        - [x] Code compiles without warnings
         ```
 
   - type: dropdown
@@ -128,5 +83,3 @@ body:
       label: Additional Context
       placeholder: Add any other context or screenshots about the PR here
       required: false
----
-

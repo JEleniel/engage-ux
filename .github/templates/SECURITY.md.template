@@ -11,7 +11,7 @@ We take security bugs seriously. We appreciate your efforts to responsibly discl
 Instead, please use one of these channels:
 
 - Use GitHub's security advisory feature: [Report a Vulnerability](https://github.com/{username}/{repo}/security/advisories/new)
-- For critical issues, you can encrypt your report using our [security team's PGP key](https://github.com/JEleniel.gpg)
+- For critical issues, you can encrypt your report using our [security team's PGP key](https://github.com/{username}.gpg)
 
 Please include the following information in your report:
 
