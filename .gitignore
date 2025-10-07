@@ -1,79 +1,5 @@
 # Project specific
 # Add files and directories specific to your project that should be ignored here
-<<<<<<< Updated upstream
-# Rust / Cargo
-.fingerprint/
-*.dSYM/
-*.profraw
-*.rlib
-*.rmeta
-incremental/
-target/
-
-# Compiled dynamic libraries and executables (built artifacts)
-*.dll
-*.dylib
-*.exe
-*.so
-
-# Rust toolchain / analysis
-.rust-analyzer/
-.rust-analysis/
-.analyze/
-
-# Agents
-.prompts/
-
-# VSCode
-.vscode/*
-!.vscode/*.code-snippets
-!.vscode/extensions.json
-!.vscode/launch.json
-!.vscode/settings.*.json
-!.vscode/settings.json
-!.vscode/tasks.json
-.history/
-.vscode-test
-*.vsix
-
-# Archive Files
-*.7z
-*.bz2
-*.bzip
-*.bzip2
-*.cab
-*.deb
-*.dmg
-*.egg
-*.gem
-*.gz
-*.gzip
-*.iso
-*.jar
-*.lzma
-*.msi
-*.msix
-*.msm
-*.msp
-*.rar
-*.rpm
-*.tar
-*.tgz
-*.txz
-*.tzst
-*.xar
-*.xpi
-*.xz
-*.zip
-*.zst
-
-# Backup Files
-*.bak
-*.gho
-*.ori
-*.orig
-
-=======
 .analyze/
 target/
 
@@ -126,7 +52,6 @@ target/
 *.ori
 *.orig
 
->>>>>>> Stashed changes
 # Diff Files
 *.diff
 *.patch
