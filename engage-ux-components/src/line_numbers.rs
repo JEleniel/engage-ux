@@ -1,6 +1,6 @@
 //! Line numbers component for code editors
 
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
 use serde::{Deserialize, Serialize};
 

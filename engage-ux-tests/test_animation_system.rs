@@ -3,7 +3,7 @@
 use engage_ux_core::animation::{
 	Animation, AnimationController, AnimationState, AnimationValue, Easing,
 };
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use std::time::Duration;
 
 #[test]

@@ -33,7 +33,7 @@ Let's create a simple "Counter" component as an example.
 ### Step 1: Define the Component Structure
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -428,6 +428,7 @@ pub type CounterRef = Arc<RwLock<Counter>>;
 ### 7. Consistent Naming
 
 Follow Rust naming conventions:
+
 - Types use `PascalCase`
 - Functions and variables use `snake_case`
 - Constants use `SCREAMING_SNAKE_CASE`
@@ -448,7 +449,7 @@ pub fn load_from_file(&mut self, path: &str) -> Result<(), std::io::Error> {
 Here's a template to start from:
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use engage_ux_core::component::{Component, ComponentId, ComponentProperties, Rect};
 use engage_ux_core::input::{InputHandler, KeyboardEvent, MouseEvent};
 use serde::{Deserialize, Serialize};

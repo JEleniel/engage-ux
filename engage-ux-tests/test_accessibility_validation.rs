@@ -4,10 +4,10 @@
 //! and accessibility infrastructure across all components.
 
 use engage_ux_components::*;
+use engage_ux_core::Color;
 use engage_ux_core::accessibility::{
 	AccessibilityProps, AnnouncementPriority, AriaRole, FocusManager,
 };
-use engage_ux_core::color::Color;
 use engage_ux_core::component::{Component, Rect};
 
 /// Test ARIA role types are available

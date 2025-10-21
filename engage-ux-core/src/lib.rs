@@ -1,4 +1,5 @@
-//! Engage UX Core - Foundation for cross-platform UI toolkit
+//! Engage UX Core - Core functionality for Engage UX - a fully themable, modular UX framework for
+//! 	Rust, providing core functionality, components, and base themes.
 //!
 //! This crate provides the core functionality for Engage UX including:
 //! - Color system (RGB and HSL)
@@ -11,28 +12,9 @@
 //! - Media support (fonts and images)
 //! - Layout system with relative units
 
-pub mod accessibility;
-pub mod animation;
-pub mod color;
-pub mod component;
-pub mod drag_drop;
-pub mod events;
-pub mod input;
-pub mod layout;
-pub mod media;
-pub mod rendering;
+mod modules;
 
-pub use animation::{Animation, AnimationController, AnimationState, Easing};
-pub use color::{Color, ColorSpace};
-pub use component::Component;
-pub use drag_drop::{DragData, DragEvent, DragManager, DragOperation, DragSource, DropTarget};
-pub use events::{Event, EventHandler};
-pub use input::{InputEvent, InputHandler};
-pub use layout::{
-	CalculatedBounds, Constraints, Layout, Position, PositionMode, RelativeUnit, Size, SizeMode,
-	Unit,
-};
-pub use rendering::{RenderError, SvgDocument, SvgParser};
+pub use modules::*;
 
 #[cfg(test)]
 mod tests {

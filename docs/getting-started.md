@@ -135,7 +135,7 @@ Edit `src/main.rs`:
 
 ```rust
 use engage_ux_components::{Button, Container, Label};
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use engage_ux_core::component::{Component, Rect};
 use engage_ux_themes::Theme;
 
@@ -211,9 +211,11 @@ You should see output like:
 ```
 
 > **⚠️ Important**: The "Hello World" example above uses stub backends for testing and does not display a window. To see **actual visual rendering** with a real window, run:
+>
 > ```bash
 > cargo run --example visual_window_demo -p engage-ux-oal
 > ```
+>
 > See [Actual Rendering Documentation](actual-rendering.md) for details.
 
 ## Understanding the Architecture
@@ -232,7 +234,7 @@ The foundation layer providing:
 - **Accessibility**: WCAG AAA support infrastructure
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use engage_ux_core::component::Component;
 use engage_ux_core::input::{KeyCode, MouseButton};
 ```
@@ -324,7 +326,7 @@ input.set_on_change(|text| {
 Engage UX supports multiple color formats:
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 
 // RGB
 let red = Color::from_rgb(255, 0, 0);
@@ -368,12 +370,14 @@ Now that you have the basics, explore:
 Engage UX includes several examples:
 
 #### Visual Window Example (ACTUAL RENDERING)
+
 ```bash
 # Creates a real window with visual graphics!
 cargo run --example visual_window_demo -p engage-ux-oal
 ```
 
 #### Component Examples (Console Output Only)
+>
 > **Note**: These examples use stub backends and print to console only (no window):
 
 ```bash

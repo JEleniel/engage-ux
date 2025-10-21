@@ -64,7 +64,7 @@ checkbox.set_on_change(|checked| println!("Checked: {}", checked));
 ## Colors
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 
 // Hex
 let color = Color::from_hex("#FF5733")?;

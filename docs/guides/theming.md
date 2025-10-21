@@ -40,6 +40,7 @@ let theme = Theme::dark();
 ```
 
 **Features**:
+
 - Deep space backgrounds
 - Bright accent colors
 - High contrast for readability
@@ -54,6 +55,7 @@ let theme = Theme::light();
 ```
 
 **Features**:
+
 - Light backgrounds
 - Softer accent colors
 - Clean and modern
@@ -306,7 +308,7 @@ Engage UX supports multiple color formats. See [Color Formats](../color-formats.
 ### Using Colors in Rust
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 
 // From theme
 let primary = theme.colors.primary;

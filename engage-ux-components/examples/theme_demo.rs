@@ -4,7 +4,7 @@
 //!
 //! Run with: cargo run --example theme_demo
 
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use engage_ux_themes::Theme;
 
 fn main() {

@@ -1,6 +1,6 @@
 //! Dialog components (alert, modal, file dialogs)
 
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
 use engage_ux_core::events::{Event, EventCallback};
 use serde::{Deserialize, Serialize};

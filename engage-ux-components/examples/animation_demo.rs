@@ -2,8 +2,8 @@
 //!
 //! Shows various animation types, easing functions, and animation composition.
 
+use engage_ux_core::Color;
 use engage_ux_core::animation::{Animation, AnimationController, Easing};
-use engage_ux_core::color::Color;
 use std::time::Duration;
 
 fn main() {

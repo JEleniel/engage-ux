@@ -2,7 +2,7 @@
 //!
 //! Provides JSON-based theme configuration and management.
 
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -328,7 +328,7 @@ impl Theme {
 				blur_radius: 4.0,
 				offset_x: 0.0,
 				offset_y: 2.0,
-				color: Color::rgb(0.0, 0.0, 0.0, 0.2),
+				color: Color::new(0, 0, 0, 50),
 			},
 			component_layouts: HashMap::new(),
 		}
@@ -375,7 +375,7 @@ impl Theme {
 				blur_radius: 4.0,
 				offset_x: 0.0,
 				offset_y: 2.0,
-				color: Color::rgb(0.0, 0.0, 0.0, 0.4),
+				color: Color::new(0, 0, 0, 100),
 			},
 			component_layouts: HashMap::new(),
 		}

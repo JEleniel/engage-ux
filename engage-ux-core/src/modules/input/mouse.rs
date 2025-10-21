@@ -2,8 +2,10 @@
 
 use std::collections::HashSet;
 
+use serde::{Deserialize, Serialize};
+
 /// Mouse buttons
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum MouseButton {
 	/// Left mouse button
 	Left,

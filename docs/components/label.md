@@ -46,7 +46,7 @@ label.set_text(format!("Count: {}", count));
 ### Styling
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 
 // Set color
 label.set_color(Color::from_hex("#333333")?);

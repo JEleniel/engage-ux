@@ -5,7 +5,7 @@
 //! Run with: cargo run --example basic_components
 
 use engage_ux_components::{Button, Checkbox, Container, Label, TextInput};
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 use engage_ux_core::component::Component;
 use engage_ux_core::events::{Event, EventType};
 use engage_ux_themes::Theme;

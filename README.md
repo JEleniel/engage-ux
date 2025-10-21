@@ -27,45 +27,45 @@ Engage UX is organized as a Cargo workspace with the following crates:
 ### Core Crates
 
 - **engage-ux-core**: Foundation layer providing:
-	- Color system (RGB/HSL support with user-friendly formats)
-	- Component trait and base structures
-	- Event system using Tokio signals
-	- Input system (keyboard, mouse, touch with gesture recognition, custom devices)
-	- Animation system (fade, slide, scale, rotate, color transitions with easing)
-	- Drag and drop system (DragSource, DropTarget, event management)
-	- Accessibility infrastructure (ARIA, focus management, screen readers)
-	- Rendering abstractions (SVG parsing, font and image loading)
-	- Thread-safe primitives
+   	+ Color system (RGB/HSL support with user-friendly formats)
+   	+ Component trait and base structures
+   	+ Event system using Tokio signals
+   	+ Input system (keyboard, mouse, touch with gesture recognition, custom devices)
+   	+ Animation system (fade, slide, scale, rotate, color transitions with easing)
+   	+ Drag and drop system (DragSource, DropTarget, event management)
+   	+ Accessibility infrastructure (ARIA, focus management, screen readers)
+   	+ Rendering abstractions (SVG parsing, font and image loading)
+   	+ Thread-safe primitives
 
 - **engage-ux-oal**: OS Abstraction Layer providing:
-	- Platform detection and initialization
-	- Window management abstractions
-	- Graphics rendering backend interfaces
-	- Platform-specific factory patterns
+   	+ Platform detection and initialization
+   	+ Window management abstractions
+   	+ Graphics rendering backend interfaces
+   	+ Platform-specific factory patterns
 
 - **engage-ux-themes**: Theme system providing:
-	- JSON-based theme configuration
-	- Default LCARS themes (light and dark) - inspired by Star Trek Voyager
-	- Classic themes available for traditional designs
-	- User-friendly color formats (hex, RGB, HSL)
-	- Color palettes, typography, spacing, borders, and shadows
+   	+ JSON-based theme configuration
+   	+ Default LCARS themes (light and dark) - inspired by Star Trek Voyager
+   	+ Classic themes available for traditional designs
+   	+ User-friendly color formats (hex, RGB, HSL)
+   	+ Color palettes, typography, spacing, borders, and shadows
 
 - **engage-ux-components**: UI components library providing:
-	- All 50 components from the specification
-	- Informational components (Label, Text, Icon, Image, Avatar, Progress, etc.)
-	- Interactive components (Button, TextInput, Checkbox, Radio, Toggle, Slider, etc.)
-	- Layout components (Container, Card, Table, Window)
-	- Notification components (Badge, Banner, Toast)
-	- Menu components (Drawer, Dropdown, Hamburger Menu)
-	- Dialog components (Alert, Confirm, Custom Modal, File dialogs)
+   	+ All 50 components from the specification
+   	+ Informational components (Label, Text, Icon, Image, Avatar, Progress, etc.)
+   	+ Interactive components (Button, TextInput, Checkbox, Radio, Toggle, Slider, etc.)
+   	+ Layout components (Container, Card, Table, Window)
+   	+ Notification components (Badge, Banner, Toast)
+   	+ Menu components (Drawer, Dropdown, Hamburger Menu)
+   	+ Dialog components (Alert, Confirm, Custom Modal, File dialogs)
 
 - **engage-ux-tests**: Integration test suite providing:
-	- Input system integration tests
-	- Rendering pipeline tests
-	- Theme integration tests
-	- Animation system tests
-	- Drag and drop tests
-	- Custom input device tests
+   	+ Input system integration tests
+   	+ Rendering pipeline tests
+   	+ Theme integration tests
+   	+ Animation system tests
+   	+ Drag and drop tests
+   	+ Custom input device tests
 
 ## Components
 
@@ -203,7 +203,7 @@ let custom_theme = Theme::from_json(json).unwrap();
 ### Example: Working with Colors
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 
 // Create RGB color
 let red = Color::rgb(1.0, 0.0, 0.0, 1.0);
@@ -273,12 +273,14 @@ let bounds = layout.calculate_bounds(
 ```
 
 **Relative Units:**
+
 - `rb` - Relative to theme base (like `em` in CSS)
 - `rp` - Relative to inherited size (like `rem` in CSS)
 - `%` - Percentage of parent dimension
 - `px` - Absolute pixels
 
 **Size Modes:**
+
 - `Fixed` - Specific size in any unit
 - `Fill` - Fill available space in parent
 - `FitContent` - Size to fit content (calculated later)
@@ -318,6 +320,7 @@ let monitor = config.monitor_at_point(3000, 500);
 ```
 
 **Monitor Modes:**
+
 - `Unified` - All monitors as one virtual surface
 - `Separate` - Each monitor independent
 - `Mixed` - Custom groupings for complex setups
@@ -396,12 +399,14 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 ## Roadmap
 
 **Phase 1 - Complete ✅**
+
 - [x] Complete all 50 component implementations
 - [x] Add comprehensive examples
 - [x] Core color, component, event, and theme systems
 - [x] 223 component tests passing
 
 **Phase 2 - Complete ✅**
+
 - [x] User-friendly color formats (hex, RGB, HSL)
 - [x] Complete input system (keyboard, mouse, touch with gestures)
 - [x] Accessibility infrastructure (WCAG AAA ready)
@@ -414,6 +419,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 - [x] Comprehensive documentation
 
 **Phase 3 - Complete ✅**
+
 - [x] Component development framework and documentation
 - [x] Animation system (fade, slide, scale, rotate, color with easing functions)
 - [x] Drag and drop support (DragSource, DropTarget, full event system)
@@ -422,6 +428,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 - [x] Comprehensive examples and documentation
 
 **Phase 4 - Complete ✅**
+
 - [x] Cross-platform window management (winit backend for all platforms)
 - [x] Software rendering backend (softbuffer for Windows, macOS, Android, iOS)
 - [x] Linux-specific renderer (tiny-skia for high-quality 2D graphics)
@@ -430,6 +437,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 - [x] DPI scaling support
 
 **Phase 5 - Complete ✅**
+
 - [x] Relative unit system (rb, rp, %, px)
 - [x] Layout system with positioning and sizing
 - [x] Size constraints (min/max width/height)
@@ -440,13 +448,14 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 - [x] Complete documentation and working examples
 
 **Phase 6 - Complete ✅**
+
 - [x] Screen reader backend architecture (ScreenReaderBackend trait)
 - [x] Platform-specific screen reader implementations:
-  + Windows: UI Automation
-  + macOS: NSAccessibility
-  + Linux: AT-SPI D-Bus protocol
-  + Android: TalkBack
-  + iOS: VoiceOver
+    + Windows: UI Automation
+    + macOS: NSAccessibility
+    + Linux: AT-SPI D-Bus protocol
+    + Android: TalkBack
+    + iOS: VoiceOver
 - [x] Accessibility tree management
 - [x] Focus management system
 - [x] Announcement system with priorities
@@ -454,6 +463,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 - [x] Linux AT-SPI infrastructure (323 lines)
 
 **Future - Phase 7**
+
 - [ ] Client/server rendering support
 - [ ] Hardware-accelerated GPU rendering (wgpu)
 - [ ] Enhanced native accessibility integration

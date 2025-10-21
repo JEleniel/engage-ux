@@ -6,36 +6,38 @@
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
+use crate::Color;
+
 /// Animation state
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum AnimationState {
-	/// Animation is idle (not started)
+	/// Animation is idle (not started).
 	#[default]
 	Idle,
-	/// Animation is running
+	/// Animation is running.
 	Running,
-	/// Animation is paused
+	/// Animation is paused.
 	Paused,
-	/// Animation has completed
+	/// Animation has completed.
 	Completed,
 }
 
-/// Easing function type
+/// Supported easing functions for animations.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Easing {
-	/// Linear interpolation (constant speed)
+	/// Linear interpolation (constant speed).
 	Linear,
-	/// Ease in (slow start, accelerate)
+	/// Ease in (slow start, accelerate).
 	EaseIn,
-	/// Ease out (fast start, decelerate)
+	/// Ease out (fast start, decelerate).
 	EaseOut,
-	/// Ease in and out (slow start and end)
+	/// Ease in and out (slow start and end).
 	EaseInOut,
-	/// Cubic bezier easing (slow start, fast middle, slow end)
+	/// Cubic bezier easing (slow start, fast middle, slow end).
 	CubicBezier,
-	/// Elastic easing (bouncy effect)
+	/// Elastic easing (bouncy effect).
 	Elastic,
-	/// Bounce easing
+	/// Bounce easing.
 	Bounce,
 }
 
@@ -83,26 +85,47 @@ impl Easing {
 	}
 }
 
-/// Animation type
+/// Types of supported animations.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum AnimationType {
-	/// Fade animation (opacity)
-	Fade { from: f32, to: f32 },
-	/// Slide animation (position)
+	/// Fade animation (opacity).
+	Fade {
+		/// Starting opacity value.
+		from: f32,
+		/// Ending opacity value.
+		to: f32,
+	},
+	/// Slide animation (position).
 	Slide {
+		/// The starting X coordinate of the slide.
 		from_x: f32,
+		/// The starting Y coordinate of the slide.
 		from_y: f32,
+		/// The ending X coordinate of the slide.
 		to_x: f32,
+		/// The ending Y coordinate of the slide.
 		to_y: f32,
 	},
-	/// Scale animation (size)
-	Scale { from: f32, to: f32 },
-	/// Rotate animation (angle in degrees)
-	Rotate { from: f32, to: f32 },
-	/// Color transition
+	/// Scale animation (size).
+	Scale {
+		/// Starting scale factor.
+		from: f32,
+		/// Ending scale factor.
+		to: f32,
+	},
+	/// Rotate animation (angle in degrees).
+	Rotate {
+		/// Starting rotation angle in degrees.
+		from: f32,
+		/// Ending rotation angle in degrees.
+		to: f32,
+	},
+	/// Color transition animation.
 	Color {
-		from: crate::color::Color,
-		to: crate::color::Color,
+		/// Starting color value.
+		from: Color,
+		/// Ending color value.
+		to: Color,
 	},
 }
 
@@ -129,19 +152,7 @@ impl AnimationType {
 			AnimationType::Rotate { from, to } => {
 				AnimationValue::Rotation(from + (to - from) * progress)
 			}
-			AnimationType::Color { from, to } => {
-				// Interpolate in RGB space
-				let from_rgb = from.to_rgb();
-				let to_rgb = to.to_rgb();
-				let from_comp = from_rgb.components();
-				let to_comp = to_rgb.components();
-				AnimationValue::Color(crate::color::Color::rgb(
-					from_comp[0] + (to_comp[0] - from_comp[0]) * progress,
-					from_comp[1] + (to_comp[1] - from_comp[1]) * progress,
-					from_comp[2] + (to_comp[2] - from_comp[2]) * progress,
-					from_comp[3] + (to_comp[3] - from_comp[3]) * progress,
-				))
-			}
+			AnimationType::Color { from, to } => AnimationValue::Color(from.lerp(to, progress)),
 		}
 	}
 }
@@ -149,40 +160,45 @@ impl AnimationType {
 /// Animation value result
 #[derive(Debug, Clone, PartialEq)]
 pub enum AnimationValue {
-	/// Opacity value (0.0 to 1.0)
+	/// Opacity value (0.0 to 1.0).
 	Opacity(f32),
-	/// Position (x, y)
-	Position { x: f32, y: f32 },
-	/// Scale factor
+	/// Position value with x and y coordinates.
+	Position {
+		/// X coordinate of the position.
+		x: f32,
+		/// Y coordinate of the position.
+		y: f32,
+	},
+	/// Scale factor value.
 	Scale(f32),
-	/// Rotation angle in degrees
+	/// Rotation angle in degrees.
 	Rotation(f32),
-	/// Color value
-	Color(crate::color::Color),
+	/// Color value.
+	Color(Color),
 }
 
-/// Animation configuration
+/// Configuration for a single animation.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Animation {
-	/// Animation type
+	/// Animation type (e.g., fade, slide, scale, rotate, color).
 	animation_type: AnimationType,
-	/// Duration of the animation
+	/// Duration of the animation.
 	duration: Duration,
-	/// Easing function
+	/// Easing function to use for the animation.
 	easing: Easing,
-	/// Delay before starting
+	/// Delay before starting the animation.
 	delay: Duration,
-	/// Number of times to repeat (0 = play once, None = infinite)
+	/// Number of times to repeat the animation (`0` = play once, `None` = infinite).
 	repeat: Option<u32>,
-	/// Whether to reverse on alternate iterations
+	/// Whether to reverse on alternate iterations.
 	alternate: bool,
-	/// Current state
+	/// Current state of the animation.
 	#[serde(skip)]
 	state: AnimationState,
-	/// Elapsed time
+	/// Elapsed time since the animation started.
 	#[serde(skip)]
 	elapsed: Duration,
-	/// Current iteration (for repeating animations)
+	/// Current iteration (for repeating animations).
 	#[serde(skip)]
 	current_iteration: u32,
 }
@@ -232,7 +248,7 @@ impl Animation {
 	}
 
 	/// Create a color transition animation
-	pub fn color(from: crate::color::Color, to: crate::color::Color, duration: Duration) -> Self {
+	pub fn color(from: Color, to: Color, duration: Duration) -> Self {
 		Self::new(AnimationType::Color { from, to }, duration)
 	}
 
@@ -369,6 +385,7 @@ impl Animation {
 /// Animation controller for managing multiple animations
 #[derive(Debug)]
 pub struct AnimationController {
+	/// List of animations managed by the controller.
 	animations: Vec<Animation>,
 }
 
@@ -455,6 +472,7 @@ impl Default for AnimationController {
 #[cfg(test)]
 mod tests {
 	use super::*;
+	use crate::Color;
 
 	#[test]
 	fn test_easing_linear() {
@@ -604,22 +622,18 @@ mod tests {
 
 	#[test]
 	fn test_animation_color() {
-		use crate::color::Color;
-
-		let from = Color::rgb(0.0, 0.0, 0.0, 1.0);
-		let to = Color::rgb(1.0, 1.0, 1.0, 1.0);
+		let from = Color::from_rgb(0, 0, 0);
+		let to = Color::from_rgb(255, 255, 255);
 		let mut anim = Animation::color(from, to, Duration::from_secs(1));
 		anim.start();
 
 		let value = anim.update(Duration::from_millis(500));
 		assert!(value.is_some());
 		if let Some(AnimationValue::Color(color)) = value {
-			// Color should be somewhere between black and white
-			let comp = color.components();
-			// At 50% progress, should be around 0.5 for RGB components
-			assert!((comp[0] - 0.5).abs() < 0.1);
-			assert!((comp[1] - 0.5).abs() < 0.1);
-			assert!((comp[2] - 0.5).abs() < 0.1);
+			let comp = [color.red, color.green, color.blue, color.alpha];
+			assert!((comp[0] as f32 - 127.5).abs() < 20.0);
+			assert!((comp[1] as f32 - 127.5).abs() < 20.0);
+			assert!((comp[2] as f32 - 127.5).abs() < 20.0);
 		}
 	}
 }

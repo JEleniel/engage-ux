@@ -101,7 +101,7 @@ button.set_variant(ButtonVariant::Secondary);
 ### Colors
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 
 // Set background color
 button.set_background_color(Color::from_hex("#007AFF").unwrap());

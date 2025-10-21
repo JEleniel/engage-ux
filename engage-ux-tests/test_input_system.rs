@@ -1,8 +1,7 @@
 //! Integration tests for the input system
 
 use engage_ux_core::input::{
-	InputEvent, InputHandler, KeyCode, KeyModifiers, KeyboardEvent, MouseButton, MouseEvent, Touch,
-	TouchEvent, TouchPhase,
+	InputEvent, InputHandler, MouseButton, MouseEvent, Touch, TouchEvent, TouchPhase,
 };
 
 struct TestComponent {

@@ -2,7 +2,7 @@
 //!
 //! Provides thread-safe event handling using Tokio's async runtime.
 
-use crate::component::ComponentId;
+use crate::{Point, component::ComponentId, input::MouseButton};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::broadcast;
@@ -11,25 +11,46 @@ use tokio::sync::broadcast;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum EventType {
 	/// Mouse button pressed
-	MouseDown { x: f32, y: f32, button: MouseButton },
+	MouseDown {
+		/// Location of the mouse event
+		location: Point,
+		/// Which mouse button was pressed
+		button: MouseButton,
+	},
 	/// Mouse button released
-	MouseUp { x: f32, y: f32, button: MouseButton },
+	MouseUp {
+		/// Location of the mouse event
+		location: Point,
+		/// Which mouse button was released
+		button: MouseButton,
+	},
 	/// Mouse moved
-	MouseMove { x: f32, y: f32 },
+	MouseMove {
+		/// The location of the mouse
+		location: Point,
+	},
 	/// Mouse wheel scrolled
-	MouseWheel { delta_x: f32, delta_y: f32 },
+	MouseWheel {
+		/// Scroll delta X
+		delta_x: f32,
+		/// Scroll delta Y
+		delta_y: f32,
+	},
 	/// Key pressed
 	KeyDown {
-		key: String,
-		modifiers: KeyModifiers,
+		/// The keyboard state at the time of the event
+		key_event: keyboard_types::KeyboardEvent,
 	},
 	/// Key released
 	KeyUp {
-		key: String,
-		modifiers: KeyModifiers,
+		/// The keyboard state at the time of the event
+		key_event: keyboard_types::KeyboardEvent,
 	},
 	/// Text input
-	TextInput { text: String },
+	TextInput {
+		/// The input text
+		text: String,
+	},
 	/// Component gained focus
 	FocusGained,
 	/// Component lost focus
@@ -39,45 +60,39 @@ pub enum EventType {
 	/// Component value changed
 	ValueChanged,
 	/// Window resized
-	Resize { width: f32, height: f32 },
+	Resize {
+		/// The new window width
+		width: f32,
+		/// The new window height
+		height: f32,
+	},
 	/// Custom event
-	Custom { name: String, data: String },
-}
-
-/// Mouse buttons
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-pub enum MouseButton {
-	Left,
-	Right,
-	Middle,
-}
-
-/// Keyboard modifiers
-#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize)]
-pub struct KeyModifiers {
-	pub shift: bool,
-	pub ctrl: bool,
-	pub alt: bool,
-	pub meta: bool,
+	Custom {
+		/// Custom event name
+		name: String,
+		/// Custom event data
+		data: String,
+	},
 }
 
 /// An event with its target component
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Event {
+	/// Target component ID
 	pub target: ComponentId,
+	/// Type of event
 	pub event_type: EventType,
-	pub timestamp: u64,
+	/// Timestamp of the event
+	pub timestamp: chrono::DateTime<chrono::Utc>,
 }
 
 impl Event {
+	/// Create a new event
 	pub fn new(target: ComponentId, event_type: EventType) -> Self {
 		Self {
 			target,
 			event_type,
-			timestamp: std::time::SystemTime::now()
-				.duration_since(std::time::UNIX_EPOCH)
-				.unwrap_or_default()
-				.as_millis() as u64,
+			timestamp: chrono::Utc::now(),
 		}
 	}
 }
@@ -105,12 +120,6 @@ impl EventHandler {
 	/// Subscribe to events
 	pub fn subscribe(&self) -> broadcast::Receiver<Event> {
 		self.sender.subscribe()
-	}
-}
-
-impl Default for EventHandler {
-	fn default() -> Self {
-		Self::new()
 	}
 }
 
@@ -144,17 +153,5 @@ mod tests {
 		// Note: In a real test, we'd use tokio runtime to test async
 		// For now, just verify the handler was created
 		assert!(handler.sender.receiver_count() > 0);
-	}
-
-	#[test]
-	fn test_key_modifiers() {
-		let modifiers = KeyModifiers {
-			shift: true,
-			ctrl: false,
-			alt: false,
-			meta: false,
-		};
-		assert!(modifiers.shift);
-		assert!(!modifiers.ctrl);
 	}
 }

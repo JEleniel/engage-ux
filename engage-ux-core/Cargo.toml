@@ -2,22 +2,25 @@
 name = "engage-ux-core"
 version.workspace = true
 edition.workspace = true
-description = "Core functionality for Engage UX - a cross-platform UI toolkit"
+description = "Core functionality for Engage UX - a fully themable, modular UX framework for Rust, providing core functionality, components, and base themes."
 repository.workspace = true
 license.workspace = true
 
 [dependencies]
+bitflags = { workspace = true }
+chrono = { workspace = true }
+fontdue = { workspace = true }
+image = { workspace = true }
+keyboard-types = { workspace = true }
+resvg = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-tokio = { workspace = true }
-bitflags = "2.4"
-image = { workspace = true }
-fontdue = { workspace = true }
-usvg = { workspace = true }
-resvg = { workspace = true }
+thiserror = { workspace = true }
 tiny-skia = { workspace = true }
+tokio = { workspace = true }
+usvg = { workspace = true }
 
 [dev-dependencies]
 
-[lints.rust]
-unsafe_code = "forbid"
+[lints]
+workspace = true

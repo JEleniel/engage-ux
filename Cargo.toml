@@ -7,7 +7,7 @@ members = [
 [workspace.package]
 version = "0.1.0-alpha.1"
 edition = "2024"
-description = "A modular UX framework for Rust, providing core functionality, components, and themes."
+description = "A fully themable, modular UX framework for Rust, providing core functionality, components, and base themes."
 repository = "https://github.com/JEleniel/engage-ux"
 license = " MIT OR Apache-2.0"
 keywords = ["components", "framework", "rust", "themes", "ux"]
@@ -20,14 +20,26 @@ categories = [
 ]
 
 [workspace.dependencies]
+bitflags = { version = "2.4" }
+chrono = { version = "0.4", features = ["serde"] }
+fontdue = { version = "0.9" }
+image = { version = "0.25", default-features = false, features = [
+  "bmp",
+  "gif",
+  "jpeg",
+  "png",
+  "tiff",
+  "webp",
+] }
+keyboard-types = { version = "0.8", features = ["serde"] }
+resvg = { version = "0.44" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0" }
-tokio = { version = "1.41", features = ["full"] }
-image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "gif", "bmp", "tiff"] }
-fontdue = { version = "0.9" }
-usvg = { version = "0.44" }
-resvg = { version = "0.44" }
+thiserror = { version = "2" }
 tiny-skia = { version = "0.11" }
+tokio = { version = "1.41", features = ["full"] }
+usvg = { version = "0.44" }
 
-[profile.release]
-lto = true
+[workspace.lints.rust]
+missing_docs = "warn"
+unsafe_code = "forbid"

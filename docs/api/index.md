@@ -20,10 +20,11 @@ The `engage-ux-core` crate provides the foundation for the entire toolkit.
 RGB and HSL color system with conversions.
 
 ```rust
-use engage_ux_core::color::Color;
+use engage_ux_core::Color;
 ```
 
 **Key Types**:
+
 - `Color` - RGBA color representation
 - Color parsing and conversion methods
 
@@ -38,6 +39,7 @@ use engage_ux_core::component::{Component, ComponentProperties, Rect};
 ```
 
 **Key Types**:
+
 - `Component` trait - Base interface for all UI elements
 - `ComponentProperties` - Common component attributes
 - `Rect` - Position and size
@@ -54,6 +56,7 @@ use engage_ux_core::events::{Event, EventType, EventHandler};
 ```
 
 **Key Types**:
+
 - `Event` - Event data structure
 - `EventType` - Event type enumeration
 - `EventHandler` - Async event handler
@@ -75,6 +78,7 @@ use engage_ux_core::input::{
 ```
 
 **Key Types**:
+
 - `KeyboardEvent`, `KeyCode`, `KeyModifiers` - Keyboard input
 - `MouseEvent`, `MouseButton` - Mouse input
 - `TouchEvent`, `TouchPhase` - Touch input
@@ -94,6 +98,7 @@ use engage_ux_core::animation::{
 ```
 
 **Key Types**:
+
 - `Animation` - Animation definition
 - `AnimationType` - Fade, slide, scale, rotate, color
 - `EasingFunction` - Linear, ease-in, ease-out, etc.
@@ -112,6 +117,7 @@ use engage_ux_core::accessibility::{
 ```
 
 **Key Types**:
+
 - `AccessibilityProps` - Component accessibility properties
 - `AriaRole` - ARIA role enumeration
 - `FocusManager` - Keyboard focus management
@@ -128,6 +134,7 @@ use engage_ux_core::layout::{Layout, Unit, Size, PositionMode};
 ```
 
 **Key Types**:
+
 - `Layout` - Layout specification
 - `Unit` - Pixels, rb, rp, percentage
 - `Size` - Fixed, Fill, FitContent
@@ -146,6 +153,7 @@ use engage_ux_core::drag_drop::{
 ```
 
 **Key Types**:
+
 - `DragSource` trait - Draggable components
 - `DropTarget` trait - Drop zones
 - `DragData` - Data being dragged
@@ -205,6 +213,7 @@ use engage_ux_themes::Theme;
 ```
 
 **Key Types**:
+
 - `Theme` - Theme definition
 - `ColorPalette` - Theme colors
 - `Typography` - Font settings
@@ -244,6 +253,7 @@ use engage_ux_oal::{
 ```
 
 **Key Types**:
+
 - `Platform` - Platform detection
 - `WindowBackend` trait - Window management
 - `RenderBackend` trait - Graphics rendering
