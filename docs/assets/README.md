@@ -4,7 +4,7 @@ This directory contains visual assets for the Engage UX documentation.
 
 ## Directory Structure
 
-```
+```text
 assets/
 ├── images/       # General images (logos, icons, etc.)
 ├── diagrams/     # Architecture and flow diagrams
@@ -39,6 +39,7 @@ assets/
 ### 1. Create the Asset
 
 Use appropriate tools for your asset type:
+
 - **Screenshots**: Use OS screenshot tools or browser dev tools
 - **Diagrams**: Use Draw.io, Figma, or code-based tools (Mermaid, PlantUML)
 - **Icons**: Use SVG format for scalability
@@ -60,7 +61,7 @@ jpegoptim --max=85 input.jpg
 
 ### 3. Place in Correct Directory
 
-```
+```text
 assets/
 ├── images/
 │   ├── logo.svg
@@ -80,7 +81,7 @@ assets/
 
 Use relative paths in markdown:
 
-```markdown
+```text
 ![Button Variants](../assets/screenshots/button-variants.png)
 
 ![Architecture](../assets/diagrams/architecture-overview.svg)
@@ -90,24 +91,24 @@ Use relative paths in markdown:
 
 ### Images
 
-- `logo.svg` - Engage UX logo (TODO)
-- `icon-*.png` - Component icons (TODO)
+- `logo.svg` - Engage UX logo (placeholder - add optimized SVG in `assets/images/` when available)
+- `icon-*.png` - Component icons (placeholder - add icons in `assets/images/` when available)
 
 ### Diagrams
 
-- `architecture-overview.svg` - System architecture diagram (TODO)
-- `component-hierarchy.svg` - Component inheritance tree (TODO)
-- `data-flow.svg` - Event and data flow diagram (TODO)
-- `theme-structure.svg` - Theme system structure (TODO)
-- `input-system.svg` - Input handling flow (TODO)
+- `architecture-overview.svg` - System architecture diagram (placeholder - add optimized SVG in `assets/diagrams/` when available)
+- `component-hierarchy.svg` - Component inheritance tree (placeholder)
+- `data-flow.svg` - Event and data flow diagram (placeholder)
+- `theme-structure.svg` - Theme system structure (placeholder)
+- `input-system.svg` - Input handling flow (placeholder)
 
 ### Screenshots
 
-- `button-variants.png` - All button variants (TODO)
-- `theme-demo-light.png` - Light theme showcase (TODO)
-- `theme-demo-dark.png` - Dark theme showcase (TODO)
-- `component-gallery.png` - All components overview (TODO)
-- `form-example.png` - Form components example (TODO)
+- `button-variants.png` - All button variants (placeholder)
+- `theme-demo-light.png` - Light theme showcase (placeholder)
+- `theme-demo-dark.png` - Dark theme showcase (placeholder)
+- `component-gallery.png` - All components overview (placeholder)
+- `form-example.png` - Form components example (placeholder)
 
 ## Tools and Resources
 

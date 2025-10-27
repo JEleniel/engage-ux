@@ -1,50 +1,30 @@
-name: Documentation Request
-description: Request corrections or additions to the documentation.
-title: '[docs]: '
-labels: ['documentation', 'triage']
+name: 'Documentation request'
+about: 'Request improvements or corrections to documentation.'
+title: '[docs] '
+labels: ['documentation']
 body:
-  - type: markdown
-    attributes:
-      value: Thank you for helping us improve our documentation!
   - type: textarea
-    id: current-state
+    id: summary
     attributes:
-      label: Current Documentation
-      description: What does the current documentation say? (if applicable)
-      placeholder: Please provide a link or quote from the current documentation
-    validations:
-      required: false
+      label: 'Summary'
+      description: 'Brief summary of the documentation change requested.'
+      placeholder: 'Short description of the missing or incorrect documentation.'
   - type: textarea
-    id: proposed-changes
+    id: current
     attributes:
-      label: Proposed Changes
-      description: What changes would you like to see?
-      placeholder: Describe your suggested improvements or additions in detail
-    validations:
-      required: true
-  - type: dropdown
-    id: doc-type
+      label: 'Current documentation'
+      description: 'Link or quote the current documentation that should change (if applicable).'
+      placeholder: 'URL or excerpt of the current docs.'
+  - type: textarea
+    id: improvement
     attributes:
-      label: Documentation Type
-      description: What type of documentation needs to be updated?
+      label: 'Proposed improvement'
+      description: 'Describe the requested change and provide a suggested replacement or example.'
+      placeholder: 'Proposed text, code snippets, or screenshots.'
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 'Checklist'
       options:
-        - API Reference
-        - User Guide
-        - Tutorial
-        - README
-        - Code Comments
-        - Other
-    validations:
-      required: true
-  - type: input
-    id: affected-pages
-    attributes:
-      label: Affected Pages/Files
-      description: Which documentation pages or files need to be updated?
-      placeholder: e.g., /docs/api.md, README.md
-  - type: textarea
-    id: additional-context
-    attributes:
-      label: Additional Context
-      description: Any other context or examples that would help us understand your request
-      placeholder: Include any relevant examples, screenshots, or additional context
+        - label: 'I searched existing docs and issues'
+        - label: 'This change improves clarity or correctness'

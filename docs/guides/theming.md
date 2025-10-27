@@ -40,6 +40,7 @@ let theme = Theme::dark();
 ```
 
 **Features**:
+
 - Deep space backgrounds
 - Bright accent colors
 - High contrast for readability
@@ -54,6 +55,7 @@ let theme = Theme::light();
 ```
 
 **Features**:
+
 - Light backgrounds
 - Softer accent colors
 - Clean and modern

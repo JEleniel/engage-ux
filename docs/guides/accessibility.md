@@ -354,6 +354,7 @@ focus_manager.set_focus(username_input.id());
 ### Contrast Requirements
 
 WCAG AAA requires:
+
 - **Normal text**: 7:1 contrast ratio
 - **Large text**: 4.5:1 contrast ratio
 - **UI components**: 3:1 contrast ratio
@@ -502,6 +503,7 @@ fn test_keyboard_navigation() {
 ### Screen Reader Testing
 
 Test with actual screen readers:
+
 - **Windows**: NVDA (free), JAWS
 - **macOS**: VoiceOver (built-in)
 - **Linux**: Orca

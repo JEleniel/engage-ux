@@ -428,6 +428,7 @@ pub type CounterRef = Arc<RwLock<Counter>>;
 ### 7. Consistent Naming
 
 Follow Rust naming conventions:
+
 - Types use `PascalCase`
 - Functions and variables use `snake_case`
 - Constants use `SCREAMING_SNAKE_CASE`
