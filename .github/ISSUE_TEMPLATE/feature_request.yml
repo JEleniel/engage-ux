@@ -1,63 +1,36 @@
-name: Feature Request
-description: Request a new feature or an enhancement to an existing feature.
-title: '[feat]: '
-labels: ['feature', 'triage']
+name: 'Feature request'
+about: 'Use this form to propose new features or enhancements.'
+title: '[feature] '
+labels: ['enhancement']
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thank you for taking the time to suggest a new feature! Please fill out this form as completely as possible.
   - type: textarea
-    id: description
+    id: summary
     attributes:
-      label: Description
-      description: Describe the feature you'd like to see implemented
-      placeholder: Provide a clear and detailed description of the feature you're requesting
-    validations:
-      required: true
+      label: 'Summary'
+      description: 'Short description of the proposed feature.'
+      placeholder: 'A short, descriptive summary of the proposal.'
   - type: textarea
-    id: audience
+    id: problem
     attributes:
-      label: Target Audience
-      description: Who would benefit from this feature?
-      placeholder: e.g., developers, end users, administrators, specific user roles
-    validations:
-      required: true
+      label: 'Problem to solve'
+      description: 'What problem does this feature solve? Who benefits?'
+      placeholder: 'Describe the current limitation or pain point.'
   - type: textarea
-    id: benefit
+    id: proposal
     attributes:
-      label: Benefits
-      description: How would this feature improve the application?
-      placeholder: List the specific benefits and improvements this feature would bring
-    validations:
-      required: true
-  - type: dropdown
-    id: priority
-    attributes:
-      label: Priority Level
-      description: How important is this feature to you?
-      options:
-        - Critical
-        - High
-        - Medium
-        - Low
-    validations:
-      required: true
-  - type: textarea
-    id: implementation
-    attributes:
-      label: Implementation Details
-      description: Do you have any suggestions on how this could be implemented?
-      placeholder: Share any technical details, API suggestions, or implementation ideas
+      label: 'Proposed solution'
+      description: 'Describe the proposed implementation or API changes.'
+      placeholder: 'Outline the change, including examples or pseudo-code.'
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternative Solutions
-      description: Have you considered any alternative solutions or workarounds?
-      placeholder: Describe any alternatives you've considered and why they might or might not work
-  - type: textarea
-    id: examples
+      label: 'Alternatives considered'
+      description: 'Other approaches considered and why they were rejected.'
+  - type: checkboxes
+    id: checklist
     attributes:
-      label: Examples
-      description: Are there any examples of this feature in other products?
-      placeholder: Share links, screenshots, or descriptions of similar features in other applications
+      label: 'Checklist'
+      options:
+        - label: 'I considered backwards compatibility'
+        - label: 'I considered security implications'
+        - label: 'I added tests or a test plan'

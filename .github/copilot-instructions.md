@@ -1,67 +1,27 @@
-```markdown
-# Machine Coding Agent Prompt
+<<<<<<< HEAD
 
-This document defines the mandatory operational, security, and coding standards for autonomous coding agents that contribute to this repository. It also contains conventions that human contributors should follow where applicable. Read the `Scope` and `Agent-only rules` sections carefully if you are implementing or running an automated agent.
+# Copilot Instructions
 
-## Purpose and Scope
-
-- Purpose: Ensure code contributed by machines and humans is secure, maintainable, and consistent with this project's conventions.
-- Scope: These rules apply first to autonomous machine coding agents created to modify this repository. Where noted, rules also apply to human contributors. Agent-only instructions are explicitly marked.
+All paths are relative to this file.
 
 ## Coding Practices and Style
 
-### Priorities
+### Coding Priorities
 
-When writing or modifying code, strictly adhere to the following priorities, in order:
+=======
 
-1. **Security**
-2. **Robustness**
-3. **Scalability**
-4. **Performance**
-5. **Maintainability**
+# Common Agent Instructions
 
-### Standards
+## Scope
 
-Code must comply with the following standards, as applicable:
-
-- [The Twelve-Factor App](https://12factor.net/)
-- [Web Content Accessibility Guidelines (WCAG) 2.2 AAA](https://www.w3.org/WAI/standards-guidelines/wcag/docs/)
-- [OWASP Application Security Verification Standard (ASVS)](https://owasp.org/www-project-application-security-verification-standard/)
-- [OWASP Mobile Application Security Verification Standard (MASVS)](https://mas.owasp.org/MASVS/)
-
-### Formatting and Style Rules
-
-- Respect project-specific formatting configurations when present (for example `rustfmt.toml`, `.editorconfig`, or a Prettier config). If a project config exists, use it and do not override that project's preferences.
-- If no project formatter/config is present, follow language-idiomatic defaults.
-- Preferences for this repository (applies when no project config contradicts it):
-	+ Use tabs for indentation.
-	+ Use `rustfmt` for Rust sources.
-	+ Use Prettier for *Script languages (JavaScript/TypeScript/JSON/Markdown) where applicable.
-	+ Use language default formatters for all other languages.
-- Always run the appropriate formatter before committing. Automated checks (CI/pre-commit) should verify formatting.
-- Write clear, concise, and well-documented code. Comment all non-obvious logic.
-
-### Secrets and Configuration
-
-- Never hardcode secrets, credentials, or environment-specific configuration values. Use environment variables, a secrets manager, or configuration files excluded from version control.
-- If you must expose a configuration value in code, define it as a constant (`const`) with a clear name and load the real value from a secure source at runtime.
-- If a secret is accidentally committed, follow the repository's incident remediation steps: rotate the secret, remove it from history (if necessary), and create an issue documenting the incident.
-
-### Structured Configuration
-
-- Prefer JSON (Draft 07) for cross-language machine-readable configuration. Provide a matching JSON Schema (Draft 07) with `additionalProperties: false` and `additionalItems: false` when adding new JSON configuration files intended for programmatic consumption.
-- Exceptions: Use the ecosystem's conventional format when required (for example `Cargo.toml` for Cargo, `rustfmt.toml` for rustfmt, or other tool-specific files). Document the reason for using a non-JSON format in the same directory (a short README or comment is sufficient).
-
-### Dependencies
-
-- Ensure dependencies are actively maintained and widely adopted. Prefer stable, well-known crates/packages.
-
-## Project Structure
+- You may use any MCP servers you have access to.
+- Respect the `.gitignore` file; do not read or modify files listed in it.
+- Do not modify files in the `.github` or `.prompts` folders.
 
 - All documentation should live under `docs/` written in GitHub Flavored Markdown. Use Mermaid for diagrams when helpful.
-	+ Entry point: `docs/README.md`.
-	+ Design docs: `docs/design/`.
-	+ Machine-agent docs: `docs/design/agents/`.
+   	+ Entry point: `docs/README.md`.
+   	+ Design docs: `docs/design/`.
+   	+ Machine-agent docs: `docs/design/agents/`.
 - Respect `.gitignore`; do not read or modify ignored files unless explicitly instructed.
 - Files in `.github/` are protected: do not modify `.github/` policy and workflow files unless you have explicit instruction or approval. Templates in `.github/templates/` may be updated only when a maintainer approves.
 
@@ -100,24 +60,180 @@ prettier --check "**/*.{js,ts,jsx,tsx,json,md}"
 
 - Add JSON Schema validations for JSON configuration files in `schemas/` and validate them in CI.
 
-## Secrets and Incident Handling
+## Secrets and security
+>>>>>>>
+>>>>>>> 388b8aea5e651424b70717a1a2f9395b52b41905
 
-- Use the platform's secret storage (GitHub secrets, environment variables, or an external secrets manager). Do not store secrets in the repository.
-- If a secret is discovered in the repo, rotate it immediately and follow the incident remediation checklist (create an issue, remove from history if necessary, run a secret scan).
+1. Security
+2. Robustness
+3. Scalability
+4. Performance
+5. Maintainability
 
-## How to propose changes
+<<<<<<< HEAD
 
-- Open a small, focused pull request with a descriptive title and link to any related issue.
-- Include a short PR description of the change, the reason, and any CI steps required to validate it.
-- Add reviewers and request maintainers to run CI and approve.
+### Standards
 
-## Contacts and Escalation
+=======
 
-- For policy clarifications or urgent issues, open an issue and tag `@JEleniel` (or the relevant team alias) in the PR.
+### Common Requirements
+>>>>>>>
+>>>>>>> 388b8aea5e651424b70717a1a2f9395b52b41905
 
-## Examples and templates
+Code must conform to the following standards (as applicable):
 
-- Commit message example: `docs(contrib): clarify agent formatting rules (#42)`
-- Branch example: `feature/ENG-123-add-ci-format-checks`
+<<<<<<< HEAD
 
-```
+- [The Twelve-Factor App](https://12factor.net/).
+- [Web Content Accessibility Guidelines (WCAG) 2.2 AAA](https://www.w3.org/WAI/standards-guidelines/wcag/docs/).
+- [OWASP Application Security Verification Standard (ASVS)](https://owasp.org/www-project-application-security-verification-standard/), if applicable.
+- [OWASP Mobile Application Security Verification Standard (MASVS)](https://mas.owasp.org/MASVS/)
+=======
+- Follow [The Twelve-Factor App](https://12factor.net/).
+- UI elements must conform to [Web Content Accessibility Guidelines (WCAG) 2.2 AAA](https://www.w3.org/WAI/standards-guidelines/wcag/docs/).
+- Conform to the [OWASP Application Security Verification Standard (ASVS)](https://owasp.org/www-project-application-security-verification-standard/), if applicable.
+- Conform to the [OWASP Mobile Application Security Verification Standard (MASVS)](https://mas.owasp.org/MASVS/), if applicable.
+- All code must:
+    + Compile with zero warnings or errors.
+    + Include appropriate passing unit tests for all generated functions and code.
+    + Be runnable without elevated permissions (e.g., root).
+    + Implement appropriate input validation and sanitization.
+    + Use secure coding practices to prevent common vulnerabilities.
+    + Implement proper error handling and logging.
+
+>>>>>>> 388b8aea5e651424b70717a1a2f9395b52b41905
+
+### Acceptance Criteria
+
+All code must:
+
+- Compile with zero warnings or errors.
+    + Future-use code should be appropriately marked to avoid warnings (for example, prefix unused identifiers with `_` in Rust).
+    + Remove unused code when it is not required.
+- Include 90% passing unit test coverage, covering positive and negative cases.
+- Follow secure coding practices to prevent common vulnerabilities.
+- Not crash in normal operation. Implement proper error handling and logging.
+
+### Coding Style
+
+- Follow language-specific style guidelines and best practices unless otherwise instructed.
+<<<<<<< HEAD
+- Use the language-appropriate formatter (e.g., `rustfmt`, `prettier`, `markdownlint`) and obey the project's configuration for that tool.
+- Prefer tabs for indentation when it is idiomatic for the language or project; otherwise follow the established language conventions.
+- Write clear, concise, and well-documented code.
+- Add comments explaining non-obvious logic.
+- Avoid hardcoding secrets or configuration values (API keys, passwords, etc.). Use environment variables or a secrets manager.
+- For application configuration, prefer JSON (Draft 07) when a structured format is required. Provide a matching JSON Schema (draft-07) and, where appropriate, set `additionalProperties: false` and `additionalItems: false`.
+- Avoid YAML and TOML unless they are the accepted standard for a specific tool being used.
+=======
+- Conform to the appropriate style configuration(s), e.g., `rustfmt.toml`, `.prettierrc.json`, `.markdownlint.json`, etc.
+- Prefer tabs over spaces for indentation when appropriate for the language.
+- Write clear, concise, and well-documented code.
+- Include comments explaining non-obvious logic.
+- Avoid hardcoding information (e.g., API keys, passwords) or configurable values.
+- Ensure that libraries used are actively maintained and widely adopted.
+
+>>>>>>> 388b8aea5e651424b70717a1a2f9395b52b41905
+
+## Version Control Guidelines
+
+- Write clear, descriptive commit messages.
+- Keep commits small and focused.
+- Use descriptive branch names that follow project conventions.
+- Include relevant issue or ticket numbers in commit messages when applicable.
+
+## Technologies, Libraries, and Frameworks
+
+<<<<<<< HEAD
+
+- Unless constrained to a specific library or framework, choose actively maintained and widely adopted dependencies:
+    + Project must be at least one year old and updated within the past six months.
+
+### Preferred Libraries and Frameworks
+
+The following libraries and ecosystems are preferred (non-exhaustive):
+
+#### Rust
+
+- base64
+- bincode
+- bitflags
+- chrono
+- clap
+- config
+- fern
+- libloading
+- log
+- lowlevel-types
+- num-traits
+- rand
+- regex
+- reqwest
+- rustls
+- serde
+- serde_json
+- serde-binary-adv
+- strum
+- thiserror
+- tokio
+- tower
+- tracing
+- url
+- uuid
+
+#### Node.js / TypeScript / JavaScript
+
+- @types/node
+- Axios
+- Bcrypt
+- Cors
+- DotEnv / @dotenvx/dotenvx
+- Express.js
+- Helmet
+- MySQL 2
+- Passport
+- Prefer `pnpm` over `npm`
+- Prettier & Prettier Plugins
+- Svelte / SvelteKit
+- TailwindCSS (v4+)
+- TypeScript
+- uuid
+- Vite
+
+## Project Structure
+
+- Documentation should be formatted and structured to be easily deployable to GitHub Pages using Jekyll.
+- User documentation is located in the `../docs/` folder with `../docs/README.md` as the entry point.
+- Design documentation is in `../docs/design/`.
+- Files in `../docs/design/agents/` are design artifacts created for machine-agent use.
+- Respect the repository `.gitignore`; do not read or modify files listed there unless explicitly instructed.
+- You may read, but should not modify, files in the `.github` folder unless directly instructed.
+    + The `.github/templates/` folder contains template examples named with an extra `.template` extension; remove that extension when instantiating a template.
+- Other dot-folders (e.g., `.analyze/`) are used by tooling and should be ignored unless explicitly required.
+
+## Secrets and Security
+
+- Never commit secrets, credentials, or private keys to the repository. Use environment variables or a secrets manager.
+- Report security issues privately following the repository's SECURITY.md process.
+=======
+- Use clear, well-structured GitHub‑Flavored Markdown (GFM).
+- Match the tone, style, and structure of existing documentation.
+- Cross-reference related docs where relevant; include appropriate direct links.
+- Cite project details with file and section references.
+- When generating Markdown, use GFM and conform to the `.markdownlint.json` file.
+
+## Project Structure
+
+- The following documents should exist in the root of the workspace: `.editorconfig`, `.gitignore`, `.markdownlint.json`, `.prettierrc.json`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `DCO.md`, `LICENSE*.md` (there may be multiple), `README.md`, `SECURITY.md`. Templates for these files are available in the GitHub repository at <http://github.com/JEleniel/template/>.
+- All other documentation must be in the `docs/` folder. Design documentation must be in the `docs/design/` folder. Files in the `docs/design/agents/` folder are for machine agent use.
+
+## Prerequisites
+
+Before starting, familiarize yourself with:
+
+- [README.md](README.md) - Project overview and architecture. Do not modify this file unless otherwise instructed.
+- [docs/design/agents/IMPLEMENTATION_SUMMARY.md](docs/design/agents/IMPLEMENTATION_SUMMARY.md) - Current, agent-maintained implementation status. Create it if it does not exist; update it if it does.
+- [docs/design/agents/TODO.md](docs/design/agents/TODO.md) - Task tracking and completion status. Keep it updated as you work.
+- Do not modify this file unless otherwise instructed.
+
+>>>>>>> 388b8aea5e651424b70717a1a2f9395b52b41905

@@ -29,6 +29,7 @@ cargo run --example basic_components -p engage-ux-components
 ```
 
 **What it shows**:
+
 - Creating buttons, labels, and inputs
 - Setting component properties
 - Handling events
@@ -45,6 +46,7 @@ cargo run --example theme_demo -p engage-ux-components
 ```
 
 **What it shows**:
+
 - Loading built-in themes
 - Applying themes to components
 - Color conversions
@@ -61,6 +63,7 @@ cargo run --example lcars_theme_demo -p engage-ux-components
 ```
 
 **What it shows**:
+
 - LCARS design aesthetic
 - High contrast colors
 - Unique component styling
@@ -79,6 +82,7 @@ cargo run --example animation_demo -p engage-ux-components
 ```
 
 **What it shows**:
+
 - Fade animations
 - Slide animations
 - Scale and rotate animations
@@ -99,6 +103,7 @@ cargo run --example drag_drop_demo -p engage-ux-components
 ```
 
 **What it shows**:
+
 - Creating draggable components
 - Defining drop zones
 - Handling drag events
@@ -116,6 +121,7 @@ cargo run --example custom_input_demo -p engage-ux-components
 ```
 
 **What it shows**:
+
 - Gamepad input
 - Stylus/pen input
 - Sensor input
@@ -135,6 +141,7 @@ cargo run --example layout_demo -p engage-ux-components
 ```
 
 **What it shows**:
+
 - Unit types (pixels, rb, rp, percentage)
 - Layout calculations
 - Constraints (min/max)
@@ -154,6 +161,7 @@ cargo run --example color_formats -p engage-ux-themes
 ```
 
 **What it shows**:
+
 - Hex color format
 - RGB array format
 - HSL array format
@@ -171,6 +179,7 @@ cargo run --example export_themes -p engage-ux-themes
 ```
 
 **What it does**:
+
 - Exports light theme to `themes/light.json`
 - Exports dark theme to `themes/dark.json`
 - Creates theme directory if needed
@@ -395,26 +404,35 @@ Complete example projects demonstrating real-world usage:
 ### Todo App (Coming Soon)
 
 A complete todo list application showing:
+
 - CRUD operations
 - Data persistence
 - Theme customization
 - Responsive layout
 
+Note: These example projects are tracked in the agent roadmap. Machine agents and contributors can find tasks and acceptance criteria in `docs/design/agents/TODO.md`.
+
 ### Dashboard (Coming Soon)
 
 A data dashboard demonstrating:
+
 - Charts and graphs
 - Real-time updates
 - Complex layouts
 - Multiple views
 
+Note: See `docs/design/agents/TODO.md` for tasks related to creating example projects.
+
 ### Text Editor (Coming Soon)
 
 A simple text editor showing:
+
 - File operations
 - Syntax highlighting
 - Find and replace
 - Multiple tabs
+
+Note: Example project tasks are tracked under `docs/design/agents/TODO.md`.
 
 ## Community Examples
 

@@ -265,6 +265,7 @@ cargo tarpaulin --all --out Html --output-dir ./coverage && open coverage/index.
 ### Current Coverage
 
 As of Phase 2 completion:
+
 - **Total**: 321 tests passing
 - **engage-ux-core**: 14 tests
 - **engage-ux-components**: 200 tests
