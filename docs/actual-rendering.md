@@ -16,6 +16,7 @@ The current default backends (`WinitWindowBackend`, `SoftbufferRenderer`, `TinyS
 - ❌ **Do NOT display visual output on screen**
 
 These are intentionally designed this way to allow:
+
 - Unit testing without requiring a display
 - CI/CD pipeline testing in headless environments
 - Architecture validation and API design
@@ -30,6 +31,7 @@ cargo run --example visual_window_demo -p engage-ux-oal
 ```
 
 This example demonstrates:
+
 - ✅ **Real window creation** using winit
 - ✅ **Visual rendering** using softbuffer
 - ✅ **Actual display** on your screen
@@ -42,12 +44,14 @@ This example demonstrates:
 ## Why Two Types?
 
 ### Stub Backends (Current Default)
+
 - **Purpose**: Testing, CI/CD, architecture validation
 - **Use case**: Unit tests, integration tests, examples
 - **Benefit**: Works in headless environments
 - **Limitation**: No visual output
 
 ### Visual Rendering Example
+
 - **Purpose**: Actual application development
 - **Use case**: Real applications with GUI
 - **Benefit**: Actual windows and rendering
@@ -55,23 +59,28 @@ This example demonstrates:
 
 ## Running the Visual Example
 
-### On Linux (with X11 or Wayland):
+### On Linux (with X11 or Wayland)
+
 ```bash
 cargo run --example visual_window_demo -p engage-ux-oal
 ```
 
-### On Windows:
+### On Windows
+
 ```bash
 cargo run --example visual_window_demo -p engage-ux-oal
 ```
 
-### On macOS:
+### On macOS
+
 ```bash
 cargo run --example visual_window_demo -p engage-ux-oal
 ```
 
-### Expected Output:
+### Expected Output
+
 A window will appear showing:
+
 - Dark blue-gray background
 - Three colored rectangles (red, green, blue)
 - Outlined rectangle (yellow)
@@ -93,6 +102,7 @@ To create a real application with visual rendering, follow the pattern in `visua
 ## Future Work (Phase 7)
 
 The roadmap includes:
+
 - [ ] Integrate actual rendering into the default backends
 - [ ] Hardware-accelerated GPU rendering (wgpu)
 - [ ] Component-to-renderer integration
@@ -102,12 +112,14 @@ The roadmap includes:
 ## Summary
 
 **Current examples** (basic_components, theme_demo, etc.):
+
 - Use stub backends
 - Print console output
 - No visual window displayed
 - **This is intentional** for testing
 
 **Visual rendering example** (visual_window_demo):
+
 - Uses actual winit + softbuffer
 - Creates real window
 - Displays graphics on screen

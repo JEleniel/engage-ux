@@ -7,6 +7,7 @@ The Engage UX layout system provides flexible positioning and sizing with suppor
 The layout system supports four types of units:
 
 ### 1. Pixels (px)
+
 Absolute pixel values.
 
 ```rust
@@ -17,6 +18,7 @@ let unit = Unit::pixels(100.0);
 ```
 
 ### 2. Relative to Base (rb)
+
 Scales relative to the theme's base size (similar to `em` in CSS).
 
 ```rust
@@ -25,6 +27,7 @@ let unit = Unit::rb(2.0);
 ```
 
 ### 3. Relative to Parent (rp)
+
 Scales relative to the inherited size (similar to `rem` in CSS).
 
 ```rust
@@ -33,6 +36,7 @@ let unit = Unit::rp(1.5);
 ```
 
 ### 4. Percentage (%)
+
 Percentage of the parent dimension.
 
 ```rust
@@ -72,17 +76,20 @@ let layout = Layout::new()
 Three sizing modes are supported:
 
 1. **Fixed**: Specific size in any unit
+
    ```rust
    Size::Fixed(Unit::pixels(200.0))
    Size::Fixed(Unit::percent(50.0))
    ```
 
 2. **Fill**: Fill available space in parent
+
    ```rust
    Size::Fill
    ```
 
 3. **FitContent**: Size to content (calculated later)
+
    ```rust
    Size::FitContent
    ```
@@ -92,11 +99,13 @@ Three sizing modes are supported:
 Two positioning modes are available:
 
 1. **Relative**: Position relative to parent's content box
+
    ```rust
    layout.with_position_mode(PositionMode::Relative)
    ```
 
 2. **Absolute**: Position absolute within parent
+
    ```rust
    layout.with_position_mode(PositionMode::Absolute)
    ```
@@ -203,16 +212,19 @@ let monitor = config.monitor_at_point(3000, 500);
 Three layout modes are supported:
 
 1. **Unified**: Treat all monitors as one virtual surface
+
    ```rust
    MonitorLayoutMode::Unified
    ```
 
 2. **Separate**: Each monitor is a separate surface
+
    ```rust
    MonitorLayoutMode::Separate
    ```
 
 3. **Mixed**: Custom groupings of monitors
+
    ```rust
    let mut config = MonitorConfiguration::new(MonitorLayoutMode::Mixed);
    config.add_monitor_group(vec![1, 2]);  // Group monitors 1 and 2
@@ -228,6 +240,7 @@ cargo run --example layout_demo -p engage-ux-components
 ```
 
 This demonstrates:
+
 - All unit types and conversions
 - Layout calculations
 - Constraints and fill modes

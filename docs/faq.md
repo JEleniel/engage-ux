@@ -31,11 +31,11 @@ Engage UX is currently in Phase 2 (v0.2.0) with all core components and systems 
 
 - **Rust**: 1.70 or later
 - **Operating System**:
-  - Windows 10 or later
-  - macOS 10.15 (Catalina) or later
-  - Linux with X11/Wayland
-  - Android 8.0 (API 26) or later
-  - iOS 13 or later
+    + Windows 10 or later
+    + macOS 10.15 (Catalina) or later
+    + Linux with X11/Wayland
+    + Android 8.0 (API 26) or later
+    + iOS 13 or later
 
 ### How do I install Engage UX?
 
@@ -64,6 +64,7 @@ Not yet. Initial releases are available via Git while we work toward v1.0.0 and 
 ### How many components are available?
 
 Engage UX includes all 50 components from the specification:
+
 - 11 Informational components
 - 14 Interactive components
 - 4 Layout components
@@ -93,6 +94,7 @@ Absolutely! Use the theme system to customize colors, typography, spacing, and m
 ### What themes are included?
 
 Engage UX includes:
+
 - **Dark LCARS Theme** - Futuristic sci-fi aesthetic
 - **Light LCARS Theme** - Light variant of LCARS
 - **Classic Themes** - Traditional light and dark themes
@@ -108,6 +110,7 @@ Yes, themes can be changed dynamically. See the [Dynamic Theme Switching](guides
 ### What color formats are supported?
 
 Themes support multiple formats:
+
 - Hex: `#FF5733`, `#FF5733CC`
 - RGB: `[255, 87, 51]`, `[255, 87, 51, 0.8]`
 - HSL: `[9, 100, 60]`, `[9, 100, 60, 0.8]`
@@ -143,6 +146,7 @@ Direct integration isn't available yet, but bridges are planned for Phase 5.
 ### How fast is Engage UX?
 
 Engage UX is built in Rust with performance as a core goal:
+
 - Zero-cost abstractions
 - No garbage collection
 - Async-first for responsiveness
@@ -151,6 +155,7 @@ Engage UX is built in Rust with performance as a core goal:
 ### What's the memory footprint?
 
 Memory usage depends on your application, but Engage UX itself is lightweight:
+
 - Minimal runtime overhead
 - No embedded browser engine
 - Efficient component pooling (planned)
@@ -158,6 +163,7 @@ Memory usage depends on your application, but Engage UX itself is lightweight:
 ### Can it handle large datasets?
 
 Yes, with features like:
+
 - Virtual scrolling (planned Phase 4)
 - Lazy loading
 - Efficient rendering
@@ -168,6 +174,7 @@ Yes, with features like:
 ### How do I debug my application?
 
 Use standard Rust debugging tools:
+
 - `println!` / `dbg!` macros
 - `cargo test` for unit tests
 - Rust analyzer in VS Code
@@ -196,6 +203,7 @@ Or see the [API Reference](api/index.md).
 ### How do I report bugs?
 
 [Open an issue](https://github.com/JEleniel/engage-ux/issues/new?template=bug_report.md) on GitHub with:
+
 - Description of the issue
 - Steps to reproduce
 - Expected vs actual behavior
@@ -206,6 +214,7 @@ Or see the [API Reference](api/index.md).
 ### Does it support animations?
 
 Yes! Engage UX includes a comprehensive animation system with:
+
 - Fade, slide, scale, rotate animations
 - Color transitions
 - Easing functions
@@ -216,6 +225,7 @@ See [examples/animation_demo](examples/index.md).
 ### Can I use drag and drop?
 
 Yes! Full drag and drop support is included with:
+
 - Draggable sources
 - Drop targets
 - Multiple drop effects
@@ -226,6 +236,7 @@ See [examples/drag_drop_demo](examples/index.md).
 ### Does it support touch input?
 
 Yes! Multi-touch support with:
+
 - Touch events (down, move, up, cancel)
 - Gesture recognition (pinch, pan, swipe)
 - Hover simulation
@@ -234,6 +245,7 @@ Yes! Multi-touch support with:
 ### What about keyboard navigation?
 
 Comprehensive keyboard support:
+
 - Tab navigation
 - Arrow key navigation
 - Keyboard shortcuts
@@ -249,6 +261,7 @@ Yes! Custom input device support includes gamepads, styluses, sensors, and more.
 ### What's the license?
 
 Engage UX is dual-licensed under:
+
 - Apache License 2.0
 - MIT License
 
@@ -271,6 +284,7 @@ Yes! Both licenses permit modification.
 ### How can I contribute?
 
 See the [Contributing Guide](../CONTRIBUTING.md) for:
+
 - Code contributions
 - Bug reports
 - Feature requests
@@ -319,6 +333,7 @@ Yes! See the [Roadmap](roadmap.md) for planned features and timeline.
 ### Tests failing
 
 **Solution**:
+
 1. Update Rust: `rustup update`
 2. Clean build: `cargo clean && cargo build`
 3. Run specific test: `cargo test <test_name>`
@@ -343,6 +358,7 @@ Target: Q3 2025 (see [Roadmap](roadmap.md))
 ### What's next after Phase 2?
 
 Phase 3 focuses on platform-specific backends:
+
 - Windows, macOS, Linux rendering
 - Native window management
 - Mobile platform support

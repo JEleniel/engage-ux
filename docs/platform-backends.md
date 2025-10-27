@@ -216,6 +216,7 @@ All platform backends are implemented using 100% safe Rust code:
 - Native menu bar integration
 
 #### Linux
+
 - **Renderer**: Tiny-skia for high-quality 2D graphics (Cairo/Skia-like API)
 - **Window Management**: winit with support for both X11 and Wayland
 - **Accessibility**: AT-SPI infrastructure for screen reader integration
@@ -309,33 +310,33 @@ The platform backends include comprehensive test coverage:
 ### Unit Tests
 
 - **engage-ux-oal**: 48 tests covering all backend components
-  - Window backend creation and properties (5 tests)
-  - Renderer creation and operations (6 tests)
-  - Tiny-skia renderer (5 tests, Linux only)
-  - AT-SPI accessibility (9 tests, Linux only)
-  - Monitor configuration (11 tests)
-  - Platform detection and other utilities
+    + Window backend creation and properties (5 tests)
+    + Renderer creation and operations (6 tests)
+    + Tiny-skia renderer (5 tests, Linux only)
+    + AT-SPI accessibility (9 tests, Linux only)
+    + Monitor configuration (11 tests)
+    + Platform detection and other utilities
 
 ### Integration Tests
 
 - **test_platform_backends.rs**: 14 tests for cross-platform backend functionality
-  - Backend factory creation
-  - Renderer operations (shapes, clipping, complex scenes)
-  - Window backend properties and state management
-  - Event generation and handling
-  - Multiple render contexts
-  - Hardware acceleration queries
+    + Backend factory creation
+    + Renderer operations (shapes, clipping, complex scenes)
+    + Window backend properties and state management
+    + Event generation and handling
+    + Multiple render contexts
+    + Hardware acceleration queries
 
 - **test_linux_backend.rs**: 14 tests for Linux-specific functionality (Linux only)
-  - Tiny-skia renderer operations
-  - Advanced shape rendering with transparency
-  - Clipping operations
-  - Multiple render contexts
-  - AT-SPI bridge initialization and lifecycle
-  - Element registration and management
-  - Focus and state notifications
-  - Property change notifications
-  - Error handling
+    + Tiny-skia renderer operations
+    + Advanced shape rendering with transparency
+    + Clipping operations
+    + Multiple render contexts
+    + AT-SPI bridge initialization and lifecycle
+    + Element registration and management
+    + Focus and state notifications
+    + Property change notifications
+    + Error handling
 
 Run the tests with:
 

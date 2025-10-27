@@ -65,30 +65,39 @@ engage-ux-oal = { git = "https://github.com/JEleniel/engage-ux" }
 ## 🎯 Component Categories
 
 ### Informational (11)
+
 Labels, Text, Icons, Images, Lists, Progress, Tooltips, Breadcrumbs, Avatars, Line Numbers, Rulers
 
 ### Interactive (14)
+
 Buttons, Checkboxes, Radio Buttons, Sliders, Text Inputs, Text Areas, Toggles, Links, Selects, Pagination, Carousels, Date Pickers, Text Editors, Consoles
 
 ### Layout (4)
+
 Containers, Cards, Tables, Windows
 
 ### Notification (3)
+
 Badges, Toasts, Banners
 
 ### Menus (4)
+
 Drawers, Dropdowns, Hamburger Menus, Title Menus
 
 ### Dialogs (5)
+
 Alerts, Confirm Dialogs, Custom Modals, Open Dialogs, Save-As Dialogs
 
 ### Window Controls (3)
+
 Close, Maximize/Restore, Minimize/Restore
 
 ### Pane Groups (2)
+
 Accordions, Tabs
 
 ### Graphic/Display (2)
+
 Groups, Videos
 
 [View Complete Component List →](components/)

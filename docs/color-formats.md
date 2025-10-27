@@ -29,6 +29,7 @@ The most common format for web colors. Perfect for copying colors directly from 
 ```
 
 **Format details:**
+
 - 6 characters for RGB: `#RRGGBB` where each pair is a hexadecimal value (00-FF)
 - 8 characters for RGBA: `#RRGGBBAA` where the last pair is alpha
 - Alpha values: `00` (fully transparent) to `FF` (fully opaque)
@@ -59,6 +60,7 @@ Standard RGB format using familiar 0-255 values. Ideal for programmatic color ge
 ```
 
 **Format details:**
+
 - Red, Green, Blue: Integer values from `0` to `255`
 - Alpha: Decimal value from `0.0` (fully transparent) to `1.0` (fully opaque)
 - Alpha is optional; omitting it defaults to `1.0` (fully opaque)
@@ -88,6 +90,7 @@ Hue-Saturation-Lightness format. Perfect for color manipulation, creating color 
 ```
 
 **Format details:**
+
 - Hue: Degrees from `0` to `360` on the color wheel (0=red, 120=green, 240=blue)
 - Saturation: Decimal from `0.0` (grayscale) to `1.0` (full color) representing 0% to 100%
 - Lightness: Decimal from `0.0` (black) to `1.0` (white) representing 0% to 100%
@@ -95,6 +98,7 @@ Hue-Saturation-Lightness format. Perfect for color manipulation, creating color 
 - Alpha is optional; omitting it defaults to `1.0` (fully opaque)
 
 **Why use HSL?**
+
 - Easy to create lighter/darker variants by adjusting lightness
 - Simple to create complementary colors by adjusting hue
 - Intuitive for creating color schemes (monochromatic, analogous, triadic, etc.)
@@ -113,6 +117,7 @@ The original internal format, still fully supported for backward compatibility w
 ```
 
 **Format details:**
+
 - RGB components: Decimal values from `0.0` to `1.0` (normalized)
 - Alpha: Decimal value from `0.0` to `1.0`
 - All four components are required (Red, Green, Blue, Alpha)
@@ -240,6 +245,7 @@ You can mix different formats within the same theme file:
 ### Automatic Format Detection
 
 Engage UX automatically detects which format you're using based on the JSON structure:
+
 - If it has a `"hex"` key, it's parsed as hex format
 - If it has an `"rgb"` key, it's parsed as RGB array format
 - If it has an `"hsl"` key, it's parsed as HSL array format

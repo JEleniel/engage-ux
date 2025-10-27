@@ -5,6 +5,7 @@ The LCARS (Library Computer Access/Retrieval System) theme is the default theme 
 ## Overview
 
 LCARS themes feature:
+
 - **Voyager Indigo/Blue Colors**: Distinctive #6699FF (Voyager Blue) and #5566CC (Voyager Indigo)
 - **Curved Borders**: Signature 20px radius for that iconic LCARS look
 - **Bold Elements**: 3px border width for prominent UI elements
@@ -16,6 +17,7 @@ LCARS themes feature:
 ## Available Variants
 
 ### LCARS Light
+
 The default light theme with a black background and vibrant accent colors.
 
 ```rust
@@ -27,6 +29,7 @@ let theme = Theme::lcars_light();
 ```
 
 ### LCARS Dark
+
 A darker variant with slightly adjusted colors for better contrast.
 
 ```rust
@@ -40,23 +43,27 @@ let theme = Theme::lcars_dark();
 ## Color Palette
 
 ### Primary Colors
+
 - **Primary**: `#6699FF` - Voyager Blue (signature color)
 - **Secondary**: Light - `#9966CC` (Voyager Purple), Dark - `#9999FF` (Voyager Lavender)
 - **Background**: `#000000` - Pure black
 - **Surface**: Light - `#1A1A1A`, Dark - `#0D0D0D` (very dark gray)
 
 ### Semantic Colors
+
 - **Error**: Light - `#CC6666`, Dark - `#FF6666` (soft red)
 - **Warning**: `#FFAA66` (warm orange)
 - **Success**: `#66CCAA` (teal)
 - **Info**: `#66CCFF` (Voyager Cyan)
 
 ### Text Colors
+
 - **Primary Text**: `#AAAAFF` (Voyager Periwinkle) - high contrast on black
 - **Secondary Text**: `#9999FF` (Voyager Lavender)
 - **Disabled Text**: Light - `#666666`, Dark - `#555555` (muted gray)
 
 ### Custom Colors
+
 Both themes include these custom colors for extended palette usage:
 
 - `voyager_indigo`: `#5566CC`
@@ -72,6 +79,7 @@ Both themes include these custom colors for extended palette usage:
 - `accent_glow`: Light - `#6699FFCC`, Dark - `#6699FFAA` (with alpha)
 
 Dark theme also includes:
+
 - `panel_light`: `#1A1A1A`
 - `button_inactive`: `#333333`
 - `separator`: `#6699FF66`
@@ -216,6 +224,7 @@ cargo run --example lcars_theme_demo -p engage-ux-components
 ```
 
 This displays:
+
 - Complete color palettes for both variants
 - Typography specifications
 - Spacing and border details

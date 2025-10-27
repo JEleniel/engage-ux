@@ -35,6 +35,7 @@ Q4 2024
 ### Completed Features
 
 #### Window Backends
+
 - ✅ Windows backend (via winit's Win32 integration)
 - ✅ macOS backend (via winit's Cocoa integration)
 - ✅ Linux backend (via winit's X11/Wayland integration)
@@ -42,11 +43,13 @@ Q4 2024
 - ✅ iOS backend (via winit's UIKit integration)
 
 #### Rendering Backends
+
 - ✅ Software rendering backend (via softbuffer, cross-platform)
 - ✅ Linux high-quality renderer (via tiny-skia)
 - ✅ Platform backend integration (14 tests)
 
 #### Integration
+
 - ✅ DPI scaling support
 - ✅ Multi-monitor configuration
 - ✅ Window state management
@@ -97,6 +100,7 @@ Q4 2024
 ### Planned Enhancements
 
 #### Native Integration
+
 - [ ] Native file dialogs
 - [ ] System tray integration
 - [ ] Native notifications

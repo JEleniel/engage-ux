@@ -185,51 +185,51 @@ All documentation should:
 ### High Priority
 
 1. **Component Documentation**
-   - Create docs for remaining 48 components
-   - Follow Button and Label as templates
-   - Include examples for each
+   + Create docs for remaining 48 components
+   + Follow Button and Label as templates
+   + Include examples for each
 
 2. **Visual Assets**
-   - Screenshot all components
-   - Create architecture diagrams
-   - Design system mockups
+   + Screenshot all components
+   + Create architecture diagrams
+   + Design system mockups
 
 3. **Video Tutorials**
-   - Getting started video
-   - Component showcase
-   - Theme customization
+   + Getting started video
+   + Component showcase
+   + Theme customization
 
 ### Medium Priority
 
 1. **Additional Guides**
-   - Animation guide
-   - Drag & drop guide
-   - Input handling guide
-   - Layout guide (extended)
+   + Animation guide
+   + Drag & drop guide
+   + Input handling guide
+   + Layout guide (extended)
 
 2. **API Documentation**
-   - Detailed API pages for each module
-   - Interactive API browser
-   - Code playground
+   + Detailed API pages for each module
+   + Interactive API browser
+   + Code playground
 
 3. **Interactive Documentation**
-   - Live component examples
-   - Theme editor
-   - Code sandbox
+   + Live component examples
+   + Theme editor
+   + Code sandbox
 
 ### Low Priority
 
 1. **Community Content**
-   - User-submitted examples
-   - Third-party themes
-   - Plugin documentation
+   + User-submitted examples
+   + Third-party themes
+   + Plugin documentation
 
 2. **Translations**
-   - Spanish
-   - French
-   - German
-   - Chinese
-   - Japanese
+   + Spanish
+   + French
+   + German
+   + Chinese
+   + Japanese
 
 ## Contributing to Documentation
 

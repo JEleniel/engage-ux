@@ -7,12 +7,14 @@ Solutions to common problems when using Engage UX.
 ⚠️ **IMPORTANT**: Most examples use **stub backends** that do not display visual windows!
 
 **Expected Behavior**:
+
 - Examples like `basic_components`, `theme_demo`, `lcars_theme_demo` print console output only
 - They do NOT open windows or show graphics on screen
 - This is **intentional** for testing in headless environments
 
 **For Actual Visual Rendering**:
 See the working example that creates real windows:
+
 ```bash
 cargo run --example visual_window_demo -p engage-ux-oal
 ```
@@ -28,6 +30,7 @@ For complete details, see [Actual Rendering Documentation](actual-rendering.md).
 **Solution**: Install platform-specific build tools.
 
 **Windows**:
+
 ```bash
 # Install Visual Studio Build Tools
 # https://visualstudio.microsoft.com/downloads/
@@ -35,23 +38,27 @@ For complete details, see [Actual Rendering Documentation](actual-rendering.md).
 ```
 
 **macOS**:
+
 ```bash
 # Install Xcode Command Line Tools
 xcode-select --install
 ```
 
 **Linux (Ubuntu/Debian)**:
+
 ```bash
 sudo apt-get update
 sudo apt-get install build-essential libx11-dev
 ```
 
 **Linux (Fedora)**:
+
 ```bash
 sudo dnf install gcc gcc-c++ libX11-devel
 ```
 
 **Linux (Arch)**:
+
 ```bash
 sudo pacman -S base-devel libx11
 ```
@@ -134,6 +141,7 @@ tokio = { version = "1.0", features = ["full"] }
 ```
 
 For tests:
+
 ```rust
 #[tokio::test]
 async fn my_test() {
@@ -142,6 +150,7 @@ async fn my_test() {
 ```
 
 For main:
+
 ```rust
 #[tokio::main]
 async fn main() {
@@ -219,17 +228,20 @@ Color::from_hex("#F57")?;         // Too short
 **Solution**: Validate JSON format:
 
 1. Check JSON syntax:
+
 ```bash
 # Use a JSON validator
 cat theme.json | jq .
 ```
 
 2. Validate against schema:
+
 ```bash
 jsonschema -i theme.json schemas/theme.schema.json
 ```
 
 3. Check required fields:
+
 ```json
 {
   "name": "My Theme",
@@ -282,16 +294,19 @@ button.set_text_color(theme.colors.on_primary);
 **Solutions**:
 
 1. Update dependencies:
+
 ```bash
 cargo update
 ```
 
 2. Run specific test for details:
+
 ```bash
 cargo test test_name -- --nocapture
 ```
 
 3. Check for test isolation:
+
 ```rust
 // Use separate test data
 #[test]
@@ -354,22 +369,26 @@ tokio::spawn(async move {
 **Solutions**:
 
 1. Use incremental compilation (enabled by default):
+
 ```toml
 [profile.dev]
 incremental = true
 ```
 
 2. Use `cargo check` for faster feedback:
+
 ```bash
 cargo check
 ```
 
 3. Build in release mode for production:
+
 ```bash
 cargo build --release
 ```
 
 4. Use `sccache` for caching:
+
 ```bash
 # Install sccache
 cargo install sccache
@@ -386,6 +405,7 @@ rustc-wrapper = "sccache"
 **Solutions**:
 
 1. Profile memory usage:
+
 ```bash
 # Install valgrind
 cargo install cargo-valgrind
@@ -395,6 +415,7 @@ cargo valgrind run
 ```
 
 2. Check for memory leaks:
+
 ```rust
 // Ensure proper cleanup
 impl Drop for MyComponent {
@@ -405,6 +426,7 @@ impl Drop for MyComponent {
 ```
 
 3. Use weak references where appropriate:
+
 ```rust
 use std::sync::Weak;
 
@@ -497,6 +519,7 @@ sudo dnf install libX11-devel libXext-devel libXrender-devel
 
 1. Update rust-analyzer
 2. Increase memory limit in VS Code settings:
+
 ```json
 {
   "rust-analyzer.server.extraEnv": {
@@ -519,21 +542,21 @@ sudo dnf install libX11-devel libXext-devel libXrender-devel
 Include the following information:
 
 1. **Environment**:
-   - OS and version
-   - Rust version (`rustc --version`)
-   - Cargo version (`cargo --version`)
-   
+   + OS and version
+   + Rust version (`rustc --version`)
+   + Cargo version (`cargo --version`)
+
 2. **Minimal reproduction**:
-   - Smallest code that reproduces the issue
-   - Steps to reproduce
-   
+   + Smallest code that reproduces the issue
+   + Steps to reproduce
+
 3. **Expected vs actual**:
-   - What you expected to happen
-   - What actually happened
-   
+   + What you expected to happen
+   + What actually happened
+
 4. **Error messages**:
-   - Full error output
-   - Stack traces if available
+   + Full error output
+   + Stack traces if available
 
 Example:
 
