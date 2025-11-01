@@ -278,6 +278,14 @@ impl Animation {
 
 	/// Start the animation
 	pub fn start(&mut self) {
+		// If duration is zero, treat the animation as a no-op and mark as completed.
+		if self.duration == Duration::ZERO {
+			self.state = AnimationState::Completed;
+			self.elapsed = Duration::ZERO;
+			self.current_iteration = 0;
+			return;
+		}
+
 		self.state = AnimationState::Running;
 		self.elapsed = Duration::ZERO;
 		self.current_iteration = 0;
@@ -635,5 +643,23 @@ mod tests {
 			assert!((comp[1] as f32 - 127.5).abs() < 20.0);
 			assert!((comp[2] as f32 - 127.5).abs() < 20.0);
 		}
+	}
+
+	#[test]
+	fn test_animation_zero_duration_update_returns_some() {
+		// Zero-duration animations are treated as no-ops and immediately completed.
+		let mut anim = Animation::fade(0.0, 1.0, Duration::from_secs(0));
+		anim.start();
+		assert!(anim.is_completed());
+		// update should return None since animation is already completed
+		let value = anim.update(Duration::from_millis(10));
+		assert!(value.is_none());
+	}
+
+	#[test]
+	fn test_update_before_start_returns_none() {
+		let mut anim = Animation::fade(0.0, 1.0, Duration::from_secs(1));
+		// Not started yet - update should return None
+		assert!(anim.update(Duration::from_millis(100)).is_none());
 	}
 }

@@ -4,7 +4,28 @@ All notable changes to the Engage UX documentation.
 
 ## [Unreleased]
 
+### Code & Documentation — Unreleased (2025-11-01)
+
+#### Changed
+
+- `engage-ux-core` public API reorganized to improve discoverability and reduce duplication:
+
+    + Small shared primitives (ComponentId, Rect, MouseButton, KeyModifiers, etc.) were centralized into `engage-ux-core::types` (`src/types.rs`).
+
+    + The `Component` trait and its runtime properties were split so each file contains a single primary struct/trait: `component.rs` now contains the `Component` trait and `component_properties.rs` contains `ComponentProperties`.
+
+    + Crate root (`lib.rs`) was changed to use curated, explicit re-exports instead of broad `pub use module::*;` to avoid name collisions and hidden exports.
+
+    + A `prelude` module was added to expose the most commonly-used types for ergonomic imports (for example `use engage_ux_core::prelude::*`).
+
+- Animation behavior change: zero-duration animations are now treated as a no-op and are immediately marked `Completed` when started; subsequent `update()` calls return `None`.
+
+#### Documentation
+
+- API docs updated to reflect the reorganization and new semantics for animations (see `docs/api/core/reorg.md`).
+
 ### Phase 3 Documentation Plans
+
 - Component documentation for remaining 48 components
 - Architecture diagrams and visualizations
 - Component screenshots and visual examples
@@ -17,6 +38,7 @@ All notable changes to the Engage UX documentation.
 ### Added
 
 #### Core Documentation
+
 - **index.md** - Comprehensive documentation home page with navigation
 - **getting-started.md** - Complete installation and setup guide (11k+ words)
 - **faq.md** - Frequently asked questions (9k+ words)
@@ -25,88 +47,95 @@ All notable changes to the Engage UX documentation.
 - **DOCUMENTATION_SUMMARY.md** - Documentation overview and status
 
 #### Guides
+
 - **guides/theming.md** - Complete theming system guide (12k+ words)
-  - Built-in themes
-  - Creating custom themes
-  - Color system
-  - Typography
-  - Dynamic theme switching
-  - Best practices
-  
+    + Built-in themes
+    + Creating custom themes
+    + Color system
+    + Typography
+    + Dynamic theme switching
+    + Best practices
+
 - **guides/testing.md** - Comprehensive testing guide (10k+ words)
-  - Unit testing
-  - Component testing
-  - Integration testing
-  - Test coverage
-  - Best practices
-  
+    + Unit testing
+    + Component testing
+    + Integration testing
+    + Test coverage
+    + Best practices
+
 - **guides/accessibility.md** - WCAG AAA accessibility guide (14k+ words)
-  - ARIA roles and attributes
-  - Keyboard navigation
-  - Screen reader support
-  - Focus management
-  - Color and contrast
-  - Component accessibility
-  - Testing accessibility
+    + ARIA roles and attributes
+    + Keyboard navigation
+    + Screen reader support
+    + Focus management
+    + Color and contrast
+    + Component accessibility
+    + Testing accessibility
 
 #### Component Documentation
+
 - **components/index.md** - Complete component catalog (7k+ words)
-  - All 50 components categorized
-  - Quick reference table
-  - Usage patterns
-  
+    + All 50 components categorized
+    + Quick reference table
+    + Usage patterns
+
 - **components/button.md** - Button component reference (6k+ words)
-  - All variants
-  - Properties and methods
-  - Examples
-  - Accessibility
-  - Best practices
-  
+    + All variants
+    + Properties and methods
+    + Examples
+    + Accessibility
+    + Best practices
+
 - **components/label.md** - Label component reference (9k+ words)
-  - Properties and methods
-  - Typography
-  - Alignment
-  - Examples
-  - Best practices
+    + Properties and methods
+    + Typography
+    + Alignment
+    + Examples
+    + Best practices
 
 #### API Reference
+
 - **api/index.md** - API documentation hub (8k+ words)
-  - Core API overview
-  - Components API overview
-  - Themes API overview
-  - OAL API overview
-  - Common patterns
-  - Platform support matrix
+    + Core API overview
+    + Components API overview
+    + Themes API overview
+    + OAL API overview
+    + Common patterns
+    + Platform support matrix
 
 #### Examples
+
 - **examples/index.md** - Examples catalog (9k+ words)
-  - All 9 examples documented
-  - Usage instructions
-  - Code patterns
-  - Integration examples
+    + All 9 examples documented
+    + Usage instructions
+    + Code patterns
+    + Integration examples
 
 #### Infrastructure
+
 - **_config.yml** - GitHub Pages configuration
-  - Jekyll theme setup
-  - Navigation structure
-  - Collections configuration
-  - SEO settings
-  
+    + Jekyll theme setup
+    + Navigation structure
+    + Collections configuration
+    + SEO settings
+
 - **assets/** - Visual assets directory structure
-  - images/ - General images
-  - diagrams/ - Architecture diagrams
-  - screenshots/ - Component screenshots
-  - README.md - Asset guidelines
+    + images/ - General images
+    + diagrams/ - Architecture diagrams
+    + screenshots/ - Component screenshots
+    + README.md - Asset guidelines
 
 ### Updated
+
 - **README.md** - Reorganized with GitHub Pages navigation
-  - Added comprehensive structure overview
-  - Added quick start section
-  - Added popular topics
-  - Phase completion status
-  - Better organization
+    + Added comprehensive structure overview
+    + Added quick start section
+    + Added popular topics
+    + Phase completion status
+    + Better organization
 
 ### Documentation Statistics
+
 - **20+ documentation pages** created
 - **50,000+ words** of documentation
 - **Full GitHub Pages setup** with Jekyll
@@ -116,6 +145,7 @@ All notable changes to the Engage UX documentation.
 - **9 documented examples**
 
 ### Organization
+
 - Established clear documentation hierarchy
 - Cross-referenced all related content
 - Added navigation breadcrumbs
@@ -128,6 +158,7 @@ All notable changes to the Engage UX documentation.
 ### Added
 
 #### Existing Documentation
+
 - **README.md** (root) - Project overview and quick start
 - **CONTRIBUTING.md** - Contributing guidelines
 - **color-formats.md** - Color format specification
@@ -136,25 +167,28 @@ All notable changes to the Engage UX documentation.
 - **guides/component-development.md** - Component development guide
 
 #### Design Documentation
+
 - **design/architecture/** - System architecture documents
-  - System_Architecture.md
-  - Component_Architecture.md
-  - Data_Flow.md
-  - Quick_Reference.md
-  - Requirement documents (1-4)
-  - NFRs.md
+    + System_Architecture.md
+    + Component_Architecture.md
+    + Data_Flow.md
+    + Quick_Reference.md
+    + Requirement documents (1-4)
+    + NFRs.md
 
 #### Agent Documentation
+
 - **design/agents/** - Agent-specific documentation
-  - IMPLEMENTATION_SUMMARY.md
-  - TODO.md
-  - TECHNOLOGIES.md
+    + IMPLEMENTATION_SUMMARY.md
+    + TODO.md
+    + TECHNOLOGIES.md
 
 ## Format
 
 This changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format.
 
 ### Types of Changes
+
 - **Added** - New documentation
 - **Changed** - Changes to existing documentation
 - **Deprecated** - Documentation marked as deprecated

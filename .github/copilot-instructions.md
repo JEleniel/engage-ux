@@ -1,88 +1,72 @@
-# Machine Coding Agent Prompt
 
-This document defines the mandatory operational and coding standards for all autonomous coding agents contributing to this repository.
-This document defines the mandatory operational and coding standards for all autonomous coding agents contributing to this repository.
+# GitHub Copilot Instructions
 
-## Coding Practices and Style
+## Scope
 
-### Priorities
+- Unless specifically instructed, do not modify the following files or files inside the following folders:
+    + `.git/`
+    + `.github/`
+    + Any dot (`.`) folder
+    + Any dot (`.`) file
+    + Any configuration file, with the exception of managing dependencies.
+- You may use any MCP servers you have access to.
 
-When writing or modifying code, strictly adhere to the following priorities, in order:
+## Behavior and personality
 
-1. **Security**
-2. **Robustness**
-3. **Scalability**
-4. **Performance**
-5. **Maintainability**
+- Maintain a professional and respectful tone.
+- Keep responses complete and concise.
+- Ensure outputs are accurate and logically consistent.
+- Keep summaries to one paragraph when possible.
+- Avoid sycophantic or needlessly conciliatory language.
 
-### Standards
+### Instruction priority
 
-Code must comply with the following standards, as applicable:
+When two instructions conflict, follow them in this order (top = highest):
 
-- [OWASP Application Security Verification Standard (ASVS)](https://owasp.org/www-project-application-security-verification-standard/)
-- [OWASP Mobile Application Security Verification Standard (MASVS)](https://mas.owasp.org/MASVS/)
-- [The Twelve-Factor App](https://12factor.net/)
-- [The Twelve-Factor App](https://12factor.net/)
-- [Web Content Accessibility Guidelines (WCAG) 2.2 AAA](https://www.w3.org/WAI/standards-guidelines/wcag/docs/)
+1. Explicit, written instructions.
+2. Repository configuration files and `.github/` policies (when edits are explicitly permitted).
+3. This file's guidance.
+4. Language or ecosystem best practices.
 
-### Coding Style
+## Coding standards
 
-- Follow idiomatic language style guides and best practices.
-- Use the appropriate formatter (`rustfmt`, `prettier`, `markdownlint`, etc.) and respect the project’s configuration.
-- Prefer **tabs** for indentation; otherwise follow language conventions.
-- Write **clear, concise, and well-documented** code.
-- Comment all non-obvious logic.
-- Never hardcode secrets, credentials, or configuration values — use environment variables or a secrets manager.
-- Use **JSON (Draft 07)** for structured configuration. Provide a matching JSON Schema (Draft 07) with `additionalProperties: false` and `additionalItems: false`.
-- Avoid YAML and TOML unless required by a third-party tool.
-- Ensure all dependencies are **actively maintained** and **widely adopted**.
+- Follow language-specific style guidelines and best practices unless otherwise instructed.
+- Conform to applicable standards:
+    + [The Twelve-Factor App](https://12factor.net/)
+    + [Web Content Accessibility Guidelines (WCAG) 2.2 AAA](https://www.w3.org/WAI/standards-guidelines/wcag/docs/)
+- Follow the repository's established formatter and configuration (for example, `rustfmt.toml` for Rust). If the repository has no formatter/settings, use the language's well-accepted default. Prefer automatic formatting tools over manual whitespace edits.
+- Formatting and linting are provided by the IDE or project tooling (e.g., Prettier, rustfmt). Read and follow the project's configuration files and CI checks.
+- Follow secure coding practices to prevent common vulnerabilities.
+- Implement proper error handling and logging.
+- Avoid hardcoding secrets or configurable values (API keys, passwords).
+- Ensure libraries used are actively maintained (updated within the past six months) and are widely adopted.
 
-## Project Structure
+## Documentation standards
 
-- All documentation must reside in the `docs/` directory, written in **GitHub Flavored Markdown** with **Mermaid** for diagrams.
-    + The entry point is `docs/README.md`.
-    + Design documentation is stored in `docs/design/`.
-    + Machine agent documentation is stored in `docs/design/agents/`.
-    + Documentation must be **ready for GitHub Pages and Jekyll**.
-- Respect `.gitignore`; do **not** read or modify ignored files unless specifically instructed to do so.
-- You may read but not modify files in `.github/` unless instructed.
-    + Templates are stored in `.github/templates/` with the `.template` extension.
-    + All other subfolders in `.github/` must be ignored.
-- Ignore all other dot folders (e.g., `.analyze`).
-- Follow idiomatic language style guides and best practices.
-- Use the appropriate formatter (`rustfmt`, `prettier`, `markdownlint`, etc.) and respect the project’s configuration.
-- Prefer **tabs** for indentation when idiomatic; otherwise follow language conventions.
-- Write **clear, concise, and well-documented** code.
-- Comment all non-obvious logic.
-- Never hardcode secrets, credentials, or configuration values — use environment variables or a secrets manager.
-- Use **JSON (Draft 07)** for structured configuration. Provide a matching JSON Schema (Draft 07) with `additionalProperties: false` and `additionalItems: false`.
-- Avoid YAML and TOML unless required by a third-party tool.
-- Ensure all dependencies are **actively maintained** and **widely adopted**.
+- Use clear, well-structured GitHub-Flavored Markdown (GFM).
+- Match the tone, style, and structure of existing docs.
+- Cross-reference related docs where relevant and include direct links.
+- Cite project details with file and section references.
+- When generating Markdown, conform to the project's `.markdownlint.json` rules.
 
-## Version Control Guidelines
+## About the project
 
-- Use **clear, descriptive commit messages**.
-- Keep commits **small and focused**.
-- Use **descriptive branch names** following project conventions.
-- Reference **issue or ticket numbers** in commit messages when applicable.
-- Use **clear, descriptive commit messages**.
-- Keep commits **small and focused**.
-- Use **descriptive branch names** following project conventions.
-- Reference **issue or ticket numbers** in commit messages when applicable.
+Engage UX is a cross-platform Rust UI toolkit providing a themable component library without a browser engine. It uses an OS Abstraction Layer (OAL) for low-level platform interaction, allowing components to work across Windows, macOS, Linux, Android, and iOS.
 
-## Behavior Guidelines
+### Project structure
 
-1. Maintain a professional, respectful tone at all times.
-2. Keep responses concise and precise.
-3. Ensure outputs are **accurate, complete, and logically consistent**.
-4. Summarize final results in **one paragraph or less**.
+- Documentation should live in `docs/` unless it is a standard top-level GitHub documentation file (for example `README.md`, `CONTRIBUTING.md`, `LICENSE*`, `CODE_OF_CONDUCT.md`).
+    + Design docs go in `docs/design/`.
+    + The `docs/design/agents/` folder is reserved for machine-agent use.
+- The `engage-ux-oal` crate contains OS-specific code.
+- The `engage-ux-core` crate contains foundational types and logic and depends on the OAL.
+- The `engage-ux-themes` crate contains optional themes.
+- The `engage-ux-components` crate contains optional UI components built on Engage UX.
 
-## Inviolable Constraints
+## Expected outcome for changes
 
-Do NOT violate the following constraints under any circumstances unless _directly_ instructed to do so:
-
-- Do NOT create a Pull Request.
-- Do NOT stash files.
-- Do NOT make _any_ changes on GitHub.
-- Do NOT lose _**any**_ of the user's work or changes.
-- Do NOT commit any changes that _you_ did not make.
+- Code must compile with zero errors. Warnings unrelated to functional correctness (for example unused imports) are acceptable; avoid warnings that indicate functional risk.
+- Include unit tests that cover the new behavior (posiive and negative cases).
+- Code should run without elevated privileges on typical developer machines.
+- Update relevant documentation to reflect design or usage changes.
+- Update `CHANGELOG.md` for user-facing or public API changes. If it doesn't exist, create it with a short entry and date (YYYY-MM-DD) using the project's format when present.

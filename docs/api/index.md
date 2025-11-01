@@ -32,18 +32,22 @@ use engage_ux_core::Color;
 
 #### Component
 
-Base component trait and properties.
+Base component trait and properties. Note: small primitives (for example `Rect` and `ComponentId`) are centralized in `engage_ux_core::types` for consistency across the crate.
 
 ```rust
-use engage_ux_core::component::{Component, ComponentProperties, Rect};
+use engage_ux_core::component::Component;
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::types::{Rect, ComponentId};
+// or, for convenience:
+use engage_ux_core::prelude::*;
 ```
 
 **Key Types**:
 
-- `Component` trait - Base interface for all UI elements
-- `ComponentProperties` - Common component attributes
-- `Rect` - Position and size
-- `ComponentId` - Unique component identifier
+- `Component` trait - Base interface for all UI elements (defined in `component.rs`)
+- `ComponentProperties` - Common component attributes (defined in `component_properties.rs`)
+- `Rect` - Position and size (re-exported from `types`)
+- `ComponentId` - Unique component identifier (re-exported from `types`)
 
 [Full Component API Documentation →](core/component.md)
 
@@ -88,20 +92,17 @@ use engage_ux_core::input::{
 
 #### Animation
 
-Built-in animation system with easing functions.
+Built-in animation system with easing functions. Note: zero-duration animations are treated as a no-op and are immediately marked `Completed` when started; `update()` will return `None` for already-completed animations.
 
 ```rust
-use engage_ux_core::animation::{
-    Animation, AnimationType, EasingFunction,
-    AnimationController
-};
+use engage_ux_core::animation::{Animation, AnimationType, Easing, AnimationController};
 ```
 
 **Key Types**:
 
-- `Animation` - Animation definition
+- `Animation` - Animation definition; call `start()` to begin, `update(duration)` to advance; zero-duration animations are completed immediately.
 - `AnimationType` - Fade, slide, scale, rotate, color
-- `EasingFunction` - Linear, ease-in, ease-out, etc.
+- `Easing` - Linear, ease-in, ease-out, etc.
 - `AnimationController` - Animation playback control
 
 [Full Animation API Documentation →](core/animation.md)

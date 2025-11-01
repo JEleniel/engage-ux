@@ -3,7 +3,7 @@
 //! Provides a comprehensive drag and drop API supporting drag sources,
 //! drop targets, drag data, and drag events.
 
-use crate::component::ComponentId;
+use crate::types::ComponentId;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -540,5 +540,27 @@ mod tests {
 			DragDataType::Custom("custom".to_string()),
 		];
 		assert_eq!(types.len(), 5);
+	}
+
+	#[tokio::test]
+	async fn test_drop_without_target_returns_none_or_end() {
+		let mut manager = DragManager::new();
+		let data = DragData::text("Orphan");
+		manager.start_drag(1, data, DragOperation::Copy);
+
+		// Attempt to drop where no target is registered.
+		let result = manager.drop(0.0, 0.0).await;
+
+		// Depending on implementation this may return None or DragEnd with success=false.
+		// Accept either outcome but ensure dropping without a target does not succeed.
+		match result {
+			Some(DragEvent::Drop { .. }) => panic!("Drop should not succeed without target"),
+			Some(DragEvent::DragEnd { success, .. }) => assert!(!success),
+			Some(_) => {
+				// Other intermediate drag events are acceptable, but ensure no active dragging remains
+				assert!(!manager.is_dragging());
+			}
+			None => assert!(!manager.is_dragging()),
+		}
 	}
 }

@@ -194,6 +194,7 @@ impl TouchState {
 
 /// Gesture recognizer for common touch gestures
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct GestureRecognizer {
 	initial_distance: Option<f32>,
 	initial_centroid: Option<(f32, f32)>,
