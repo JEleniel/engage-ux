@@ -20,8 +20,8 @@ categories = [
 ]
 
 [workspace.dependencies]
-bitflags = { version = "2.4" }
 chrono = { version = "0.4", features = ["serde"] }
+flagset = { version = "0.4.7" }
 fontdue = { version = "0.9" }
 image = { version = "0.25", default-features = false, features = [
   "bmp",

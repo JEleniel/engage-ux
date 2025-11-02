@@ -1,0 +1,40 @@
+use crate::geometry::{Point, Unit};
+use serde::{Deserialize, Serialize};
+
+/// Geometric rectangle defined by top, left, and size
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Rectangle {
+	/// The top-left point of the rectangle
+	pub top_left: Point,
+	/// The width of the rectangle
+	pub width: Unit,
+	/// The height of the rectangle
+	pub height: Unit,
+}
+
+impl Rectangle {
+	/// Convenience constructor from top-left and bottom-right points
+	pub fn from_points(top_left: Point, bottom_right: Point) -> Self {
+		Self {
+			top_left: top_left.clone(),
+			width: bottom_right.x - top_left.x,
+			height: bottom_right.y - top_left.y,
+		}
+	}
+
+	/// Check if a point is inside the rectangle
+	pub fn contains_point(&self, point: &Point) -> bool {
+		point.x >= self.top_left.x
+			&& point.x <= self.top_left.x + self.width
+			&& point.y >= self.top_left.y
+			&& point.y <= self.top_left.y + self.height
+	}
+
+	/// Get the bottom-right point of the rectangle
+	pub fn bottom_right(&self) -> Point {
+		Point {
+			x: self.top_left.x + self.width,
+			y: self.top_left.y + self.height,
+		}
+	}
+}

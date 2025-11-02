@@ -8,6 +8,7 @@ use std::sync::Arc;
 use tokio::sync::RwLock;
 
 use crate::component_properties::ComponentProperties;
+use crate::geometry::Rectangle;
 
 /// Base trait for all UI components
 pub trait Component: Send + Sync {
@@ -41,16 +42,16 @@ pub trait Component: Send + Sync {
 	}
 
 	/// Get component bounds
-	fn bounds(&self) -> crate::types::Rect {
-		self.properties().bounds
+	fn bounds(&self) -> Rectangle {
+		// Return a clone of the stored bounds to avoid moving out of &self
+		self.properties().bounds.clone()
 	}
 
 	/// Set component bounds
-	fn set_bounds(&mut self, bounds: crate::types::Rect) {
+	fn set_bounds(&mut self, bounds: Rectangle) {
 		self.properties_mut().bounds = bounds;
 	}
 }
 
 /// Thread-safe wrapper for components
 pub type ComponentRef = Arc<RwLock<dyn Component>>;
-

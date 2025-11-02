@@ -6,6 +6,74 @@
 //! - ARIA attributes
 //! - Focus management
 
+pub mod aria_role;
+pub mod props;
+pub mod aria_live;
+pub mod focus_manager;
+pub mod announcement;
+pub mod screen_reader;
+
+pub use aria_role::AriaRole;
+pub use props::AccessibilityProps;
+pub use aria_live::AriaLive;
+pub use focus_manager::FocusManager;
+pub use announcement::{Announcement, AnnouncementPriority};
+pub use screen_reader::ScreenReader;
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn test_accessibility_props() {
+		let props = AccessibilityProps::new()
+			.with_role(AriaRole::Button)
+			.with_label("Click me")
+			.with_focusable(true);
+
+		assert_eq!(props.role, Some(AriaRole::Button));
+		assert_eq!(props.label, Some("Click me".to_string()));
+		assert!(props.focusable);
+	}
+
+	#[test]
+	fn test_focus_manager() {
+		let mut manager = FocusManager::new();
+		assert_eq!(manager.focused(), None);
+
+		manager.set_focus(1);
+		assert_eq!(manager.focused(), Some(1));
+		assert!(manager.has_focus(1));
+
+		manager.set_focus(2);
+		assert_eq!(manager.focused(), Some(2));
+
+		manager.focus_previous();
+		assert_eq!(manager.focused(), Some(1));
+	}
+
+	#[test]
+	fn test_announcement() {
+		let announcement = Announcement::high("Error occurred");
+		assert_eq!(announcement.message, "Error occurred");
+		assert_eq!(announcement.priority, AnnouncementPriority::High);
+	}
+
+	#[test]
+	fn test_aria_roles() {
+		let button = AriaRole::Button;
+		let link = AriaRole::Link;
+		assert_ne!(button, link);
+	}
+}
+//! Accessibility support for WCAG AAA compliance
+//!
+//! Provides comprehensive accessibility features including:
+//! - Screen reader support
+//! - Keyboard navigation
+//! - ARIA attributes
+//! - Focus management
+
 /// ARIA role for accessibility
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AriaRole {

@@ -2,7 +2,9 @@
 //!
 //! Provides thread-safe event handling using Tokio's async runtime.
 
-use crate::{Point, component::ComponentId, input::MouseButton};
+use crate::{Point};
+use crate::types::ComponentId;
+use crate::input::mouse::MouseButton;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::broadcast;

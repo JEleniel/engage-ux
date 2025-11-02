@@ -2,7 +2,8 @@
 //!
 //! Provides cross-platform window creation and management.
 
-use engage_ux_core::component::{ComponentId, Rect};
+use engage_ux_core::geometry::Rectangle;
+use engage_ux_core::types::ComponentId;
 
 /// Window configuration
 #[derive(Debug, Clone)]
@@ -64,7 +65,7 @@ pub trait Window: Send + Sync {
 	fn is_visible(&self) -> bool;
 
 	/// Get client area bounds
-	fn client_bounds(&self) -> Rect;
+	fn client_bounds(&self) -> Rectangle;
 }
 
 #[cfg(test)]
