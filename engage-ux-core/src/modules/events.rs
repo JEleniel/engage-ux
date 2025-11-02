@@ -2,11 +2,10 @@
 //!
 //! Provides thread-safe event handling using Tokio's async runtime.
 
-use crate::{Point};
-use crate::types::ComponentId;
+use crate::Point;
 use crate::input::mouse::MouseButton;
+use crate::types::ComponentId;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
 use tokio::sync::broadcast;
 
 /// Types of events that can occur
@@ -99,33 +98,61 @@ impl Event {
 	}
 }
 
-/// Event handler callback type
-pub type EventCallback = Arc<dyn Fn(&Event) + Send + Sync>;
-
-/// Event handler for managing event subscriptions
-pub struct EventHandler {
+/// A simple event bus that allows multi-subscriber broadcasting of `Event`.
+///
+/// This is intentionally small and ergonomic for use with the derive crate
+/// which generates `TryFrom<YourType> for EventType` implementations. Use
+/// `emit` to send an `Event` directly or `emit_payload` to send any type
+/// convertible into `EventType` (e.g. types that `#[derive(Event)]`).
+pub struct EventBus {
 	sender: broadcast::Sender<Event>,
 }
 
-impl EventHandler {
-	/// Create a new event handler
-	pub fn new() -> Self {
-		let (sender, _) = broadcast::channel(100);
+impl EventBus {
+	/// Create a new bus with a bounded channel capacity.
+	pub fn new(capacity: usize) -> Self {
+		let (sender, _) = broadcast::channel(capacity);
 		Self { sender }
 	}
 
-	/// Emit an event
+	/// Create a new bus with a default capacity (100).
+	pub fn default() -> Self {
+		Self::new(100)
+	}
+
+	/// Emit a pre-built `Event`.
 	pub fn emit(&self, event: Event) {
 		let _ = self.sender.send(event);
 	}
 
-	/// Subscribe to events
+	/// Emit a payload convertible into `EventType`. This is the idiomatic
+	/// integration point with `#[derive(Event)]` — the derive macro implements
+	/// `TryFrom<T> for EventType` so this method will accept your typed event
+	/// payload and construct an `Event` for the given target.
+	pub fn emit_payload<T, E>(&self, payload: T, target: ComponentId) -> Result<(), E>
+	where
+		T: std::convert::TryInto<EventType, Error = E>,
+	{
+		// The derive crate generates `TryFrom<T> for EventType` which yields
+		// a `TryInto<EventType>` implementation. Use that here to convert
+		// typed payloads (from `#[derive(Event)]`) into the core EventType.
+		let evt_type = payload.try_into()?;
+		self.emit(Event::new(target, evt_type));
+		Ok(())
+	}
+
+	/// Subscribe to events. Each subscriber receives all future events.
 	pub fn subscribe(&self) -> broadcast::Receiver<Event> {
 		self.sender.subscribe()
 	}
+
+	/// Number of active receivers.
+	pub fn receiver_count(&self) -> usize {
+		self.sender.receiver_count()
+	}
 }
 
-impl Clone for EventHandler {
+impl Clone for EventBus {
 	fn clone(&self) -> Self {
 		Self {
 			sender: self.sender.clone(),
@@ -146,14 +173,14 @@ mod tests {
 
 	#[test]
 	fn test_event_handler() {
-		let handler = EventHandler::new();
-		let _receiver = handler.subscribe();
+		let bus = EventBus::default();
+		let mut rx = bus.subscribe();
 
 		let event = Event::new(1, EventType::Click);
-		handler.emit(event.clone());
+		bus.emit(event.clone());
 
-		// Note: In a real test, we'd use tokio runtime to test async
-		// For now, just verify the handler was created
-		assert!(handler.sender.receiver_count() > 0);
+		// The subscriber should receive the event we just emitted
+		let got = rx.try_recv().expect("expected event");
+		assert_eq!(got.target, 1);
 	}
 }

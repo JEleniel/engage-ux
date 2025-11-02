@@ -1,4 +1,3 @@
-pub mod accessibility;
 pub mod animation;
 mod color;
 mod common;

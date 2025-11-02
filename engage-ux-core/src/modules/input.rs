@@ -3,10 +3,12 @@
 //! Provides comprehensive input handling for keyboard, mouse, and touch events
 //! with full support for accessibility and multi-modal interaction.
 
+pub mod focus_manager;
 pub mod keyboard;
 pub mod mouse;
 pub mod touch;
 
+pub use focus_manager::FocusManager;
 use keyboard_types::KeyboardEvent;
 pub use mouse::{MouseButton, MouseEvent, MouseState};
 pub use touch::{Touch, TouchEvent, TouchPhase, TouchState};
@@ -26,7 +28,7 @@ pub enum InputEvent {
 
 /// Custom input event for supporting additional input devices
 /// (gamepad, stylus, motion sensors, etc.)
-#[derive(Debug, Clone, PartialEq)]
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq)]
 pub struct CustomInputEvent {
 	/// Device type identifier
 	pub device_type: String,
@@ -37,7 +39,7 @@ pub struct CustomInputEvent {
 }
 
 /// Value type for custom input data
-#[derive(Debug, Clone, PartialEq)]
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq)]
 pub enum CustomInputValue {
 	/// Boolean value
 	Bool(bool),

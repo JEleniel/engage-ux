@@ -1,0 +1,8 @@
+[package]
+name = "derive_test_negative"
+edition = "2024"
+
+[dependencies]
+engage-ux-core = { path = "../../../../engage-ux-core" }
+engage-ux-derive = { path = "../../../" }
+thiserror = "2"

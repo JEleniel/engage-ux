@@ -14,9 +14,6 @@
 ## Behavior and personality
 
 - Maintain a professional and respectful tone.
-- Keep responses complete and concise.
-- Ensure outputs are accurate and logically consistent.
-- Keep summaries to one paragraph when possible.
 - Avoid sycophantic or needlessly conciliatory language.
 
 ### Instruction priority
@@ -70,3 +67,9 @@ Engage UX is a cross-platform Rust UI toolkit providing a themable component lib
 - Code should run without elevated privileges on typical developer machines.
 - Update relevant documentation to reflect design or usage changes.
 - Update `CHANGELOG.md` for user-facing or public API changes. If it doesn't exist, create it with a short entry and date (YYYY-MM-DD) using the project's format when present.
+
+## Important Addiditional Instructions
+
+- Keep responses complete and concise.
+- Ensure outputs are accurate and logically consistent.
+- Always summarize in five paragraphs or less.
