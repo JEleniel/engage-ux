@@ -31,7 +31,10 @@ fn main() {
 	let mut button = Button::new(2, "Click Me!");
 	button.set_background_color(theme.colors.primary.clone());
 	button.set_on_click(|event| {
-		println!("Button clicked! Event target: {}", event.target);
+		println!(
+			"Button clicked! Event target: {}",
+			event.source_component_id
+		);
 	});
 	println!("Created Button:");
 	println!("  ID: {}", button.id());

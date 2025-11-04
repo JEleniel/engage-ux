@@ -5,10 +5,12 @@
 //! or set to 100 if the density cannot be determined.
 //! For example, on a Mac Retina display with approximately 300 PPI, setting the
 //! Unit=300 would allow UI elements to be sized in inches directly (1 Unit = 1 inch).
+//! Another example, the Point(1.5,2.0 would be 1.5 cm from the left and 2.0 cm from the top
+//! of the screen if the Unit is set to 37.8 (96 PPI) and the display density is 96 PPI.
+mod direction;
 mod point;
 mod rectangle;
-mod unit;
 
+pub use direction::Direction;
 pub use point::Point;
 pub use rectangle::Rectangle;
-pub use unit::{Unit, UnitError};

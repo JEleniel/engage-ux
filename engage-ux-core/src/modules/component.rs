@@ -13,7 +13,7 @@ use crate::geometry::Rectangle;
 /// Base trait for all UI components
 pub trait Component: Send + Sync {
 	/// Get the component's unique identifier
-	fn id(&self) -> crate::types::ComponentId;
+	fn id(&self) -> u128;
 
 	/// Get component properties
 	fn properties(&self) -> &ComponentProperties;
@@ -39,17 +39,6 @@ pub trait Component: Send + Sync {
 	/// Set enabled state
 	fn set_enabled(&mut self, enabled: bool) {
 		self.properties_mut().enabled = enabled;
-	}
-
-	/// Get component bounds
-	fn bounds(&self) -> Rectangle {
-		// Return a clone of the stored bounds to avoid moving out of &self
-		self.properties().bounds.clone()
-	}
-
-	/// Set component bounds
-	fn set_bounds(&mut self, bounds: Rectangle) {
-		self.properties_mut().bounds = bounds;
 	}
 }
 

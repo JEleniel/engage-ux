@@ -14,3 +14,9 @@ Usage:
 ```rust
 use engage_ux_core::events::{Event, EventType, EventHandler};
 ```
+
+See also
+
+- `docs/api/core/derive.md` — convenience derive to convert `struct` and
+	`enum` payload types into `Event` instances (provided by
+	`engage-ux-derive`).

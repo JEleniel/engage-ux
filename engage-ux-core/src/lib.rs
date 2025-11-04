@@ -16,10 +16,11 @@ mod modules;
 
 // Keep a few top-level modules for small shared primitives and properties
 pub mod component_properties;
-pub mod geometry;
-pub mod types;
 
 pub use modules::*;
+
+// Top-level color palette module for library users: `engage_ux::color::Ansi::RED`
+pub mod color;
 
 #[cfg(test)]
 mod tests {

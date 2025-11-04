@@ -4,9 +4,33 @@
 //! like gamepads, stylus, motion sensors, etc.
 
 use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::input::{CustomInputEvent, InputEvent, InputHandler};
+use engage_ux_core::input::InputEvent;
 
-// Example component that handles custom input
+// Provider-specific example event types used by this demo (gamepad, stylus, motion)
+#[derive(Debug, Clone)]
+pub struct GamepadEvent {
+	pub event_type: String,
+	pub button: Option<i64>,
+	pub value: Option<f64>,
+}
+
+#[derive(Debug, Clone)]
+pub struct StylusEvent {
+	pub event_type: String,
+	pub x: Option<f64>,
+	pub y: Option<f64>,
+	pub pressure: Option<f64>,
+}
+
+#[derive(Debug, Clone)]
+pub struct MotionEvent {
+	pub event_type: String,
+	pub x: Option<f64>,
+	pub y: Option<f64>,
+	pub z: Option<f64>,
+}
+
+// Example component that handles provider-specific input
 struct GameComponent {
 	properties: ComponentProperties,
 	player_x: f32,
@@ -24,10 +48,10 @@ impl GameComponent {
 		}
 	}
 
-	fn handle_gamepad(&mut self, event: &CustomInputEvent) {
+	fn handle_gamepad(&mut self, event: &GamepadEvent) {
 		match event.event_type.as_str() {
 			"button_press" => {
-				if let Some(button) = event.get_int("button") {
+				if let Some(button) = event.button {
 					println!("  Button {} pressed!", button);
 					match button {
 						0 => {
@@ -44,37 +68,20 @@ impl GameComponent {
 				}
 			}
 			"axis_move" => {
-				if let Some(axis) = event.get_int("axis") {
-					if let Some(value) = event.get_float("value") {
-						println!("  Axis {} moved to {:.2}", axis, value);
-						match axis {
-							0 => {
-								// Left stick X
-								self.player_x += value as f32 * 5.0;
-								println!("  Player X: {:.1}", self.player_x);
-							}
-							1 => {
-								// Left stick Y
-								self.player_y += value as f32 * 5.0;
-								println!("  Player Y: {:.1}", self.player_y);
-							}
-							_ => {}
-						}
-					}
+				if let Some(value) = event.value {
+					println!("  Axis moved to {:.2}", value);
+					// For demo, move player by value
+					self.player_x += value as f32 * 5.0;
 				}
 			}
 			_ => {}
 		}
 	}
 
-	fn handle_stylus(&mut self, event: &CustomInputEvent) {
+	fn handle_stylus(&mut self, event: &StylusEvent) {
 		match event.event_type.as_str() {
 			"press" => {
-				if let (Some(x), Some(y), Some(pressure)) = (
-					event.get_float("x"),
-					event.get_float("y"),
-					event.get_float("pressure"),
-				) {
+				if let (Some(x), Some(y), Some(pressure)) = (event.x, event.y, event.pressure) {
 					println!(
 						"  Stylus press at ({:.1}, {:.1}) with pressure {:.2}",
 						x, y, pressure
@@ -82,38 +89,26 @@ impl GameComponent {
 				}
 			}
 			"move" => {
-				if let (Some(x), Some(y)) = (event.get_float("x"), event.get_float("y")) {
+				if let (Some(x), Some(y)) = (event.x, event.y) {
 					println!("  Stylus move to ({:.1}, {:.1})", x, y);
 				}
 			}
 			"tilt" => {
-				if let (Some(x_tilt), Some(y_tilt)) =
-					(event.get_float("x_tilt"), event.get_float("y_tilt"))
-				{
-					println!("  Stylus tilt: ({:.2}, {:.2})", x_tilt, y_tilt);
-				}
+				println!("  Stylus tilt event")
 			}
 			_ => {}
 		}
 	}
 
-	fn handle_motion(&mut self, event: &CustomInputEvent) {
+	fn handle_motion(&mut self, event: &MotionEvent) {
 		match event.event_type.as_str() {
 			"accelerometer" => {
-				if let (Some(x), Some(y), Some(z)) = (
-					event.get_float("x"),
-					event.get_float("y"),
-					event.get_float("z"),
-				) {
+				if let (Some(x), Some(y), Some(z)) = (event.x, event.y, event.z) {
 					println!("  Accelerometer: x={:.2}, y={:.2}, z={:.2}", x, y, z);
 				}
 			}
 			"gyroscope" => {
-				if let (Some(x), Some(y), Some(z)) = (
-					event.get_float("x"),
-					event.get_float("y"),
-					event.get_float("z"),
-				) {
+				if let (Some(x), Some(y), Some(z)) = (event.x, event.y, event.z) {
 					println!("  Gyroscope: x={:.2}, y={:.2}, z={:.2}", x, y, z);
 				}
 			}
@@ -136,30 +131,10 @@ impl Component for GameComponent {
 	}
 }
 
-impl InputHandler for GameComponent {
-	fn handle_custom(&mut self, event: &CustomInputEvent) -> bool {
-		println!("\nReceived custom input from: {}", event.device_type);
-
-		match event.device_type.as_str() {
-			"gamepad" => {
-				self.handle_gamepad(event);
-				true
-			}
-			"stylus" => {
-				self.handle_stylus(event);
-				true
-			}
-			"motion_sensor" => {
-				self.handle_motion(event);
-				true
-			}
-			_ => {
-				println!("  Unknown device type");
-				false
-			}
-		}
-	}
-}
+// This example handles provider-specific events directly; it does not
+// implement the generic InputHandler::handle_custom method (removed in the
+// migration). The following demos construct provider-specific events and call
+// the matching handlers above.
 
 fn main() {
 	println!("Engage UX - Custom Input Device Demo\n");
@@ -172,26 +147,30 @@ fn main() {
 	println!("---------------------");
 
 	let gamepad_events = vec![
-		CustomInputEvent::new("gamepad", "button_press")
-			.with_int("button", 0)
-			.with_bool("pressed", true)
-			.with_string("button_name", "A"),
-		CustomInputEvent::new("gamepad", "button_press")
-			.with_int("button", 1)
-			.with_bool("pressed", true)
-			.with_string("button_name", "B"),
-		CustomInputEvent::new("gamepad", "axis_move")
-			.with_int("axis", 0)
-			.with_float("value", 0.75)
-			.with_string("axis_name", "left_x"),
-		CustomInputEvent::new("gamepad", "axis_move")
-			.with_int("axis", 1)
-			.with_float("value", -0.5)
-			.with_string("axis_name", "left_y"),
+		GamepadEvent {
+			event_type: "button_press".to_string(),
+			button: Some(0),
+			value: None,
+		},
+		GamepadEvent {
+			event_type: "button_press".to_string(),
+			button: Some(1),
+			value: None,
+		},
+		GamepadEvent {
+			event_type: "axis_move".to_string(),
+			button: None,
+			value: Some(0.75),
+		},
+		GamepadEvent {
+			event_type: "axis_move".to_string(),
+			button: None,
+			value: Some(-0.5),
+		},
 	];
 
 	for event in gamepad_events {
-		game.handle_custom(&event);
+		game.handle_gamepad(&event);
 	}
 	println!();
 
@@ -200,21 +179,28 @@ fn main() {
 	println!("--------------------");
 
 	let stylus_events = vec![
-		CustomInputEvent::new("stylus", "press")
-			.with_float("x", 100.0)
-			.with_float("y", 200.0)
-			.with_float("pressure", 0.8),
-		CustomInputEvent::new("stylus", "move")
-			.with_float("x", 105.0)
-			.with_float("y", 205.0)
-			.with_float("pressure", 0.75),
-		CustomInputEvent::new("stylus", "tilt")
-			.with_float("x_tilt", 15.0)
-			.with_float("y_tilt", -10.0),
+		StylusEvent {
+			event_type: "press".to_string(),
+			x: Some(100.0),
+			y: Some(200.0),
+			pressure: Some(0.8),
+		},
+		StylusEvent {
+			event_type: "move".to_string(),
+			x: Some(105.0),
+			y: Some(205.0),
+			pressure: Some(0.75),
+		},
+		StylusEvent {
+			event_type: "tilt".to_string(),
+			x: None,
+			y: None,
+			pressure: None,
+		},
 	];
 
 	for event in stylus_events {
-		game.handle_custom(&event);
+		game.handle_stylus(&event);
 	}
 	println!();
 
@@ -223,18 +209,22 @@ fn main() {
 	println!("---------------------------");
 
 	let motion_events = vec![
-		CustomInputEvent::new("motion_sensor", "accelerometer")
-			.with_float("x", 0.2)
-			.with_float("y", 9.8)
-			.with_float("z", 0.1),
-		CustomInputEvent::new("motion_sensor", "gyroscope")
-			.with_float("x", 0.01)
-			.with_float("y", -0.02)
-			.with_float("z", 0.05),
+		MotionEvent {
+			event_type: "accelerometer".to_string(),
+			x: Some(0.2),
+			y: Some(9.8),
+			z: Some(0.1),
+		},
+		MotionEvent {
+			event_type: "gyroscope".to_string(),
+			x: Some(0.01),
+			y: Some(-0.02),
+			z: Some(0.05),
+		},
 	];
 
 	for event in motion_events {
-		game.handle_custom(&event);
+		game.handle_motion(&event);
 	}
 	println!();
 
@@ -242,12 +232,11 @@ fn main() {
 	println!("Demo 4: Using InputEvent Enum");
 	println!("------------------------------");
 
-	let custom_event = CustomInputEvent::new("gamepad", "button_press")
-		.with_int("button", 0)
-		.with_bool("pressed", true);
-
-	let input_event = InputEvent::Custom(custom_event);
-	game.handle_input(&input_event);
+	// Demo: show InputEvent usage with mouse event as example
+	let mouse_input = InputEvent::Mouse(engage_ux_core::input::mouse::MouseEvent::move_event(
+		12.0, 34.0,
+	));
+	game.handle_input(&mouse_input);
 	println!();
 
 	// Demo 5: Custom device - MIDI controller
@@ -255,26 +244,25 @@ fn main() {
 	println!("----------------------------------------");
 
 	let midi_events = vec![
-		CustomInputEvent::new("midi_controller", "note_on")
-			.with_int("note", 60)
-			.with_int("velocity", 100)
-			.with_int("channel", 0),
-		CustomInputEvent::new("midi_controller", "control_change")
-			.with_int("controller", 1)
-			.with_int("value", 64)
-			.with_int("channel", 0),
+		GamepadEvent {
+			event_type: "note_on".to_string(),
+			button: Some(60),
+			value: Some(100.0),
+		},
+		GamepadEvent {
+			event_type: "control_change".to_string(),
+			button: Some(1),
+			value: Some(64.0),
+		},
 	];
 
 	for event in midi_events {
-		println!("\nReceived MIDI input:");
+		println!("\nReceived MIDI-like input:");
 		println!("  Event: {}", event.event_type);
-		if let Some(note) = event.get_int("note") {
-			println!("  Note: {}", note);
+		if let Some(note) = event.button {
+			println!("  Note/Controller: {}", note);
 		}
-		if let Some(controller) = event.get_int("controller") {
-			println!("  Controller: {}", controller);
-		}
-		if let Some(value) = event.get_int("value") {
+		if let Some(value) = event.value {
 			println!("  Value: {}", value);
 		}
 	}
@@ -285,22 +273,25 @@ fn main() {
 	println!("------------------------------------");
 
 	let eye_events = vec![
-		CustomInputEvent::new("eye_tracker", "gaze_point")
-			.with_float("x", 512.0)
-			.with_float("y", 384.0)
-			.with_bool("left_eye_open", true)
-			.with_bool("right_eye_open", true),
-		CustomInputEvent::new("eye_tracker", "blink").with_string("eye", "right"),
+		StylusEvent {
+			event_type: "gaze_point".to_string(),
+			x: Some(512.0),
+			y: Some(384.0),
+			pressure: None,
+		},
+		StylusEvent {
+			event_type: "blink".to_string(),
+			x: None,
+			y: None,
+			pressure: None,
+		},
 	];
 
 	for event in eye_events {
 		println!("\nReceived eye tracker input:");
 		println!("  Event: {}", event.event_type);
-		if let (Some(x), Some(y)) = (event.get_float("x"), event.get_float("y")) {
+		if let (Some(x), Some(y)) = (event.x, event.y) {
 			println!("  Gaze point: ({:.1}, {:.1})", x, y);
-		}
-		if let Some(eye) = event.get_string("eye") {
-			println!("  Eye: {}", eye);
 		}
 	}
 	println!();

@@ -1,4 +1,5 @@
-use crate::geometry::{Point, Unit};
+//! Geometric rectangle defined by top, left, width, and height in units
+use crate::geometry::Point;
 use serde::{Deserialize, Serialize};
 
 /// Geometric rectangle defined by top, left, and size
@@ -7,9 +8,9 @@ pub struct Rectangle {
 	/// The top-left point of the rectangle
 	pub top_left: Point,
 	/// The width of the rectangle
-	pub width: Unit,
+	pub width: i64,
 	/// The height of the rectangle
-	pub height: Unit,
+	pub height: i64,
 }
 
 impl Rectangle {

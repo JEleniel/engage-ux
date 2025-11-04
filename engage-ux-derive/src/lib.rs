@@ -1,3 +1,47 @@
+//! Crate `engage-ux-derive` — procedural derives for Engage UX
+//!
+//! This crate provides a small set of procedural macros used by Engage UX
+//! to make it ergonomic to convert strongly-typed payloads into the
+//! framework's `Event` representation.  Currently the crate exposes a
+//! single derive macro:
+//!
+//! - `#[derive(Event)]` — implement conversion of a `struct` or `enum`
+//!   into an `engage_ux_core::events::Event` (via `TryFrom` + helper
+//!   method `try_to_event`).
+//!
+//! Features and behaviour
+//! - Works on `struct` and `enum` types that implement `serde::Serialize`.
+//! - Supports a type-level or variant-level attribute `#[event(...)]` to
+//!   override the event name or the path to the events crate.
+//! - By default the generated code references `engage_ux_core::events` as
+//!   the events crate path; you can override this with
+//!   `#[event(crate = "my::events")]`.
+//!
+//! Example
+//! ```rust
+//! use engage_ux_derive::Event;
+//! use serde::Serialize;
+//! use engage_ux_core::types::ComponentId;
+//!
+//! #[derive(Serialize, Event)]
+//! #[event("my_custom_event")]
+//! struct MyPayload { value: i32 }
+//!
+//! fn make_event(target: ComponentId) -> engage_ux_core::events::Event {
+//!     // `try_to_event` returns Result<Event, _>; unwrap here for brevity
+//!     MyPayload { value: 42 }.try_to_event(target).unwrap()
+//! }
+//! ```
+//!
+//! Notes
+//! - The derive macro serializes payloads with `serde_json` internally and
+//!   maps serialization errors into a generated `*EventError` type.
+//! - The macro intentionally strips the `Event` token from the re-emitted
+//!   original tokens to avoid recursive expansion when the original type is
+//!   re-emitted into the final expanded output.
+//!
+//! See the repository docs for a user guide: `docs/api/core/derive.md`.
+
 use proc_macro::TokenStream;
 use quote::{ToTokens, format_ident, quote};
 use syn::{Attribute, DeriveInput, Meta, parse_macro_input};
@@ -14,6 +58,21 @@ struct EventAttr {
 	name: Option<String>,
 }
 
+/// Derive macro `Event`.
+///
+/// When applied to a `struct` or `enum` that implements
+/// `serde::Serialize`, this macro generates:
+/// - a `TryFrom<YourType>` impl to convert into
+///   `engage_ux_core::events::EventType` (serializing the payload to JSON),
+/// - a convenience method `try_to_event(self, target: ComponentId) -> Result<Event, _>`.
+///
+/// Supported attributes:
+/// - `#[event("name")]` — shorthand to set the event name
+/// - `#[event(name = "...")]` — explicit name
+/// - `#[event(crate = "path::to::events")]` — override the events crate path
+///
+/// The macro emits a generated `*EventError` enum for mapping serde errors
+/// and attribute parsing errors.
 #[proc_macro_derive(Event, attributes(event))]
 pub fn derive_event(input: TokenStream) -> TokenStream {
 	let input = parse_macro_input!(input as DeriveInput);

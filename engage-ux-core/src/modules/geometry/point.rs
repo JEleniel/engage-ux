@@ -1,18 +1,12 @@
-use crate::geometry::Unit;
+//! Geometric point defined by X and Y coordinatesin units
 use serde::{Deserialize, Serialize};
 
 /// Geometric point defined by X and Y coordinates
+/// X: Horizontal, Y: Vertical
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Point {
 	/// The X coordinate
-	pub x: Unit,
+	pub x: i64,
 	/// The Y coordinate
-	pub y: Unit,
-}
-
-impl Point {
-	/// Convenience constructor
-	pub fn new(x: Unit, y: Unit) -> Self {
-		Self { x, y }
-	}
+	pub y: i64,
 }

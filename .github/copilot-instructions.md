@@ -70,6 +70,18 @@ Engage UX is a cross-platform Rust UI toolkit providing a themable component lib
 
 ## Important Addiditional Instructions
 
-- Keep responses complete and concise.
+- Keep responses complete and concise. Avoid including any information that is not required by your higherlevel instructions and is not relevant to the current context.
+- When summarizing information, focus on the most critical points and avoid unnecessary details.
 - Ensure outputs are accurate and logically consistent.
-- Always summarize in five paragraphs or less.
+- Always provide a final summary in five paragraphs or less.
+
+## Learned Style Preferences
+
+The following are stylistic and idiomatic preferences inferred from work with the repo maintainer; append these to the guidance so future edits follow the same conventions:
+
+- Module layout: prefer the modern layout (top-level `src/color.rs` + `src/color/*` or `src/modules/colors/*`) rather than legacy `mod.rs` files. Keep modules predictable and avoid duplicate module files.
+- Palettes as namespaces: use unit structs as namespaces for palettes (for example `pub struct Ansi; impl Ansi { pub const RED: Color = ... }`). This keeps constants discoverable (e.g. `engage_ux::color::Ansi::RED`).
+- Public API stability: expose consumer-friendly re-exports at the crate for developer ease but avoid shims or stubs unless the maintainers explicitly ask for them. This is a prerelease crate so backward compatibility is not a primary concern.
+- Documentation: add rustdoc comments to public constants and types. Keep naming neutral and descriptive (avoid brand names or trademarked phrases; explain inspirations without explicit references when necessary).
+- Patch discipline: make small, focused patches; run tests immediately after changes; avoid mass reformatting of unrelated files. Use `rustfmt`/project formatter for style consistency, and preserve existing public APIs unless intentionally changing them.
+- Communication & verification: commit messages and patch explanations should be concise and include what was changed and how it was verified (tests/build). Prefer a short summary in PRs and a quick test result.

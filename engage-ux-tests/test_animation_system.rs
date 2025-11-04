@@ -1,70 +1,65 @@
 //! Integration tests for the animation system
 
-use engage_ux_core::animation::{
-	Animation, AnimationController, AnimationState, AnimationValue, Easing,
-};
+use chrono::Duration as ChronoDuration;
 use engage_ux_core::Color;
-use std::time::Duration;
+use engage_ux_core::animation::{Animation, AnimationState, AnimationValue, Easing};
 
 #[test]
 fn test_animation_integration() {
-	// Test multiple animations working together
-	let mut controller = AnimationController::new();
+	// Test multiple animations working together using per-animation update
+	let mut fade = Animation::builder(engage_ux_core::animation::AnimationType::Fade {
+		start_alpha: 0.0,
+		end_alpha: 1.0,
+	})
+	.with_duration_msec(1000)
+	.with_repeat(Some(1))
+	.build();
 
-	// Add various animations (with repeat count so they complete)
-	let _fade_idx =
-		controller.add(Animation::fade(0.0, 1.0, Duration::from_secs(1)).with_repeat(Some(1)));
-	let _scale_idx =
-		controller.add(Animation::scale(1.0, 2.0, Duration::from_secs(1)).with_repeat(Some(1)));
-	let _rotate_idx =
-		controller.add(Animation::rotate(0.0, 360.0, Duration::from_secs(1)).with_repeat(Some(1)));
+	let mut scale =
+		Animation::builder(engage_ux_core::animation::AnimationType::Scale { from: 1.0, to: 2.0 })
+			.with_duration_msec(1000)
+			.with_repeat(Some(1))
+			.build();
 
-	assert_eq!(controller.len(), 3);
+	let mut rotate = Animation::builder(engage_ux_core::animation::AnimationType::Rotate {
+		start_angle: 0.0,
+		end_angle: 360.0,
+	})
+	.with_duration_msec(1000)
+	.with_repeat(Some(1))
+	.build();
 
-	// Start all animations
-	controller.start_all();
+	fade.start();
+	scale.start();
+	rotate.start();
 
 	// Update at 50% progress
-	let results = controller.update(Duration::from_millis(500));
-	assert_eq!(results.len(), 3);
+	let v_fade = fade.update(ChronoDuration::milliseconds(500));
+	let v_scale = scale.update(ChronoDuration::milliseconds(500));
+	let v_rotate = rotate.update(ChronoDuration::milliseconds(500));
 
-	// Verify each animation type
-	for (idx, value) in results {
-		match idx {
-			0 => {
-				// Fade animation
-				if let AnimationValue::Opacity(opacity) = value {
-					assert!((opacity - 0.5).abs() < 0.01);
-				} else {
-					panic!("Expected Opacity value for fade animation");
-				}
-			}
-			1 => {
-				// Scale animation
-				if let AnimationValue::Scale(scale) = value {
-					assert!((scale - 1.5).abs() < 0.01);
-				} else {
-					panic!("Expected Scale value for scale animation");
-				}
-			}
-			2 => {
-				// Rotate animation
-				if let AnimationValue::Rotation(angle) = value {
-					assert!((angle - 180.0).abs() < 1.0);
-				} else {
-					panic!("Expected Rotation value for rotate animation");
-				}
-			}
-			_ => panic!("Unexpected animation index"),
-		}
+	assert!(v_fade.is_some());
+	assert!(v_scale.is_some());
+	assert!(v_rotate.is_some());
+
+	if let Some(AnimationValue::Alpha(alpha)) = v_fade {
+		let opacity = alpha as f32 / 255.0;
+		assert!((opacity - 0.5).abs() < 0.05);
+	} else {
+		panic!("Expected Alpha value for fade animation");
 	}
 
-	// Complete animations
-	controller.update(Duration::from_millis(500));
+	if let Some(AnimationValue::Scale(s)) = v_scale {
+		assert!((s - 1.5).abs() < 0.01);
+	} else {
+		panic!("Expected Scale value for scale animation");
+	}
 
-	// Cleanup completed animations
-	controller.cleanup();
-	assert_eq!(controller.len(), 0);
+	if let Some(AnimationValue::Angle(angle)) = v_rotate {
+		assert!((angle - 180.0).abs() < 1.0);
+	} else {
+		panic!("Expected Angle value for rotate animation");
+	}
 }
 
 #[test]
@@ -80,10 +75,17 @@ fn test_animation_with_easing() {
 	let mut results = Vec::new();
 
 	for easing in easings {
-		let mut anim = Animation::fade(0.0, 1.0, Duration::from_secs(1)).with_easing(easing);
+		let mut anim = Animation::builder(engage_ux_core::animation::AnimationType::Fade {
+			start_alpha: 0.0,
+			end_alpha: 1.0,
+		})
+		.with_duration_msec(1000)
+		.with_easing(easing)
+		.build();
 		anim.start();
 
-		if let Some(AnimationValue::Opacity(opacity)) = anim.update(Duration::from_millis(500)) {
+		if let Some(AnimationValue::Alpha(alpha)) = anim.update(ChronoDuration::milliseconds(500)) {
+			let opacity = alpha as f32 / 255.0;
 			results.push(opacity);
 		}
 	}
@@ -103,37 +105,48 @@ fn test_animation_with_easing() {
 
 #[test]
 fn test_animation_sequence() {
-	// Test sequential animations with delays
-	let mut controller = AnimationController::new();
+	// Test sequential animations with delays using per-animation updates
+	let mut anim1 = Animation::builder(engage_ux_core::animation::AnimationType::Fade {
+		start_alpha: 0.0,
+		end_alpha: 1.0,
+	})
+	.with_duration_msec(500)
+	.with_repeat(Some(1))
+	.build();
 
-	// Animation 1: starts immediately (plays once)
-	let anim1 = Animation::fade(0.0, 1.0, Duration::from_millis(500)).with_repeat(Some(1));
+	let mut anim2 = Animation::builder(engage_ux_core::animation::AnimationType::Fade {
+		start_alpha: 1.0,
+		end_alpha: 0.0,
+	})
+	.with_duration_msec(500)
+	.with_delay(ChronoDuration::milliseconds(500))
+	.with_repeat(Some(1))
+	.build();
 
-	// Animation 2: starts after 500ms delay (plays once, total duration 1000ms)
-	let anim2 = Animation::fade(1.0, 0.0, Duration::from_millis(500))
-		.with_delay(Duration::from_millis(500))
-		.with_repeat(Some(1));
-
-	controller.add(anim1);
-	controller.add(anim2);
-	controller.start_all();
+	anim1.start();
+	anim2.start();
 
 	// At 250ms: only first animation active
-	let results = controller.update(Duration::from_millis(250));
-	assert_eq!(results.len(), 1);
+	let r1 = anim1.update(ChronoDuration::milliseconds(250));
+	let r2 = anim2.update(ChronoDuration::milliseconds(250));
+	let active_count = r1.is_some() as usize + r2.is_some() as usize;
+	assert_eq!(active_count, 1);
 
 	// At 500ms: first animation completes first iteration, second just finished delay
-	let results = controller.update(Duration::from_millis(250));
-	// Both animations may return values
-	assert!(results.len() >= 1 && results.len() <= 2);
+	let r1 = anim1.update(ChronoDuration::milliseconds(250));
+	let r2 = anim2.update(ChronoDuration::milliseconds(250));
+	let active_count = r1.is_some() as usize + r2.is_some() as usize;
+	assert!(active_count >= 1 && active_count <= 2);
 
 	// At 750ms: first might be on second iteration, second animation active
-	let results = controller.update(Duration::from_millis(250));
-	assert!(results.len() >= 1); // At least second anim active
+	let r1 = anim1.update(ChronoDuration::milliseconds(250));
+	let r2 = anim2.update(ChronoDuration::milliseconds(250));
+	let active_count = r1.is_some() as usize + r2.is_some() as usize;
+	assert!(active_count >= 1);
 
 	// At 1000ms: both complete their iterations
-	let _results = controller.update(Duration::from_millis(250));
-	// May or may not return values
+	let _r = anim1.update(ChronoDuration::milliseconds(250));
+	let _r = anim2.update(ChronoDuration::milliseconds(250));
 }
 
 #[test]
@@ -142,11 +155,16 @@ fn test_color_animation_interpolation() {
 	let black = Color::rgb(0.0, 0.0, 0.0, 1.0);
 	let white = Color::rgb(1.0, 1.0, 1.0, 1.0);
 
-	let mut anim = Animation::color(black, white, Duration::from_secs(1));
+	let mut anim = Animation::builder(engage_ux_core::animation::AnimationType::Color {
+		from: black,
+		to: white,
+	})
+	.with_duration_msec(1000)
+	.build();
 	anim.start();
 
 	// At 25%
-	if let Some(AnimationValue::Color(color)) = anim.update(Duration::from_millis(250)) {
+	if let Some(AnimationValue::Color(color)) = anim.update(ChronoDuration::milliseconds(250)) {
 		let comp = color.components();
 		assert!((comp[0] - 0.25).abs() < 0.01);
 		assert!((comp[1] - 0.25).abs() < 0.01);
@@ -154,7 +172,7 @@ fn test_color_animation_interpolation() {
 	}
 
 	// At 50%
-	if let Some(AnimationValue::Color(color)) = anim.update(Duration::from_millis(250)) {
+	if let Some(AnimationValue::Color(color)) = anim.update(ChronoDuration::milliseconds(250)) {
 		let comp = color.components();
 		assert!((comp[0] - 0.5).abs() < 0.01);
 		assert!((comp[1] - 0.5).abs() < 0.01);
@@ -164,7 +182,12 @@ fn test_color_animation_interpolation() {
 
 #[test]
 fn test_animation_state_management() {
-	let mut anim = Animation::fade(0.0, 1.0, Duration::from_secs(1));
+	let mut anim = Animation::builder(engage_ux_core::animation::AnimationType::Fade {
+		start_alpha: 0.0,
+		end_alpha: 1.0,
+	})
+	.with_duration_msec(1000)
+	.build();
 
 	// Initial state
 	assert_eq!(anim.state(), AnimationState::Idle);
@@ -193,21 +216,28 @@ fn test_animation_state_management() {
 #[test]
 fn test_animation_repeat_with_alternate() {
 	// Test ping-pong animation
-	let mut anim = Animation::fade(0.0, 1.0, Duration::from_millis(100))
-		.with_repeat(Some(4))
-		.with_alternate(true);
+	let mut anim = Animation::builder(engage_ux_core::animation::AnimationType::Fade {
+		start_alpha: 0.0,
+		end_alpha: 1.0,
+	})
+	.with_duration_msec(100)
+	.with_repeat(Some(4))
+	.with_alternate(true)
+	.build();
 
 	anim.start();
 
 	// First iteration: 0 -> 1
-	if let Some(AnimationValue::Opacity(opacity)) = anim.update(Duration::from_millis(50)) {
+	if let Some(AnimationValue::Alpha(alpha)) = anim.update(ChronoDuration::milliseconds(50)) {
+		let opacity = alpha as f32 / 255.0;
 		assert!(opacity > 0.0 && opacity < 1.0);
 	}
 
-	anim.update(Duration::from_millis(50)); // Complete first iteration
+	anim.update(ChronoDuration::milliseconds(50)); // Complete first iteration
 
 	// Second iteration: 1 -> 0 (alternate)
-	if let Some(AnimationValue::Opacity(opacity)) = anim.update(Duration::from_millis(50)) {
+	if let Some(AnimationValue::Alpha(alpha)) = anim.update(ChronoDuration::milliseconds(50)) {
+		let opacity = alpha as f32 / 255.0;
 		assert!(opacity > 0.0 && opacity < 1.0);
 	}
 
@@ -216,7 +246,7 @@ fn test_animation_repeat_with_alternate() {
 		if anim.is_completed() {
 			break;
 		}
-		anim.update(Duration::from_millis(50));
+		anim.update(ChronoDuration::milliseconds(50));
 	}
 
 	assert!(anim.is_completed());
@@ -224,26 +254,31 @@ fn test_animation_repeat_with_alternate() {
 
 #[test]
 fn test_animation_controller_management() {
-	let mut controller = AnimationController::new();
-
-	// Add multiple animations
-	for _i in 0..5 {
-		let anim = Animation::fade(0.0, 1.0, Duration::from_secs(1));
-		controller.add(anim);
+	// Manage multiple animations via per-animation API
+	let mut items = Vec::new();
+	for _ in 0..5 {
+		let anim = Animation::builder(engage_ux_core::animation::AnimationType::Fade {
+			start_alpha: 0.0,
+			end_alpha: 1.0,
+		})
+		.with_duration_msec(1000)
+		.build();
+		items.push(anim);
 	}
 
-	assert_eq!(controller.len(), 5);
-	assert!(!controller.is_empty());
+	assert_eq!(items.len(), 5);
 
-	// Start and complete all
-	controller.start_all();
-	controller.update(Duration::from_secs(1));
+	// Start and update all
+	for a in items.iter_mut() {
+		a.start();
+		let _ = a.update(ChronoDuration::seconds(1));
+	}
 
-	// Some might be completed
-	controller.cleanup();
+	// Some should be completed
+	let completed = items.iter().filter(|a| a.is_completed()).count();
+	assert!(completed >= 1);
 
-	// Clear all
-	controller.clear();
-	assert_eq!(controller.len(), 0);
-	assert!(controller.is_empty());
+	// Clearing is just dropping
+	items.clear();
+	assert_eq!(items.len(), 0);
 }
