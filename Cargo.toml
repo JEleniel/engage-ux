@@ -39,6 +39,7 @@ thiserror = { version = "2" }
 tiny-skia = { version = "0.11" }
 tokio = { version = "1.41", features = ["full"] }
 usvg = { version = "0.44" }
+uuid = { version = "1.18.1", features = ["serde", "v4"] }
 
 [workspace.lints.rust]
 missing_docs = "warn"

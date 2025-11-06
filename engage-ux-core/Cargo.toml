@@ -20,6 +20,7 @@ thiserror = { workspace = true }
 tiny-skia = { workspace = true }
 tokio = { workspace = true }
 usvg = { workspace = true }
+uuid = { workspace = true }
 
 [dev-dependencies]
 

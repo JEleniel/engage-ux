@@ -1,16 +1,33 @@
-//! Event module (modern layout)
-//!
-//! Provides event types, categories, an Event struct and an EventBus with
-//! optional category-filtered subscriptions.
+mod accessibility_event;
+mod bus;
+mod clipboard_event;
+mod drag_drop_event;
+mod event;
+mod focus_event;
+mod gesture_event;
+mod keyboard_event;
+mod media_event;
+mod pointer_event;
+mod system_event;
+mod text_input_event;
+mod touch_event;
+mod value_changed_event;
+mod wheel_event;
+mod window_event;
 
-pub mod bus;
-pub mod category;
-pub mod event;
-pub mod event_type;
-
+pub use accessibility_event::AccessibilityEvent;
 pub use bus::EventBus;
-pub use category::EventCategory;
+pub use clipboard_event::ClipboardEvent;
+pub use drag_drop_event::DragDropEvent;
 pub use event::Event;
-pub use event_type::EventType;
-
-// tests can be added in submodules; keep the root module small.
+pub use focus_event::FocusEvent;
+pub use gesture_event::GestureEvent;
+pub use keyboard_event::KeyboardEvent;
+pub use media_event::MediaEvent;
+pub use pointer_event::PointerEvent;
+pub use system_event::SystemEvent;
+pub use text_input_event::TextInputEvent;
+pub use touch_event::TouchEvent;
+pub use value_changed_event::ValueChangedEvent;
+pub use wheel_event::WheelEvent;
+pub use window_event::WindowEvent;

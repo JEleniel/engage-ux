@@ -56,6 +56,9 @@ struct EventAttr {
 
 	#[darling(default)]
 	name: Option<String>,
+
+	#[darling(default)]
+	category: Option<String>,
 }
 
 /// Derive macro `Event`.
@@ -80,9 +83,9 @@ pub fn derive_event(input: TokenStream) -> TokenStream {
 
 	let default_crate = "engage_ux_core::events".to_string();
 
-	// parse type-level attribute
-	let (crate_path, base_name) = match parse_event_attr(&input.attrs) {
-		Ok((c, n)) => (c.unwrap_or(default_crate.clone()), n),
+	// parse type-level attribute (crate path, optional name, optional category)
+	let (crate_path, base_name, base_category) = match parse_event_attr(&input.attrs) {
+		Ok((c, n, cat)) => (c.unwrap_or(default_crate.clone()), n, cat),
 		Err(e) => return e.to_compile_error().into(),
 	};
 
@@ -103,8 +106,22 @@ pub fn derive_event(input: TokenStream) -> TokenStream {
 
 	let generated = match &input.data {
 		syn::Data::Struct(_) => {
+			// For structs we require a category to be present on the type-level
 			let event_name = base_name.unwrap_or_else(|| name.to_string());
+			let category = match &base_category {
+				Some(c) => c.clone(),
+				None => {
+					return syn::Error::new_spanned(
+						&name,
+						"missing required `category = \"...\"` in #[event(...)] for struct",
+					)
+					.to_compile_error()
+					.into();
+				}
+			};
+
 			let event_name_lit = proc_macro2::Literal::string(&event_name);
+			let category_lit = proc_macro2::Literal::string(&category);
 
 			quote! {
 				#[derive(thiserror::Error, Debug)]
@@ -119,8 +136,8 @@ pub fn derive_event(input: TokenStream) -> TokenStream {
 					type Error = #error_ident;
 
 					fn try_from(src: #name) -> Result<Self, Self::Error> {
-						let data = ::serde_json::to_string(&src)?;
-						Ok(#crate_tokens::EventType::Custom { name: #event_name_lit.to_string(), data })
+						let data = ::serde_json::to_value(&src)?;
+						Ok(#crate_tokens::EventType::Custom { name: #event_name_lit.to_string(), category: #category_lit.to_string(), data })
 					}
 				}
 
@@ -137,8 +154,8 @@ pub fn derive_event(input: TokenStream) -> TokenStream {
 			let mut arms = Vec::new();
 			for variant in &enm.variants {
 				let v_ident = &variant.ident;
-				let (_v_crate, v_name) = match parse_event_attr(&variant.attrs) {
-					Ok((c, n)) => (c, n),
+				let (_v_crate, v_name, v_category) = match parse_event_attr(&variant.attrs) {
+					Ok((c, n, cat)) => (c, n, cat),
 					Err(e) => return e.to_compile_error().into(),
 				};
 
@@ -146,6 +163,23 @@ pub fn derive_event(input: TokenStream) -> TokenStream {
 					Some(n) => proc_macro2::Literal::string(&n),
 					None => proc_macro2::Literal::string(&format!("{}::{}", name, v_ident)),
 				};
+
+				// determine category for this variant: variant-level overrides type-level
+				let chosen_category = match &v_category {
+					Some(c) => c.clone(),
+					None => match &base_category {
+						Some(bc) => bc.clone(),
+						None => {
+							return syn::Error::new_spanned(
+								&variant.ident,
+								"missing required `category = \"...\"` in #[event(...)] for enum variant",
+							)
+							.to_compile_error()
+							.into();
+						}
+					},
+				};
+				let category_lit = proc_macro2::Literal::string(&chosen_category);
 
 				let pat = match &variant.fields {
 					syn::Fields::Named(_) => quote! { #name::#v_ident { .. } },
@@ -158,8 +192,8 @@ pub fn derive_event(input: TokenStream) -> TokenStream {
 				// subsequent code followed the match). Use `?` for serde errors.
 				arms.push(quote! {
 					#pat => {
-						let data = ::serde_json::to_string(&src)?;
-						Some(#crate_tokens::EventType::Custom { name: #name_lit.to_string(), data })
+						let data = ::serde_json::to_value(&src)?;
+						Some(#crate_tokens::EventType::Custom { name: #name_lit.to_string(), category: #category_lit.to_string(), data })
 					}
 				});
 			}
@@ -186,8 +220,12 @@ pub fn derive_event(input: TokenStream) -> TokenStream {
 							return Ok(evt);
 						}
 
-						let data = ::serde_json::to_string(&src)?;
-						Ok(#crate_tokens::EventType::Custom { name: format!("{}", stringify!(#name)).to_string(), data })
+						let data = ::serde_json::to_value(&src)?;
+						let category = match &#base_category {
+							Some(c) => c.to_string(),
+							None => return Err(#error_ident::InvalidAttribute),
+						};
+						Ok(#crate_tokens::EventType::Custom { name: format!("{}", stringify!(#name)).to_string(), category, data })
 					}
 				}
 
@@ -253,7 +291,9 @@ pub fn derive_event(input: TokenStream) -> TokenStream {
 
 /// Parse `#[event(...)]` attributes. Accepts either a keyed form or the
 /// shorthand string literal form `#[event("name")]`.
-fn parse_event_attr(attrs: &[Attribute]) -> Result<(Option<String>, Option<String>), syn::Error> {
+fn parse_event_attr(
+	attrs: &[Attribute],
+) -> Result<(Option<String>, Option<String>, Option<String>), syn::Error> {
 	for attr in attrs.iter() {
 		if let Meta::List(list) = &attr.meta {
 			if !list.path.is_ident("event") {
@@ -262,7 +302,7 @@ fn parse_event_attr(attrs: &[Attribute]) -> Result<(Option<String>, Option<Strin
 
 			// Try darling for structured forms like #[event(name = "..", crate = "..")]
 			if let Ok(ev) = EventAttr::from_meta(&attr.meta) {
-				return Ok((ev.crate_path, ev.name));
+				return Ok((ev.crate_path, ev.name, ev.category));
 			}
 
 			// Fallback: naive token parsing for shorthand #[event("name")] or name = "..." / crate = "..."
@@ -273,7 +313,7 @@ fn parse_event_attr(attrs: &[Attribute]) -> Result<(Option<String>, Option<Strin
 				if let Some(first_q) = trimmed.find('"') {
 					if let Some(end_q) = trimmed[first_q + 1..].find('"') {
 						let name = trimmed[first_q + 1..first_q + 1 + end_q].to_string();
-						return Ok((None, Some(name)));
+						return Ok((None, Some(name), None));
 					}
 				}
 			}
@@ -285,7 +325,7 @@ fn parse_event_attr(attrs: &[Attribute]) -> Result<(Option<String>, Option<Strin
 					if let Some(start_q) = rest.find('"') {
 						if let Some(end_q) = rest[start_q + 1..].find('"') {
 							let crate_path = rest[start_q + 1..start_q + 1 + end_q].to_string();
-							return Ok((Some(crate_path), None));
+							return Ok((Some(crate_path), None, None));
 						}
 					}
 				}
@@ -297,7 +337,19 @@ fn parse_event_attr(attrs: &[Attribute]) -> Result<(Option<String>, Option<Strin
 					if let Some(start_q) = rest.find('"') {
 						if let Some(end_q) = rest[start_q + 1..].find('"') {
 							let name = rest[start_q + 1..start_q + 1 + end_q].to_string();
-							return Ok((None, Some(name)));
+							return Ok((None, Some(name), None));
+						}
+					}
+				}
+			}
+
+			if let Some(idx) = s.find("category") {
+				if let Some(eq_idx) = s[idx..].find('=') {
+					let rest = &s[idx + eq_idx + 1..];
+					if let Some(start_q) = rest.find('"') {
+						if let Some(end_q) = rest[start_q + 1..].find('"') {
+							let category = rest[start_q + 1..start_q + 1 + end_q].to_string();
+							return Ok((None, None, Some(category)));
 						}
 					}
 				}
@@ -305,7 +357,7 @@ fn parse_event_attr(attrs: &[Attribute]) -> Result<(Option<String>, Option<Strin
 		}
 	}
 
-	Ok((None, None))
+	Ok((None, None, None))
 }
 
 #[cfg(test)]
@@ -316,25 +368,28 @@ mod tests {
 	#[test]
 	fn parse_shorthand_attr() {
 		let a: Attribute = parse_quote!(#[event("my_shorthand")]);
-		let (c, n) = parse_event_attr(&[a]).unwrap();
+		let (c, n, cat) = parse_event_attr(&[a]).unwrap();
 		assert_eq!(c, None);
 		assert_eq!(n, Some("my_shorthand".to_string()));
+		assert_eq!(cat, None);
 	}
 
 	#[test]
 	fn parse_keyed_attr() {
 		let a: Attribute = parse_quote!(#[event(name = "the_name", crate = "my::crate")]);
-		let (c, n) = parse_event_attr(&[a]).unwrap();
+		let (c, n, cat) = parse_event_attr(&[a]).unwrap();
 		assert_eq!(c, Some("my::crate".to_string()));
 		assert_eq!(n, Some("the_name".to_string()));
+		assert_eq!(cat, None);
 	}
 
 	#[test]
 	fn no_event_attr_returns_none() {
 		// An unrelated attribute should produce (None, None)
 		let a: Attribute = parse_quote!(#[allow(dead_code)]);
-		let (c, n) = parse_event_attr(&[a]).unwrap();
+		let (c, n, cat) = parse_event_attr(&[a]).unwrap();
 		assert_eq!(c, None);
 		assert_eq!(n, None);
+		assert_eq!(cat, None);
 	}
 }

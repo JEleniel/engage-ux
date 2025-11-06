@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Point {
 	/// The X coordinate
-	pub x: i64,
+	pub x: f32,
 	/// The Y coordinate
-	pub y: i64,
+	pub y: f32,
 }

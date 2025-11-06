@@ -1,5 +1,5 @@
 //! Geometric rectangle defined by top, left, width, and height in units
-use crate::geometry::Point;
+use crate::geometry::{Border, Point};
 use serde::{Deserialize, Serialize};
 
 /// Geometric rectangle defined by top, left, and size
@@ -8,9 +8,9 @@ pub struct Rectangle {
 	/// The top-left point of the rectangle
 	pub top_left: Point,
 	/// The width of the rectangle
-	pub width: i64,
+	pub width: f32,
 	/// The height of the rectangle
-	pub height: i64,
+	pub height: f32,
 }
 
 impl Rectangle {
@@ -36,6 +36,18 @@ impl Rectangle {
 		Point {
 			x: self.top_left.x + self.width,
 			y: self.top_left.y + self.height,
+		}
+	}
+
+	/// Shrink the rectangle by the specified border amounts
+	pub fn shrink(&self, border: &Border) -> Self {
+		Self {
+			top_left: Point {
+				x: self.top_left.x + border.left,
+				y: self.top_left.y + border.top,
+			},
+			width: self.width - border.left - border.right,
+			height: self.height - border.top - border.bottom,
 		}
 	}
 }
