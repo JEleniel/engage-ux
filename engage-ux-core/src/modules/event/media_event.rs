@@ -4,15 +4,35 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum MediaEvent {
 	/// Event indicating that media playback has started.
-	Play { title: String },
+	Play {
+		/// Title or identifier of the media item played
+		title: String,
+	},
 	/// Event indicating that media playback is paused.
-	Pause { title: String },
+	Pause {
+		/// Title or identifier of the media item paused
+		title: String,
+	},
 	/// Event indicating that media playback has stopped.
-	Stop { title: String },
+	Stop {
+		/// Title or identifier of the media item stopped
+		title: String,
+	},
 	/// Event indicating that media playback has been seeked.
-	Seek { title: String, position: f32 },
+	Seek {
+		/// Title or identifier of the media item
+		title: String,
+		/// New playback position in seconds
+		position: f32,
+	},
 	/// Event indicating that media playback has ended.
-	Ended { title: String },
+	Ended {
+		/// Title or identifier of the media item ended
+		title: String,
+	},
 	/// Event indicating that the media volume has changed.
-	VolumeChange { volume: f32 },
+	VolumeChange {
+		/// New volume level (0.0-1.0)
+		volume: f32,
+	},
 }

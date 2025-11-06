@@ -14,12 +14,16 @@ pub enum PositionMode {
 /// Position specification
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Position {
+	/// X coordinate of the position
 	pub x: f32,
+	/// Y coordinate of the position
 	pub y: f32,
+	/// Whether the position is relative or absolute
 	pub mode: PositionMode,
 }
 
 impl Position {
+	/// Create a new `Position` with the given coordinates in Relative mode.
 	pub fn new(x: f32, y: f32) -> Self {
 		Self {
 			x,
@@ -28,6 +32,7 @@ impl Position {
 		}
 	}
 
+	/// Create a `Position` in Absolute mode with the given coordinates.
 	pub fn absolute(x: f32, y: f32) -> Self {
 		Self {
 			x,
@@ -36,6 +41,7 @@ impl Position {
 		}
 	}
 
+	/// Create a `Position` in Relative mode with the given coordinates.
 	pub fn relative(x: f32, y: f32) -> Self {
 		Self {
 			x,

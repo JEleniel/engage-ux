@@ -4,7 +4,13 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum FocusEvent {
 	/// Event indicating that a component has gained focus.
-	Gained { component_id: u128 },
+	Gained {
+		/// Component id that gained focus
+		component_id: u128,
+	},
 	/// Event indicating that a component has lost focus.
-	Lost { component_id: u128 },
+	Lost {
+		/// Component id that lost focus
+		component_id: u128,
+	},
 }

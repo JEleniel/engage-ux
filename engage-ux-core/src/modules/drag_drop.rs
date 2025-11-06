@@ -26,11 +26,11 @@ pub enum DragDataType {
 /// Drag data container
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DragData {
-	/// Data type
+	/// The kind of data contained in this drag payload
 	data_type: DragDataType,
-	/// Data content as bytes
+	/// Raw payload bytes for the drag data
 	data: Vec<u8>,
-	/// Metadata
+	/// Optional metadata key/value pairs associated with the drag
 	metadata: HashMap<String, String>,
 }
 
@@ -118,40 +118,75 @@ pub enum DragOperation {
 pub enum DragEvent {
 	/// Drag operation started
 	DragStart {
+		/// Id of the drag source component
 		source: u128,
+		/// Drag payload
 		data: DragData,
+		/// X coordinate in local space where the drag started
 		x: f32,
+		/// Y coordinate in local space where the drag started
 		y: f32,
 	},
 	/// Drag is moving
-	DragMove { source: u128, x: f32, y: f32 },
+	DragMove {
+		/// Id of the drag source component
+		source: u128,
+		/// Current X coordinate
+		x: f32,
+		/// Current Y coordinate
+		y: f32,
+	},
 	/// Drag entered a drop target
 	DragEnter {
+		/// Id of the drag source component
 		source: u128,
+		/// Id of the target component entered
 		target: u128,
+		/// X coordinate where entered
 		x: f32,
+		/// Y coordinate where entered
 		y: f32,
 	},
 	/// Drag is over a drop target
 	DragOver {
+		/// Id of the drag source component
 		source: u128,
+		/// Id of the target currently under the pointer
 		target: u128,
+		/// Current X coordinate
 		x: f32,
+		/// Current Y coordinate
 		y: f32,
 	},
 	/// Drag left a drop target
-	DragLeave { source: u128, target: u128 },
+	DragLeave {
+		/// Id of the drag source component
+		source: u128,
+		/// Id of the target that was left
+		target: u128,
+	},
 	/// Item dropped on target
 	Drop {
+		/// Id of the drag source component
 		source: u128,
+		/// Id of the drop target
 		target: u128,
+		/// Drag payload delivered to the target
 		data: DragData,
+		/// Operation performed (copy/move/link)
 		operation: DragOperation,
+		/// X coordinate where drop occurred
 		x: f32,
+		/// Y coordinate where drop occurred
 		y: f32,
 	},
 	/// Drag operation ended (dropped or cancelled)
-	DragEnd { source: u128, success: bool },
+	DragEnd {
+		/// Id of the drag source component
+		source: u128,
+		/// Whether the drag completed successfully
+		success: bool,
+	},
 }
 
 /// Drag source trait for components that can be dragged

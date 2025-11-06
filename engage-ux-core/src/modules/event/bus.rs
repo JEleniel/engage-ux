@@ -42,7 +42,7 @@ impl EventBus {
 	where
 		T: Serialize,
 	{
-		let mut value = serde_json::to_value(&payload)?;
+		let value = serde_json::to_string(&payload)?;
 
 		self.emit(Event::Custom {
 			timestamp: chrono::Utc::now(),

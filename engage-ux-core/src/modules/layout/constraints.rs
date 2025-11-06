@@ -6,9 +6,13 @@ use serde::{Deserialize, Serialize};
 /// Size constraints (min/max width and height)
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Constraints {
+	/// Optional minimum width constraint
 	pub min_width: Option<Unit>,
+	/// Optional maximum width constraint
 	pub max_width: Option<Unit>,
+	/// Optional minimum height constraint
 	pub min_height: Option<Unit>,
+	/// Optional maximum height constraint
 	pub max_height: Option<Unit>,
 }
 

@@ -109,8 +109,8 @@ impl AnimationType {
 			let p = p.max(0.0).min(1.0);
 			let lerp_f = |a: f32, b: f32| -> f32 { a + (b - a) * p };
 			Point {
-				x: lerp_f(ax, bx).round() as i64,
-				y: lerp_f(ay, by).round() as i64,
+				x: lerp_f(ax, bx).round(),
+				y: lerp_f(ay, by).round(),
 			}
 		};
 

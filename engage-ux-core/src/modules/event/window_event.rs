@@ -8,7 +8,10 @@ pub enum WindowEvent {
 	/// The window has been requested to close.
 	CloseRequested,
 	/// The window has been resized.
-	MovedOrResized { rectangle: Rectangle },
+	MovedOrResized {
+		/// New window bounds as a `Rectangle`
+		rectangle: Rectangle,
+	},
 	/// The window has been minimized.
 	Minimized,
 	/// The window has been restored.
