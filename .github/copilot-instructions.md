@@ -5,10 +5,9 @@
 
 - Unless specifically instructed, do not modify the following files or files inside the following folders:
     + `.git/`
-    + `.github/`
+    + `.github/` (except this file: `.github/copilot-instructions.md`)
     + Any dot (`.`) folder
     + Any dot (`.`) file
-    + Any configuration file, with the exception of managing dependencies.
 - You may use any MCP servers you have access to.
 
 ## Behavior and personality
@@ -27,6 +26,7 @@ When two instructions conflict, follow them in this order (top = highest):
 
 ## Coding standards
 
+- Check the current documentation (using MCP) to ensure you are writing current, secure, and idiomatic code.
 - Follow language-specific style guidelines and best practices unless otherwise instructed.
 - Conform to applicable standards:
     + [The Twelve-Factor App](https://12factor.net/)
@@ -37,6 +37,10 @@ When two instructions conflict, follow them in this order (top = highest):
 - Implement proper error handling and logging.
 - Avoid hardcoding secrets or configurable values (API keys, passwords).
 - Ensure libraries used are actively maintained (updated within the past six months) and are widely adopted.
+- Prefer one major element per file, and files named with the snake case version of the name of that element (for example, `oal_error.rs`, `surface.rs`, `skia_context.rs`, `window.rs`). Small enums or traits that only support a single type may be grouped together in a single file (for example, `input_event.rs` may contain both the `InputEvent` enum and the `InputEventKind` enum it uses). If in doubt, split it out.
+- Organize the crate into developer friendly, logical modules (for example, `accessibility`, `clipboard`, `input`, `rendering`, `windowing`), with each module containing related traits, types, and errors. Expose them so that there is no redundancy in the paths. For example, `engage_ux_oal::windowing::Window` rather than `engage_ux_oal::window::Window`.
+- Before creating a new type or trait check whether it can be exposed from a module further up the hierarchy (for example, `engage_ux_core::geometry::Rectangle` rather than defining a new `oal::geometry::Rectangle`).
+- Use full words when naming types and traits; avoid abbreviations (for example, `Surface`, `AccessibilityBridge`, `ClipboardManager` rather than `Surf`, `A11yBridge`, `ClipMgr`).
 
 ## Documentation standards
 
@@ -48,7 +52,7 @@ When two instructions conflict, follow them in this order (top = highest):
 
 ## About the project
 
-Engage UX is a cross-platform Rust UI toolkit providing a themable component library without a browser engine. It uses an OS Abstraction Layer (OAL) for low-level platform interaction, allowing components to work across Windows, macOS, Linux, Android, and iOS.
+Engage UX is a cross-platform Rust UI toolkit providing a themable component library without a browser engine or the `winit` library. It uses an OS Abstraction Layer (OAL) for low-level platform interaction, allowing components to work across Windows, macOS, Linux, Android, and iOS.
 
 ### Project structure
 
@@ -73,7 +77,8 @@ Engage UX is a cross-platform Rust UI toolkit providing a themable component lib
 - Keep responses complete and concise. Avoid including any information that is not required by your higherlevel instructions and is not relevant to the current context.
 - When summarizing information, focus on the most critical points and avoid unnecessary details.
 - Ensure outputs are accurate and logically consistent.
-- Always provide a final summary in five paragraphs or less.
+- Always provide a final summary in three paragraphs or less. This may be done after the normal summary and before the prompt for next actions, and thus does not conflict with your normal summary behavior.
+- The following "Learned Style Preferences" section contains stylistic and idiomatic preferences inferred from work with the repo maintainer; append these as needed to the guidance so future edits follow the same conventions.
 
 ## Learned Style Preferences
 

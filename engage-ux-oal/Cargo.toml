@@ -7,24 +7,8 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-engage-ux-core = { path = "../engage-ux-core" }
-serde = { workspace = true }
-winit = "0.30"
-softbuffer = "0.4"
-raw-window-handle = "0.6"
 
 [dev-dependencies]
 
-[target.'cfg(target_os = "android")'.dependencies]
-
-[target.'cfg(target_os = "ios")'.dependencies]
-
-[target.'cfg(target_os = "linux")'.dependencies]
-tiny-skia = { workspace = true }
-
-[target.'cfg(target_os = "macos")'.dependencies]
-
-[target.'cfg(target_os = "windows")'.dependencies]
-
-[lints.rust]
-unsafe_code = "forbid"
+[lints]
+workspace = true

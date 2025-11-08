@@ -452,7 +452,7 @@ fn test_screen_reader_live_regions() {
 
 #### Backend
 
--	**Window Management**: Winit window backend
+-	**Window Management**: Project windowing backend (no third-party windowing crates)
 -	**Rendering**: Softbuffer software renderer
 
 ### macOS Testing
@@ -467,7 +467,7 @@ fn test_screen_reader_live_regions() {
 
 #### Backend
 
--	**Window Management**: Winit window backend
+-	**Window Management**: Project windowing backend (no third-party windowing crates)
 -	**Rendering**: Softbuffer software renderer
 
 ### Linux Testing
@@ -482,7 +482,7 @@ fn test_screen_reader_live_regions() {
 
 #### Backend
 
--	**Window Management**: Winit window backend
+-	**Window Management**: Project windowing backend (no third-party windowing crates)
 -	**Rendering**: Softbuffer software renderer
 
 ### Android Testing
@@ -497,7 +497,7 @@ fn test_screen_reader_live_regions() {
 
 #### Backend
 
--	**Window Management**: Winit window backend
+-	**Window Management**: Project windowing backend (no third-party windowing crates)
 -	**Rendering**: Softbuffer software renderer
 
 ### iOS Testing
@@ -512,7 +512,7 @@ fn test_screen_reader_live_regions() {
 
 #### Backend
 
--	**Window Management**: Winit window backend
+-	**Window Management**: Project windowing backend (no third-party windowing crates)
 -	**Rendering**: Softbuffer software renderer
 
 ## Test Coverage Strategy

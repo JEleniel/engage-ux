@@ -14,13 +14,14 @@
 
 mod modules;
 
+// NOTE: compatibility shim removed — prerelease API cleanup
+
 // Keep a few top-level modules for small shared primitives and properties
 pub mod component_properties;
 
 pub use modules::*;
 
-// Top-level color palette module for library users: `engage_ux::color::Ansi::RED`
-pub mod color;
+// NOTE: top-level color compatibility module removed as part of cleanup
 
 #[cfg(test)]
 mod tests {

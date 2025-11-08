@@ -5,85 +5,92 @@ This document lists all the external libraries and technologies used in the Enga
 ## Core Dependencies
 
 ### Async Runtime
+
 - **tokio** (v1.41) - Async runtime with full features
-  + Used for: Event handling, async component operations, non-blocking I/O
-  + License: MIT
-  + Status: Active (updated Oct 2024)
+    + Used for: Event handling, async component operations, non-blocking I/O
+    + License: MIT
+    + Status: Active (updated Oct 2024)
 
 ### Serialization
+
 - **serde** (v1.0) - Serialization framework with derive macros
-  + Used for: Theme serialization, configuration
-  + License: MIT OR Apache-2.0
-  + Status: Active
+    + Used for: Theme serialization, configuration
+    + License: MIT OR Apache-2.0
+    + Status: Active
 
 - **serde_json** (v1.0) - JSON serialization
-  + Used for: Theme files, JSON configuration
-  + License: MIT OR Apache-2.0
-  + Status: Active
+    + Used for: Theme files, JSON configuration
+    + License: MIT OR Apache-2.0
+    + Status: Active
 
 ### Bit Manipulation
+
 - **bitflags** (v2.x) - Bitflag macro for efficient flag management
-  + Used for: Keyboard modifiers, component states
-  + License: MIT OR Apache-2.0
-  + Status: Active
+    + Used for: Keyboard modifiers, component states
+    + License: MIT OR Apache-2.0
+    + Status: Active
 
 ## Media Processing
 
 ### Image Support
+
 - **image** (v0.25) - Image decoding and encoding
-  + Formats: PNG, JPEG, WebP, GIF, BMP, TIFF
-  + Used for: Image component, avatar component, icon loading
-  + License: MIT OR Apache-2.0
-  + Status: Active (updated Sept 2024)
+    + Formats: PNG, JPEG, WebP, GIF, BMP, TIFF
+    + Used for: Image component, avatar component, icon loading
+    + License: MIT OR Apache-2.0
+    + Status: Active (updated Sept 2024)
 
 ### Font Processing
+
 - **fontdue** (v0.9) - TrueType/OpenType font parser and rasterizer
-  + Used for: Font loading, font rendering, text layout
-  + License: MIT OR Apache-2.0
-  + Status: Active
+    + Used for: Font loading, font rendering, text layout
+    + License: MIT OR Apache-2.0
+    + Status: Active
 
 ### SVG Processing
+
 - **usvg** (v0.44) - SVG parser with security features
-  + Used for: SVG parsing, script blocking, icon rendering
-  + Features: Automatic script/event handler blocking
-  + License: MPL-2.0
-  + Status: Active (updated Nov 2024)
+    + Used for: SVG parsing, script blocking, icon rendering
+    + Features: Automatic script/event handler blocking
+    + License: MPL-2.0
+    + Status: Active (updated Nov 2024)
 
 - **resvg** (v0.44) - SVG renderer
-  + Used for: SVG to raster conversion
-  + License: MPL-2.0
-  + Status: Active (updated Nov 2024)
+    + Used for: SVG to raster conversion
+    + License: MPL-2.0
+    + Status: Active (updated Nov 2024)
 
 ## Platform Abstraction Layer
 
 ### Window Management
-- **winit** (v0.30) - Cross-platform window creation and management
-  + Platforms: Windows, macOS, Linux (X11/Wayland), Android, iOS
-  + Used for: Window creation, event loops, input handling
-  + License: Apache-2.0
-  + Status: Active (updated Oct 2024)
+
+- Project-managed windowing backend (in-tree) - Minimal, repo-maintained window creation and event-loop plumbing.
+    + Used for: Window creation, surface attachment, and integration with an application-provided main event loop. Platform crates should not introduce external high-level windowing crates; instead they implement the small WindowBackend API used by the OAL.
+    + Rationale: Keeps platform backends small, auditable, and consistent with the project's requirement that embedding applications supply the primary event loop.
 
 - **raw-window-handle** (v0.6) - Window handle abstraction
-  + Used for: Platform-agnostic window handle representation
-  + License: MIT OR Apache-2.0
-  + Status: Active
+    + Used for: Platform-agnostic window handle representation (interop with native APIs)
+    + License: MIT OR Apache-2.0
+    + Status: Active
 
 ### Rendering
 
 #### Cross-Platform
+
 - **softbuffer** (v0.4) - Software rendering backend
-  + Platforms: Windows, macOS, Android, iOS
-  + Used for: CPU-based rendering, framebuffer access
-  + License: MIT OR Apache-2.0
-  + Status: Active (updated Oct 2024)
+    + Platforms: Windows, macOS, Android, iOS
+    + Used for: CPU-based rendering, framebuffer access
+    + License: MIT OR Apache-2.0
+    + Status: Active (updated Oct 2024)
 
 #### Linux-Specific
+
 - **tiny-skia** (v0.11) - 2D graphics library
-  + Platform: Linux (X11/Wayland)
-  + Used for: High-quality rendering on Linux, anti-aliasing
-  + Features: Cairo-like API, gradients, patterns
-  + License: BSD-3-Clause
-  + Status: Active (updated Oct 2024)
+    + Platform: Linux (X11/Wayland)
+    + Used for: High-quality rendering on Linux, anti-aliasing
+    + Features: Cairo-like API, gradients, patterns
+    + License: BSD-3-Clause
+    + Status: Active (updated Oct 2024)
 
 ## Technology Selection Criteria
 
@@ -99,38 +106,45 @@ All dependencies meet the following requirements:
 ## Platform-Specific Technology Choices
 
 ### Windows
-- Window backend: **winit** (Win32 integration)
+
+- Window backend: Project-managed windowing backend (Win32 integration maintained in-tree)
 - Renderer: **softbuffer**
 - Accessibility: UI Automation (stub implementation for future)
 
 ### macOS
-- Window backend: **winit** (Cocoa integration)
+
+- Window backend: Project-managed windowing backend (Cocoa integration maintained in-tree)
 - Renderer: **softbuffer**
 - Accessibility: NSAccessibility (stub implementation for future)
 
 ### Linux
-- Window backend: **winit** (X11/Wayland integration)
+
+- Window backend: Project-managed windowing backend (X11/Wayland integration maintained in-tree)
 - Renderer: **tiny-skia** (high-quality 2D)
 - Accessibility: AT-SPI D-Bus (infrastructure implemented)
 
 ### Android
-- Window backend: **winit** (Android NDK integration)
+
+- Window backend: Project-managed windowing backend (Android NDK integration maintained in-tree)
 - Renderer: **softbuffer**
 - Accessibility: TalkBack (stub implementation for future)
 
 ### iOS
-- Window backend: **winit** (UIKit integration)
+
+- Window backend: Project-managed windowing backend (UIKit integration maintained in-tree)
 - Renderer: **softbuffer**
 - Accessibility: VoiceOver (stub implementation for future)
 
 ## Development Tools
 
 ### Code Quality
+
 - **rustfmt** - Code formatting (tab indentation enforced)
 - **clippy** - Linting (zero warnings required)
 - **cargo** - Build system and package manager
 
 ### Testing
+
 - Built-in Rust testing framework
 - 611 test functions across all crates
 - Integration tests for platform backends
@@ -156,6 +170,7 @@ Technologies being evaluated for future phases:
 ## License Compliance
 
 All dependencies use permissive licenses compatible with:
+
 - GNU GPL v3.0 (project license)
 - Commercial use
 - Distribution
@@ -173,16 +188,22 @@ All dependencies use permissive licenses compatible with:
 
 ## Current Status
 
-**Last Updated**: January 2025  
-**Total Dependencies**: 11 production libraries  
-**All Dependencies Active**: ✅ Yes (all updated within last 6 months)  
-**License Compliance**: ✅ Verified (all permissive licenses)  
-**Safety Compliance**: ✅ All safe Rust (`#![forbid(unsafe_code)]` enforced)  
+**Last Updated**: January 2025
+
+**Total Dependencies**: 11 production libraries
+
+**All Dependencies Active**: ✅ Yes (all updated within last 6 months)
+
+**License Compliance**: ✅ Verified (all permissive licenses)
+
+**Safety Compliance**: ✅ All safe Rust (`#![forbid(unsafe_code)]` enforced)
+
 **Edition**: Rust 2024
 
 ### Dependency Versions (Verified)
 
 Core dependencies from workspace:
+
 - **serde**: v1.0 (serialization framework)
 - **serde_json**: v1.0 (JSON support)
 - **tokio**: v1.41 (async runtime)
@@ -194,7 +215,8 @@ Core dependencies from workspace:
 - **tiny-skia**: v0.11 (2D graphics for Linux)
 
 Platform abstraction (engage-ux-oal specific):
-- **winit**: v0.30 (cross-platform windowing)
+
+- Project-managed windowing backend (in-tree, no high-level third-party windowing crates)
 - **softbuffer**: v0.4 (software rendering)
 - **raw-window-handle**: v0.6 (window handle abstraction)
 

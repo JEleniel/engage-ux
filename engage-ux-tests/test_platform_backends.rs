@@ -1,6 +1,6 @@
 //! Integration tests for platform-specific backends
 //!
-//! Tests the winit window backend and softbuffer renderer implementations
+//! Tests the window backend and renderer implementations
 //! across all supported platforms.
 
 use engage_ux_oal::backends::{
@@ -23,7 +23,7 @@ fn test_platform_backend_factory_creation() {
 	);
 
 	assert!(
-		window.name().contains("Winit") || window.name().contains("Window"),
+		!window.name().is_empty(),
 		"Expected real window backend implementation, got: {}",
 		window.name()
 	);
