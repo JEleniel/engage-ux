@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 
 use crate::modules::event::event::Event;
 use serde::Serialize;
@@ -13,7 +13,7 @@ use tokio::sync::mpsc::{self, UnboundedReceiver, UnboundedSender};
 /// `EventType::Custom.data` when present.
 pub struct EventBus {
 	tx: Arc<UnboundedSender<Event>>,
-	rx: Arc<UnboundedReceiver<Event>>,
+	rx: Arc<Mutex<UnboundedReceiver<Event>>>,
 }
 
 impl EventBus {
@@ -23,7 +23,7 @@ impl EventBus {
 
 		Self {
 			tx: Arc::new(tx),
-			rx: Arc::new(rx),
+			rx: Arc::new(Mutex::new(rx)),
 		}
 	}
 
@@ -53,7 +53,9 @@ impl EventBus {
 	}
 
 	/// Subscribe to receive events.
-	pub fn subscribe(&self) -> Arc<UnboundedReceiver<Event>> {
+	/// Subscribe to receive events. Returns a thread-safe shared receiver wrapped
+	/// in an Arc<Mutex<_>> so synchronous consumers can lock and poll events.
+	pub fn subscribe(&self) -> Arc<Mutex<UnboundedReceiver<Event>>> {
 		self.rx.clone()
 	}
 }

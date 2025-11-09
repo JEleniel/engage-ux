@@ -79,6 +79,9 @@ Engage UX is a cross-platform Rust UI toolkit providing a themable component lib
 - Ensure outputs are accurate and logically consistent.
 - Always provide a final summary in three paragraphs or less. This may be done after the normal summary and before the prompt for next actions, and thus does not conflict with your normal summary behavior.
 - The following "Learned Style Preferences" section contains stylistic and idiomatic preferences inferred from work with the repo maintainer; append these as needed to the guidance so future edits follow the same conventions.
+- Always maintain the `docs/design/agents/TODO.md` file as a checklist of outstanding work.
+- Remove items from the TODO and add them to the CHANGELOG as you complete them.
+- Always read the TODO when planning work.
 
 ## Learned Style Preferences
 
@@ -88,5 +91,5 @@ The following are stylistic and idiomatic preferences inferred from work with th
 - Palettes as namespaces: use unit structs as namespaces for palettes (for example `pub struct Ansi; impl Ansi { pub const RED: Color = ... }`). This keeps constants discoverable (e.g. `engage_ux::color::Ansi::RED`).
 - Public API stability: expose consumer-friendly re-exports at the crate for developer ease but avoid shims or stubs unless the maintainers explicitly ask for them. This is a prerelease crate so backward compatibility is not a primary concern.
 - Documentation: add rustdoc comments to public constants and types. Keep naming neutral and descriptive (avoid brand names or trademarked phrases; explain inspirations without explicit references when necessary).
-- Patch discipline: make small, focused patches; run tests immediately after changes; avoid mass reformatting of unrelated files. Use `rustfmt`/project formatter for style consistency, and preserve existing public APIs unless intentionally changing them.
 - Communication & verification: commit messages and patch explanations should be concise and include what was changed and how it was verified (tests/build). Prefer a short summary in PRs and a quick test result.
+- Continue working until all items in the current checklist are complete and verified. This includes running tests, verifying formatting, and ensuring documentation is updated.
