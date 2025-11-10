@@ -138,3 +138,10 @@ pids/
 *.pid
 *.pid.lock
 *.seed
+
+# Ignore generated bindings written into the protocol crate when developing
+# (we keep a checked-in, known-good `src/xdg_client.rs` as the fallback).
+/xdg-protocols/src/xdg_client.generated.rs
+/xdg-protocols/src/*.generated.rs
+/xdg-protocols/generated/
+/xdg-protocols/out/

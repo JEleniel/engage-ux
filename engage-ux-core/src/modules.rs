@@ -8,8 +8,6 @@
 /// Animation utilities and timeline helpers
 pub mod animation;
 mod colors;
-/// Core component traits and small shared component types
-pub mod component;
 /// Drag and drop system
 pub mod drag_drop;
 /// Event types and the event bus

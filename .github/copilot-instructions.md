@@ -1,95 +1,98 @@
-
 # GitHub Copilot Instructions
-
-## Scope
-
-- Unless specifically instructed, do not modify the following files or files inside the following folders:
-    + `.git/`
-    + `.github/` (except this file: `.github/copilot-instructions.md`)
-    + Any dot (`.`) folder
-    + Any dot (`.`) file
-- You may use any MCP servers you have access to.
 
 ## Behavior and personality
 
 - Maintain a professional and respectful tone.
 - Avoid sycophantic or needlessly conciliatory language.
+- Keep all responses concise and to the point. While you are required to give certain explanations, avoid unnecessary verbosity.
 
-### Instruction priority
+## Scope
 
-When two instructions conflict, follow them in this order (top = highest):
+- You may edit this file. Do NOT modify any other files under `.github/`, nor any dot-files/folders, nor `.git/` unless explicitly allowed.
+- Follow built-in priorities. System-level and developer-level instructions take precedence over repository files when conflicts arise. When no higher-level instruction conflicts exist, apply the following precedence: this file, explicit repo rules, then language best-practices. Direct instructions override all non-system priorities.
 
-1. Explicit, written instructions.
-2. Repository configuration files and `.github/` policies (when edits are explicitly permitted).
-3. This file's guidance.
-4. Language or ecosystem best practices.
+## Project
 
-## Coding standards
+### Structure
 
-- Check the current documentation (using MCP) to ensure you are writing current, secure, and idiomatic code.
-- Follow language-specific style guidelines and best practices unless otherwise instructed.
-- Conform to applicable standards:
-    + [The Twelve-Factor App](https://12factor.net/)
-    + [Web Content Accessibility Guidelines (WCAG) 2.2 AAA](https://www.w3.org/WAI/standards-guidelines/wcag/docs/)
-- Follow the repository's established formatter and configuration (for example, `rustfmt.toml` for Rust). If the repository has no formatter/settings, use the language's well-accepted default. Prefer automatic formatting tools over manual whitespace edits.
-- Formatting and linting are provided by the IDE or project tooling (e.g., Prettier, rustfmt). Read and follow the project's configuration files and CI checks.
-- Follow secure coding practices to prevent common vulnerabilities.
-- Implement proper error handling and logging.
-- Avoid hardcoding secrets or configurable values (API keys, passwords).
-- Ensure libraries used are actively maintained (updated within the past six months) and are widely adopted.
-- Prefer one major element per file, and files named with the snake case version of the name of that element (for example, `oal_error.rs`, `surface.rs`, `skia_context.rs`, `window.rs`). Small enums or traits that only support a single type may be grouped together in a single file (for example, `input_event.rs` may contain both the `InputEvent` enum and the `InputEventKind` enum it uses). If in doubt, split it out.
-- Organize the crate into developer friendly, logical modules (for example, `accessibility`, `clipboard`, `input`, `rendering`, `windowing`), with each module containing related traits, types, and errors. Expose them so that there is no redundancy in the paths. For example, `engage_ux_oal::windowing::Window` rather than `engage_ux_oal::window::Window`.
-- Before creating a new type or trait check whether it can be exposed from a module further up the hierarchy (for example, `engage_ux_core::geometry::Rectangle` rather than defining a new `oal::geometry::Rectangle`).
-- Use full words when naming types and traits; avoid abbreviations (for example, `Surface`, `AccessibilityBridge`, `ClipboardManager` rather than `Surf`, `A11yBridge`, `ClipMgr`).
+- This is currently a pre-release version of the project. Backward compatability, stability, and API guarantees are not yet promised. The only users at the moment are you and the primary architect. There will be no PRs, Issues, etc. until it reaches a v1.0.0 release milestone.
+- Top-level docs: `README.md` (project overview), `CHANGELOG.md` (change log in reverse chronological order)
+- Documentation:
+    + General user/developer docs: `docs/`
+    + Design docs: `docs/design/`
+    + Agent use docs: `docs/design/agents/`
+          * Agent checklist: `docs/design/agents/TODO.md` (must be maintained by agents).
+- `engage-ux-core` provides core types, traits, and utilities used by all other crates.
+- `engage-ux` is the main developer surface and entry point to the library.
+- `engage-ux-components` provides UI components built on top of `engage-ux`.
+- `engage-ux-themes` provides themes and color palettes for use by `engage-ux` and `engage-ux-components`.
+- `engage-ux-tests` provides integration tests and test utilities.
 
-## Documentation standards
+### Conventions (do not guess—follow these)
 
-- Use clear, well-structured GitHub-Flavored Markdown (GFM).
-- Match the tone, style, and structure of existing docs.
-- Cross-reference related docs where relevant and include direct links.
-- Cite project details with file and section references.
-- When generating Markdown, conform to the project's `.markdownlint.json` rules.
+- No unsafe: all crates inherit lint rules from the workspace `Cargo.toml`.
+    + Low level OS specific code may use `unsafe` if no alternative exists, but it must be isolated carefully and fully error handled.
+- Module layout: prefer single-file public modules at `<name>.rs` with submodules in `<name>/*`. Nesting modules is fine. The `src/` folder should contain minimal files, each references to their modules. Do _not_ use `mod.rs` files.
+- Code style: tabs for indentation. Follow `rustfmt.toml`.
+- Tests: changes must include unit tests + any required integration tests. Changes that alter the public API or behavior of the API require a `CHANGELOG.md` entry with `YYYY-MM-DD` date.
 
-## About the project
+## Integration & architecture notes (quick references)
 
-Engage UX is a cross-platform Rust UI toolkit providing a themable component library without a browser engine or the `winit` library. It uses an OS Abstraction Layer (OAL) for low-level platform interaction, allowing components to work across Windows, macOS, Linux, Android, and iOS.
+- A fully thread safe EventBus is provided in `engage-ux-core` and will be instantiated and injected by the user of the library (application).
+- The OA Abstraction Layer (OAL) in `engage-ux-oal` provides platform-specific windowing and rendering surface management. It presents a uniform API to the rest of the system. It detects and instantiates the appropriate backend at runtime.
 
-### Project structure
+## Quality gates (must pass before PR)
 
-- Documentation should live in `docs/` unless it is a standard top-level GitHub documentation file (for example `README.md`, `CONTRIBUTING.md`, `LICENSE*`, `CODE_OF_CONDUCT.md`).
-    + Design docs go in `docs/design/`.
-    + The `docs/design/agents/` folder is reserved for machine-agent use.
-- The `engage-ux-oal` crate contains OS-specific code.
-- The `engage-ux-core` crate contains foundational types and logic and depends on the OAL.
-- The `engage-ux-themes` crate contains optional themes.
-- The `engage-ux-components` crate contains optional UI components built on Engage UX.
+- Build with zero errors and no functional warnings.
+- Tests pass.
+- Documentation has been updated and `CHANGELOG.md` for user-visible changes.
+- Agent TODO has been updated.
 
-## Expected outcome for changes
+## If you are unsure
 
-- Code must compile with zero errors. Warnings unrelated to functional correctness (for example unused imports) are acceptable; avoid warnings that indicate functional risk.
-- Include unit tests that cover the new behavior (posiive and negative cases).
-- Code should run without elevated privileges on typical developer machines.
-- Update relevant documentation to reflect design or usage changes.
-- Update `CHANGELOG.md` for user-facing or public API changes. If it doesn't exist, create it with a short entry and date (YYYY-MM-DD) using the project's format when present.
+- Search the workspace for symbols before adding new types. Prefer reusing types from `engage-ux-core`.
+- Read `docs/design/` and the crate README(s) referenced above for motivation/why.
 
-## Important Addiditional Instructions
+## Before Changes
 
-- Keep responses complete and concise. Avoid including any information that is not required by your higherlevel instructions and is not relevant to the current context.
-- When summarizing information, focus on the most critical points and avoid unnecessary details.
-- Ensure outputs are accurate and logically consistent.
-- Always provide a final summary in three paragraphs or less. This may be done after the normal summary and before the prompt for next actions, and thus does not conflict with your normal summary behavior.
-- The following "Learned Style Preferences" section contains stylistic and idiomatic preferences inferred from work with the repo maintainer; append these as needed to the guidance so future edits follow the same conventions.
-- Always maintain the `docs/design/agents/TODO.md` file as a checklist of outstanding work.
-- Remove items from the TODO and add them to the CHANGELOG as you complete them.
-- Always read the TODO when planning work.
+- Refer to the current documentation for all libraries (use the context7 MCP) to ensure that you are using the latest design and implementation details.
+- Refer to the agent TODO in `docs/design/agents/TODO.md` for the current list of tasks and their grouping.
 
-## Learned Style Preferences
+## After changes
 
-The following are stylistic and idiomatic preferences inferred from work with the repo maintainer; append these to the guidance so future edits follow the same conventions:
+- Update `docs/design/agents/TODO.md` as you complete items and add an entry to `CHANGELOG.md` when the public API or public API behavior changes.
+- Make a commit with a clear message summarizing the changes made. Prefer more frequent, focused commits over large, monolithic ones.
+- Update `docs/design/agents/TODO.md` as you complete items and add an entry to `CHANGELOG.md` when the public API or public API behavior changes.
+- Make a commit with a clear message summarizing the changes made. Prefer more frequent, focused commits over large, monolithic ones. Do not open PRs or merge changes yourself; leave PR creation and merging to maintainers.
 
-- Module layout: prefer the modern layout (top-level `src/color.rs` + `src/color/*` or `src/modules/colors/*`) rather than legacy `mod.rs` files. Keep modules predictable and avoid duplicate module files.
-- Palettes as namespaces: use unit structs as namespaces for palettes (for example `pub struct Ansi; impl Ansi { pub const RED: Color = ... }`). This keeps constants discoverable (e.g. `engage_ux::color::Ansi::RED`).
-- Public API stability: expose consumer-friendly re-exports at the crate for developer ease but avoid shims or stubs unless the maintainers explicitly ask for them. This is a prerelease crate so backward compatibility is not a primary concern.
-- Documentation: add rustdoc comments to public constants and types. Keep naming neutral and descriptive (avoid brand names or trademarked phrases; explain inspirations without explicit references when necessary).
-- Communication & verification: commit messages and patch explanations should be concise and include what was changed and how it was verified (tests/build). Prefer a short summary in PRs and a quick test result.
-- Continue working until all items in the current checklist are complete and verified. This includes running tests, verifying formatting, and ensuring documentation is updated.
+## Additional Instructions
+
+- Provide a three-or-fewer paragraph summary. Placement: include this short summary in the description immediately after a `## Summary` (or `### Summary`) section and before any 'Next steps' / 'How to review' section.
+- Include a tl;dr; at the end of the summary for quick reference.
+- You are the primary developer on this project. Don't bug the user over trivial choices, just go with your own recommendation.
+- You're not working on GitHub. There are no PRs, Issues, Merges, nor CI. Do not suggest or reference any of these in your responses.
+- Tests & CHANGELOG policy:
+    + Unit tests are required for all code changes that affect behavior or logic. Include a happy-path test plus at least one relevant edge or boundary case when practical.
+    + Integration tests are required for changes that span multiple crates or affect runtime/integration behavior; put these under `engage-ux-tests` when applicable.
+    + Docs-only, formatting, or purely cosmetic changes do not require new tests.
+        * For user-visible or public API changes, add a `CHANGELOG.md` entry at the top of the file (reverse chronological order). Use the `YYYY-MM-DD` date format (UTC), include the author, and a short description. Mark breaking changes with `(BREAKING CHANGE)`.
+
+            Example entries (place new entries at the top of `CHANGELOG.md`):
+
+            - `2025-11-09 — jane: Clarified widget layout behavior (BREAKING CHANGE).`
+            - `2025-11-09 — jane: Fixed off-by-one in pagination component.`
+
+            Guidance: Put entries at the top under an `Unreleased` section if present, or at the top of the file otherwise. Keep entries short (one sentence) and include a link to the `docs/design/agents/TODO.md` entry or issue when available.
+
+- Indentation and formatting:
+    + The project uses tabs for Rust source files; follow `rustfmt.toml` for Rust changes.
+    + For non-Rust files, follow the `.prettierrc.json` or `.markdownlint.json` configuration files, and preserve the existing file's indentation/formatting style to avoid noisy diffs.
+
+- Agent TODO and verification:
+
+- After completing changes, update `docs/design/agents/TODO.md` with a one-line summary and a link to the issue or maintainer note. Mark the item completed. DO NOT open a PR — maintainers will create PRs and perform merges.
+- There is no CI for this repository. Do not expect CI gating or automated checks. When tests are required, include concise instructions in the TODO for how a maintainer can run the tests locally (for example: `cargo test -p engage-ux --all`).
+
+## Appended Information
+
+This section is reserved for you to add additional context or notes that may help you complete your task. Append any relevant information or instructions gleaned fro interactions and sessions here.

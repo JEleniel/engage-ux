@@ -1,3 +1,2 @@
-// Platform-specific backends. Each backend is feature-gated.
-#[cfg(feature = "wayland")]
+// Platform-specific backends.
 pub mod wayland;

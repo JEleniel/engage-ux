@@ -15,14 +15,21 @@ tempfile = { version = "3", optional = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 wayland-client = { version = "0.29", optional = true }
+wayland-protocols = { version = "0.32", features = ["client"], optional = true }
 
 [dev-dependencies]
 
 [features]
 # Minimal default feature set. Heavy optional backends (skia, skia-gpu) will be added later.
-default = []
+default = ["wayland"]
 # Optional platform backends
-wayland = ["memfd", "once_cell", "tempfile", "wayland-client"]
+wayland = [
+  "memfd",
+  "once_cell",
+  "tempfile",
+  "wayland-client",
+  "wayland-protocols",
+]
 
 [lints]
 workspace = true

@@ -20,24 +20,3 @@ pub enum Direction {
 	/// Right
 	Right,
 }
-
-/// Directions as measured by a compass
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum CompassDirection {
-	/// North
-	North,
-	/// North East
-	NorthEast,
-	/// East
-	East,
-	/// South East
-	SouthEast,
-	/// South
-	South,
-	/// South West
-	SouthWest,
-	/// West
-	West,
-	/// North West
-	NorthWest,
-}

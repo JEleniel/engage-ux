@@ -1,9 +1,9 @@
-//! Wayland backend for the OAL. Feature-gated behind `wayland` feature.
-#![cfg(feature = "wayland")]
+//! Wayland backend for the OAL.
 
 use crate::OalError;
+use crate::engage_ux_oal::types::{UnitScale, View};
 use crate::{DeviceRect, DeviceSize};
-use crate::{Frame, Oal, Window};
+use crate::{Frame, Window};
 use std::cell::RefCell;
 use std::sync::Arc;
 
@@ -24,6 +24,26 @@ use wayland_client::protocol::wl_shm::WlShm;
 use wayland_client::protocol::wl_shm_pool::WlShmPool;
 use wayland_client::protocol::wl_surface::WlSurface;
 use wayland_client::{Display, EventQueue, GlobalManager};
+// `xdg-protocols` crate removed from workspace. Provide minimal local
+// placeholder types so the Wayland backend compiles and can be fleshed out
+// later if XDG support is re-introduced.
+// These are intentionally minimal and may be replaced with the real types
+// or a feature-gated dependency in future work.
+#[allow(dead_code)]
+#[allow(non_camel_case_types)]
+pub(crate) struct XdgWmBase;
+
+#[allow(dead_code)]
+pub(crate) struct XdgSurface;
+
+#[allow(dead_code)]
+pub(crate) struct XdgToplevel;
+
+#[derive(Clone, Debug)]
+pub(crate) struct XdgSurfaceHandle;
+
+#[derive(Clone, Debug)]
+pub(crate) struct XdgToplevelHandle;
 
 use memfd::MemfdOptions;
 use once_cell::sync::Lazy;
@@ -33,7 +53,7 @@ use std::io::{Seek, SeekFrom, Write};
 use std::os::unix::io::AsRawFd;
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::mpsc::{SyncSender, sync_channel};
+// no local mpsc re-exports needed here; use fully-qualified paths where required
 use tempfile::tempfile;
 
 // Global WaylandHandle to allow non-main threads (or builders) to obtain a
@@ -199,7 +219,7 @@ impl WaylandRuntime {
 	pub fn process_main_thread_tasks(
 		&mut self,
 		budget: std::time::Duration,
-	) -> Result<(), WaylandError> {
+	) -> Result<(), OalError> {
 		use std::time::Instant;
 
 		let deadline = Instant::now() + budget;
@@ -209,7 +229,7 @@ impl WaylandRuntime {
 			// First, poll any subscribed EventBus for shutdown/window events.
 			if let Some(rx_arc) = &self.event_rx {
 				if let Ok(mut guard) = rx_arc.lock() {
-					use tokio::sync::mpsc::error::TryRecvError;
+					// no local TryRecvError import needed; match on receiver errors directly
 					loop {
 						match guard.try_recv() {
 							Ok(evt) => match evt {
@@ -288,7 +308,7 @@ impl WaylandRuntime {
 		if std::time::Instant::now() <= deadline {
 			self.event_queue
 				.dispatch_pending(&mut (), |_, _, _| {})
-				.map_err(|e| WaylandError::DispatchError(e))?;
+				.map_err(|e| OalError::Wayland(format!("wayland dispatch failed: {:?}", e)))?;
 		}
 
 		Ok(())
@@ -306,12 +326,21 @@ impl WaylandRuntime {
 			.instantiate_exact::<WlCompositor>(1)
 			.map_err(|_| OalError::PlatformNotSupported)?;
 		let surface = compositor.create_surface();
+		// Initialize unit scale (default) and a view aligning top-left of the
+		// canvas to (0,0) in Units.
+		let unit_scale = UnitScale::default();
+		let unit_size = unit_scale.device_to_unit_size(DeviceSize::new(width, height));
 		let win = WaylandWindow {
 			surface: Arc::new(surface),
 			size: RefCell::new(DeviceSize::new(width, height)),
 			shm: self.shm.clone(),
 			buffers: Arc::new(std::sync::Mutex::new(Vec::new())),
+			view: RefCell::new(View::new(0, 0, unit_size)),
+			unit_scale,
+			xdg_surface: None,
+			xdg_toplevel: None,
 		};
+
 		Ok(Box::new(win))
 	}
 }
@@ -331,6 +360,13 @@ pub struct WaylandWindow {
 	size: RefCell<DeviceSize>,
 	shm: Main<WlShm>,
 	buffers: Arc<std::sync::Mutex<Vec<ShmBuffer>>>,
+	/// Logical view (viewport) into the canvas expressed in Units.
+	view: RefCell<View>,
+	/// Scale used to convert Units <-> device pixels for this window.
+	unit_scale: UnitScale,
+	// Optional xdg wrappers for top-level window management.
+	xdg_surface: Option<XdgSurfaceHandle>,
+	xdg_toplevel: Option<XdgToplevelHandle>,
 }
 
 struct ShmBuffer {
@@ -341,6 +377,8 @@ struct ShmBuffer {
 	width: u32,
 	height: u32,
 	stride: i32,
+	// Reusable temporary pixel buffer to avoid per-frame allocations.
+	tmp: RefCell<Vec<u8>>,
 }
 
 impl ShmBuffer {
@@ -375,7 +413,7 @@ fn choose_free_matching_index(infos: &[ShmInfo], width: u32, height: u32) -> Opt
 	None
 }
 
-fn create_anonymous_file(size: usize) -> Result<File, WaylandError> {
+fn create_anonymous_file(size: usize) -> Result<File, OalError> {
 	// Try memfd_create first; fallback to tempfile
 	if let Ok(m) = MemfdOptions::default().create("engage_shm") {
 		let file = m.into_file();
@@ -388,18 +426,15 @@ fn create_anonymous_file(size: usize) -> Result<File, WaylandError> {
 	Ok(file)
 }
 
-#[derive(Debug, Clone, Error)]
-pub enum WaylandError {
-	#[error("I/O error: {0}")]
-	Io(#[from] std::io::Error),
-}
+// Wayland-specific error enum removed; platform code maps errors into the
+// crate-level `OalError` to avoid duplicate/local error type usage.
 
 #[cfg(test)]
 mod tests {
 	use super::RuntimeMessage;
 	use super::WaylandHandle;
 	use super::create_anonymous_file;
-	use crate::traits::Oal;
+	use crate::engage_ux_oal::traits::PlatformTrait as OalTrait;
 	use std::sync::mpsc::sync_channel;
 	use std::time::Duration;
 
@@ -524,14 +559,15 @@ fn create_shm_buffer(shm: &Main<WlShm>, width: u32, height: u32) -> Result<ShmBu
 		width,
 		height,
 		stride,
+		tmp: RefCell::new(vec![0u8; size]),
 	})
 }
 
 #[cfg(test)]
 mod surface_tests {
 	use super::*;
-	use crate::traits::Surface;
-	use crate::types::DeviceSize;
+	use crate::engage_ux_oal::traits::Surface;
+	use crate::engage_ux_oal::types::DeviceSize;
 	use once_cell::sync::Lazy;
 	use std::sync::Mutex;
 	use std::thread;
@@ -706,15 +742,17 @@ impl WaylandWindow {
 			.lock()
 			.map_err(|_| OalError::ResourceUnavailable("buffers lock poisoned".into()))?;
 
-		// Try to find a free buffer
-		let mut idx = None;
-		for (i, b) in bufs.iter().enumerate() {
-			if !b.busy.load(Ordering::SeqCst) && b.matches(width, height) {
-				idx = Some(i);
-				break;
-			}
-		}
+		// Build ShmInfo list to choose a free matching buffer (prefer reuse).
+		let infos: Vec<ShmInfo> = bufs
+			.iter()
+			.map(|b| ShmInfo {
+				busy: b.busy.load(Ordering::SeqCst),
+				width: b.width,
+				height: b.height,
+			})
+			.collect();
 
+		let mut idx = choose_free_matching_index(&infos, width, height);
 		if idx.is_none() {
 			// create new buffer
 			let b = create_shm_buffer(&self.shm, width, height)?;
@@ -725,32 +763,37 @@ impl WaylandWindow {
 		let buf = &mut bufs[idx.unwrap()];
 		buf.busy.store(true, Ordering::SeqCst);
 
-		// Write pixels (convert RGBA -> ARGB native-endian) into the anonymous file
+		// Write pixels (convert RGBA -> ARGB native-endian) into the reusable tmp buffer
 		let stride = buf.stride as usize;
 		let size = stride * height as usize;
-		let mut out: Vec<u8> = vec![0u8; size];
-
-		for y in 0..height as usize {
-			for x in 0..width as usize {
-				let src_off = (y * width as usize + x) * 4;
-				let r = pixels[src_off];
-				let g = pixels[src_off + 1];
-				let bpx = pixels[src_off + 2];
-				let a = pixels[src_off + 3];
-				let pixel_u32: u32 =
-					((a as u32) << 24) | ((r as u32) << 16) | ((g as u32) << 8) | (bpx as u32);
-				let bytes = pixel_u32.to_ne_bytes();
-				let dst_off = y * stride + x * 4;
-				out[dst_off..dst_off + 4].copy_from_slice(&bytes);
+		{
+			let mut out = buf.tmp.borrow_mut();
+			if out.len() < size {
+				out.resize(size, 0u8);
 			}
-		}
 
-		// write to file
-		let mut f = &buf.file;
-		f.seek(SeekFrom::Start(0))
-			.map_err(|e| OalError::Other(format!("seek failed: {}", e)))?;
-		f.write_all(&out)
-			.map_err(|e| OalError::Other(format!("write failed: {}", e)))?;
+			for y in 0..height as usize {
+				for x in 0..width as usize {
+					let src_off = (y * width as usize + x) * 4;
+					let r = pixels[src_off];
+					let g = pixels[src_off + 1];
+					let bpx = pixels[src_off + 2];
+					let a = pixels[src_off + 3];
+					let pixel_u32: u32 =
+						((a as u32) << 24) | ((r as u32) << 16) | ((g as u32) << 8) | (bpx as u32);
+					let bytes = pixel_u32.to_ne_bytes();
+					let dst_off = y * stride + x * 4;
+					out[dst_off..dst_off + 4].copy_from_slice(&bytes);
+				}
+			}
+
+			// write to file
+			let mut f = &buf.file;
+			f.seek(SeekFrom::Start(0))
+				.map_err(|e| OalError::Other(format!("seek failed: {}", e)))?;
+			f.write_all(&out[0..size])
+				.map_err(|e| OalError::Other(format!("write failed: {}", e)))?;
+		}
 
 		// Attach and commit
 		self.surface.attach(Some(&buf.buffer), 0, 0);
@@ -777,9 +820,82 @@ impl Window for WaylandWindow {
 		// No-op here; the OAL top-level should expose a process API. Window may delegate.
 		Ok(())
 	}
+
+	fn set_title(&self, _title: &str) -> Result<(), OalError> {
+		// Top-level title management (xdg) is not yet implemented in this runtime.
+		// Return UnsupportedOperation until xdg integration is added.
+		Err(OalError::UnsupportedOperation)
+	}
+
+	fn set_decorations(&self, _decorated: bool) -> Result<(), OalError> {
+		// Decorations require xdg-shell to be implemented. No-op for now.
+		Ok(())
+	}
+
+	fn set_size(&self, size: DeviceSize) -> Result<(), OalError> {
+		let mut cur = self.size.borrow_mut();
+		cur.width = size.width;
+		cur.height = size.height;
+		Ok(())
+	}
+
+	fn size(&self) -> Result<DeviceSize, OalError> {
+		Ok(*self.size.borrow())
+	}
+
+	fn set_visible(&self, _visible: bool) -> Result<(), OalError> {
+		// Visibility is managed by the compositor/xdg; treat as no-op for now.
+		Ok(())
+	}
+
+	fn set_minimized(&self, _minimized: bool) -> Result<(), OalError> {
+		// Minimization depends on xdg_toplevel; not implemented.
+		Err(OalError::UnsupportedOperation)
+	}
+
+	fn set_maximized(&self, _maximized: bool) -> Result<(), OalError> {
+		// Maximization depends on xdg_toplevel; not implemented.
+		Err(OalError::UnsupportedOperation)
+	}
+
+	fn close(&self) -> Result<(), OalError> {
+		// No top-level protocol implemented; user should signal close via EventBus.
+		Err(OalError::UnsupportedOperation)
+	}
+
+	fn attach_event_bus(&self, _bus: engage_ux_core::event::EventBus) -> Result<(), OalError> {
+		// The Wayland runtime supports an optional global EventBus subscription
+		// via WaylandRuntime::new_with_event_bus. Per-window event bus wiring is
+		// not implemented; return UnsupportedOperation to indicate TODO.
+		Err(OalError::UnsupportedOperation)
+	}
+
+	fn set_view(&self, view: View) -> Result<(), OalError> {
+		let mut v = self.view.borrow_mut();
+		*v = view;
+		// Update the device size to match the new view's unit size using the
+		// window's unit_scale so callers that query size() see the correct
+		// device pixel dimensions.
+		let device = self.unit_scale.units_to_device_size(v.size);
+		let mut cur = self.size.borrow_mut();
+		cur.width = device.width;
+		cur.height = device.height;
+		Ok(())
+	}
+
+	fn get_view(&self) -> Result<View, OalError> {
+		Ok(*self.view.borrow())
+	}
+
+	fn move_view_by(&self, dx: i32, dy: i32) -> Result<(), OalError> {
+		let mut v = self.view.borrow_mut();
+		v.offset_x = v.offset_x.saturating_add(dx);
+		v.offset_y = v.offset_y.saturating_add(dy);
+		Ok(())
+	}
 }
 
-impl Oal for WaylandHandle {
+impl crate::engage_ux_oal::traits::PlatformTrait for WaylandHandle {
 	fn queue_main_thread(
 		&self,
 		task: Box<dyn FnOnce() -> Result<(), OalError> + Send + 'static>,
@@ -830,7 +946,7 @@ impl WaylandSurface {
 	}
 }
 
-impl crate::traits::Surface for WaylandSurface {
+impl crate::engage_ux_oal::traits::Surface for WaylandSurface {
 	fn present_frame(&self, frame: Frame, dirty: &[DeviceRect]) -> Result<(), OalError> {
 		self.handle
 			.present_to_surface(self.id, frame, dirty.to_vec())
@@ -849,9 +965,8 @@ impl crate::traits::Surface for WaylandSurface {
 // is enabled. This returns a `WaylandSurface` that enqueues presents to the
 // runtime mailbox. If the runtime hasn't been brought up by the embedder this
 // returns ResourceUnavailable.
-impl crate::traits::SurfaceBuilder {
-	#[cfg(feature = "wayland")]
-	pub fn build(self) -> Result<Box<dyn crate::traits::Surface>, OalError> {
+impl crate::engage_ux_oal::traits::SurfaceBuilder {
+	pub fn build(self) -> Result<Box<dyn crate::engage_ux_oal::traits::Surface>, OalError> {
 		let s = WaylandSurface::new(self.width, self.height)?;
 		Ok(Box::new(s))
 	}

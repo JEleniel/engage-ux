@@ -11,15 +11,84 @@ This document describes a proposed OS Abstraction Layer (OAL) for the Engage UX 
 
 ## High-level choices and rationale
 
-- Use a layered approach: a small, stable set of OAL traits (windowing, input, clipboard, accessibility, native view hosting, fonts, timer).
--- Rendering backend: prefer Skia for high-fidelity drawing and GPU acceleration. The OAL must define a Surface abstraction that can be backed either by a GPU-accelerated surface or by a software rasterizer. Implementations SHOULD attempt to initialize GPU backing when available, but MUST fall back to software rasterization deterministically when GPU initialization fails or is unsupported by the runtime environment.
+## Public API — Class diagram (Mermaid)
+
+The diagram below shows the primary public types and traits exposed by the
+`engage-ux-oal` crate's `traits` module and their high-level relationships.
+
+```mermaid
+classDiagram
+    class Frame {
+        +Option<Vec<u8>> rgba_pixels
+        +DeviceSize size
+    }
+
+    class Surface {
+        <<interface>>
+        +present_frame(Frame frame, DeviceRect[] dirty) Result
+        +invalidate_region(DeviceRect[] rects) Result
+        +size() DeviceSize
+    }
+
+    class SurfaceBuilder {
+        +u32 width
+        +u32 height
+        +Option<bool> prefer_gpu
+        +bool debug
+        +build() Result~Box<Surface>~
+    }
+
+    SurfaceBuilder --> Surface
+    Surface o-- Frame : presents
+
+    class Window {
+        <<interface>>
+        +present(Frame frame, DeviceRect[] dirty) Result
+        +poll_events() Result
+        +process_main_thread_tasks() Result
+        +set_title(&str) Result
+        +set_decorations(bool) Result
+        +set_size(DeviceSize) Result
+        +set_visible(bool) Result
+        +set_minimized(bool) Result
+        +set_maximized(bool) Result
+        +close() Result
+        +attach_event_bus(EventBus) Result
+    }
+
+    class WindowBuilder {
+        +u32 width
+        +u32 height
+        +Option<String> title
+        +bool decorated
+        +bool resizable
+        +Option<String> app_id
+        +build() Result~Box<Window>~
+    }
+
+    WindowBuilder --> Window
+    Window --> Surface
+
+    class AccessibilityBridge {
+        <<interface>>
+        +publish_event(AccessibilityPayload) Result
+    }
+
+    class Oal {
+        <<interface>>
+        +queue_main_thread(task: FnOnce() -> Result) Result
+        +queue_main_thread_with_handle(...) Result~oneshot::Receiver~
+    }
+
+    Oal ..> Window : manages
+    Oal ..> Surface : may create/manage
+    AccessibilityBridge ..> Oal : optional bridge
+
+```
 
 -- Do not depend on upstream windowing libraries such as `winit` (or similar) inside platform crates — this project intentionally implements its own minimal windowing/event plumbing because such libraries do not satisfy the project's cross-platform or threading model requirements.
 
--- Use the types provided by `engage-ux-core` for platform-neutral events, accessibility nodes, and rendering commands.
-    + The event bus will be initialized by a higher level and passed into the constructor (as needed) of the OAL implementation.
-    + The OAL may subscribe to the event bus to respond to events, and may use the event bus to emit events back to the core, such as input events or accessibility events.
-    + The Geometry module contains primitive geometric types, as well as a bounding box model. The bounding box of an element includes both the margin and padding.
+- The Geometry module contains primitive geometric types, as well as a bounding box model. The bounding box of an element includes both the margin and padding.
 
 ## Contract (small)
 

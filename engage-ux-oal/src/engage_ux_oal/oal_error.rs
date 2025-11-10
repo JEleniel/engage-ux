@@ -1,12 +1,28 @@
 use thiserror::Error;
 
-#[derive(Debug, Clone, Error)]
+#[derive(Debug, Error)]
 pub enum OalError {
-	#[cfg(feature = "wayland")]
-	#[error("A Wayland error occurred: {0:?}")]
-	WaylandError(#[from] wayland_client::Error),
 	#[error("Platform not supported")]
 	PlatformNotSupported,
+
+	#[error("Operation must be called from the main thread")]
+	WrongThread,
+
+	#[error("Resource unavailable: {0}")]
+	ResourceUnavailable(String),
+
+	#[error("Invalid handle")]
+	InvalidHandle,
+
+	#[error("Unsupported operation")]
+	UnsupportedOperation,
+
+	#[error("I/O error: {0:?}")]
+	Io(#[from] std::io::Error),
+
+	#[error("Wayland error: {0}")]
+	Wayland(String),
+
 	#[error("Other error: {0}")]
 	Other(String),
 }
