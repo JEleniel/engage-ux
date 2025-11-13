@@ -1,0 +1,92 @@
+name: 'Story'
+about: 'Capture user stories, acceptance criteria, estimates, and design links for planning and tracking work.'
+title: '[story] '
+labels: ['story']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to describe a user story or product/task-level story. Keep the user story clear and include acceptance criteria and any design artifacts.
+
+  - type: input
+    id: summary
+    attributes:
+      label: 'One-line summary'
+      description: 'Short title for the story.'
+      placeholder: 'e.g. "Compact virtualized list component for long lists"'
+
+  - type: textarea
+    id: user_story
+    attributes:
+      label: 'User story (As a / I want / So that)'
+      description: 'Write the story in the format: As a <role>, I want <capability>, so that <benefit>.'
+      placeholder: 'As a developer, I want a virtualized list component so that large lists render efficiently.'
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 'Acceptance criteria'
+      description: 'List clear, testable acceptance criteria. Use bullet points.'
+      placeholder: |
+        - Renders 100k items with memory usage under X
+        - Exposes stable API for item renderer
+
+  - type: dropdown
+    id: estimate
+    attributes:
+      label: 'Estimate (t-shirt)'
+      description: 'Rough effort estimate to help planning.'
+      options:
+        - label: 'XS'
+          value: xs
+        - label: 'S'
+          value: s
+        - label: 'M'
+          value: m
+        - label: 'L'
+          value: l
+        - label: 'XL'
+          value: xl
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 'Priority'
+      description: 'Business priority for scheduling.'
+      options:
+        - label: 'P0 — blocker / must ship'
+          value: p0
+        - label: 'P1 — high'
+          value: p1
+        - label: 'P2 — normal'
+          value: p2
+        - label: 'P3 — low'
+          value: p3
+
+  - type: input
+    id: designs
+    attributes:
+      label: 'Design / mock links'
+      description: 'Links to Figma, screenshots, or example repos.'
+      placeholder: 'https://www.figma.com/file/..., https://github.com/...'
+
+  - type: textarea
+    id: implementation_notes
+    attributes:
+      label: 'Implementation notes (optional)'
+      description: 'Technical notes, dependencies, or approach suggestions for implementers.'
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 'Pre-submit checklist'
+      options:
+        - label: 'Acceptance criteria are clear and testable'
+        - label: 'Designs or mocks attached (if applicable)'
+        - label: 'Estimate provided'
+        - label: 'I searched for similar stories or issues'
+
+  - type: attachments
+    id: attachments
+    attributes:
+      label: 'Attachments (screenshots, design files, or artifacts)'

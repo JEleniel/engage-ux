@@ -37,9 +37,9 @@ Examples of behavior that contributes to a positive environment for our communit
 
 **First offense**: A private, written warning shall be sent to the violator providing clarity around the nature of the violation and an explanation of why the behavior was inappropriate. A public apology may be requested.
 
-**Second offense**: The violater shall be banned from our organization and our community. The ban may be appealed.
+**Second offense**: The violator shall be banned from our organization and our community. The ban may be appealed.
 
-**Further offenses**: The violator shall be permanently banned from our organization and comminuty without the possibility of appeal or repeal.
+**Further offenses**: The violator shall be permanently banned from our organization and community without the possibility of appeal or repeal.
 
 - Discussions of politics or political topics
 - Discussion of theological, religious, or spiritual topics

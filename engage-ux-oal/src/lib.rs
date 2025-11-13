@@ -1,10 +1,17 @@
-//! OS Abstraction Layer (OAL) crate - public traits and types.
-#![allow(missing_docs)]
+//! OS Abstraction Layer for Engage UX
 //!
-//! This crate defines the minimal, stable API surface for platform services used by
-//! `engage-ux-core`. It intentionally provides traits and light-weight types only;
-//! platform-specific crates implement these traits.
+//! This crate provides a minimal OAL implementation: unit conversions, device metrics,
+//! window handles, and an EventBus integration. Rendering backends are pluggable via
+//! the `Renderer` trait.
 
-mod engage_ux_oal;
+mod errors;
+mod oal;
 
-pub use engage_ux_oal::*;
+pub use errors::*;
+pub use oal::{
+	Canvas, DeviceMetrics, NoopRenderer, Oal, Renderer, Unit, View, Window, WindowDesc,
+	run_event_loop,
+};
+#[cfg(test)]
+#[path = "units_tests.rs"]
+mod units_tests;

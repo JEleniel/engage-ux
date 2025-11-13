@@ -1,36 +1,65 @@
 name: 'Feature request'
-about: 'Use this form to propose new features or enhancements.'
+about: 'Propose a new feature, API change, or enhancement. Provide motivation and a small design or example.'
 title: '[feature] '
 labels: ['enhancement']
 body:
-  - type: textarea
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing an improvement — good feature requests explain the problem, the users affected, and a minimal design.
+
+  - type: input
     id: summary
     attributes:
-      label: 'Summary'
-      description: 'Short description of the proposed feature.'
-      placeholder: 'A short, descriptive summary of the proposal.'
+      label: 'One-line summary'
+      description: 'Short, descriptive summary of the proposal.'
+      placeholder: 'e.g. "Add a compact list component with virtualization"'
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: 'Expected impact'
+      description: 'Rough scope / impact of the change.'
+      options:
+        - label: 'small — minimal API additions, opt-in'
+          value: small
+        - label: 'medium — new API surface or feature flag'
+          value: medium
+        - label: 'large — potential breaking change / wide impact'
+          value: large
+
   - type: textarea
     id: problem
     attributes:
       label: 'Problem to solve'
-      description: 'What problem does this feature solve? Who benefits?'
-      placeholder: 'Describe the current limitation or pain point.'
+      description: 'Describe the current limitation or user problem this feature addresses.'
+      placeholder: 'Who benefits and why is the current behavior insufficient?'
+
   - type: textarea
     id: proposal
     attributes:
-      label: 'Proposed solution'
-      description: 'Describe the proposed implementation or API changes.'
+      label: 'Proposed solution / design'
+      description: 'Describe the proposed API, UX, or implementation. Example code or sketches are helpful.'
       placeholder: 'Outline the change, including examples or pseudo-code.'
+
   - type: textarea
     id: alternatives
     attributes:
       label: 'Alternatives considered'
       description: 'Other approaches considered and why they were rejected.'
+
+  - type: textarea
+    id: migration
+    attributes:
+      label: 'Backward-compatibility / migration notes'
+      description: 'If this changes public APIs, explain migration steps or compatibility guarantees.'
+
   - type: checkboxes
     id: checklist
     attributes:
-      label: 'Checklist'
+      label: 'Pre-submit checklist'
       options:
         - label: 'I considered backwards compatibility'
-        - label: 'I considered security implications'
-        - label: 'I added tests or a test plan'
+        - label: 'I considered security and performance implications'
+        - label: 'I included a test plan or example usage'
+        - label: 'I searched existing issues and designs'
