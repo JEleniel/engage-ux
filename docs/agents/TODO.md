@@ -11,6 +11,13 @@ This file is a compact, actionable TODO for agent tasks. It is not meant to cont
 - Do NOT include completion checkmarks, dates, or long status paragraphs in this file; keep historical or release notes in `CHANGELOG.md` instead.
 - When work starts, update this file with the minimal checkbox state. When work completes, remove the item from this file and append an entry to the `CHANGELOG.md` as required by the project guidance.
 
+## Agent Work Plan (short)
+
+- [ ] Review and align agent TODO (`docs/agents/TODO.md`)
+- [ ] Prepare implementation plan
+- [ ] Update `docs/agents/TODO.md` to reflect the plan
+- [ ] Report back and propose next steps (tests, commits, further work)
+
 ## OAL Implementation (all backends)
 
 - [ ] Implement Backend trait for Wayland, X11, Windows, MacOS, iOS, Android in `engage-ux-oal`
@@ -54,3 +61,7 @@ This file is a compact, actionable TODO for agent tasks. It is not meant to cont
 - [ ] Add visual regression baseline/screenshot tests with diff reporting and cross-platform comparisons.
 - [ ] Add performance benchmarks (rendering fps, memory under load, large datasets responsiveness).
 - [ ] Expand documentation: inline API examples, tutorials, troubleshooting, and migration guides.
+
+## Recent agent actions
+
+- Core modules API review: harmonized component identifier usage to the `ComponentId` alias and introduced a `Timestamp` alias in the event module. Applied minimal edits to `engage-ux-core/src/component_properties.rs` and `engage-ux-core/src/modules/event/event.rs`. Verified with `cargo check -p engage-ux-core` (warnings only).
