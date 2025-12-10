@@ -58,6 +58,10 @@ impl Backend for WaylandBackend {
 		self.inner.as_ref().reconfigure_surface(surface, params)
 	}
 
+	fn set_surface_title(&self, surface: SurfaceHandle, title: &str) -> Result<()> {
+		self.inner.as_ref().set_surface_title(surface, title)
+	}
+
 	fn submit_render(
 		&self,
 		surface: SurfaceHandle,

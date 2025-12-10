@@ -16,8 +16,15 @@ mod modules;
 
 // NOTE: compatibility shim removed — prerelease API cleanup
 
+pub mod component;
+// Remove duplicate mod declaration
+
 // Keep a few top-level modules for small shared primitives and properties
 pub mod component_properties;
+
+// Workspace error type and convenience Result
+pub mod error;
+pub use error::{EngageError, Result as EngageResult};
 
 pub use modules::*;
 

@@ -10,6 +10,7 @@ pub struct Transform {
 }
 
 impl Transform {
+	/// Create an identity transform (no translation, unit scale, zero rotation).
 	pub fn identity() -> Self {
 		Self {
 			translate: (0.0, 0.0),

@@ -1,7 +1,8 @@
 //! Progress indicator component
 
+use crate::component::{Component, ComponentId};
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Progress indicator type
@@ -40,8 +41,8 @@ impl Progress {
 			progress_type: ProgressType::Linear,
 			show_label: false,
 			label: String::new(),
-			color: Color::from_hex("#1976D2").unwrap(),
-			background_color: Color::from_hex("#E0E0E0").unwrap(),
+			color: Color::from_hex("#1976D2").unwrap_or_default(),
+			background_color: Color::from_hex("#E0E0E0").unwrap_or_default(),
 			height: 8.0,
 			thickness: 4.0,
 		}

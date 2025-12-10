@@ -22,26 +22,34 @@ impl Platform {
 		}
 	}
 
+	/// Create a new platform surface using the provided descriptor.
 	pub fn create_surface(&self, params: SurfaceDescriptor) -> Result<SurfaceHandle> {
 		self.backend.create_surface(params)
 	}
 
+	/// Poll for platform events and return any pending `PlatformEvent`s.
 	pub fn poll_events(&self) -> Vec<PlatformEvent> {
 		self.backend.poll_events()
 	}
 
+	/// Present the provided dirty rectangles for the given surface.
 	pub fn present_frame(&self, surface: SurfaceHandle, dirty: &[Rectangle]) -> Result<()> {
 		self.backend.present_frame(surface, dirty)
 	}
 
+	/// Invalidate the given logical rectangles on the surface. Backends may
+	/// use this as a hint to repaint or flush regions.
 	pub fn invalidate_region(&self, surface: SurfaceHandle, rects: &[Rectangle]) -> Result<()> {
 		self.backend.invalidate_region(surface, rects)
 	}
 
+	/// Destroy the given surface and release associated resources.
 	pub fn destroy_surface(&self, surface: SurfaceHandle) -> Result<()> {
 		self.backend.destroy_surface(surface)
 	}
 
+	/// Reconfigure an existing surface (for example on resize). Backends may
+	/// perform efficient in-place reconfiguration or fall back to recreate.
 	pub fn reconfigure_surface(
 		&self,
 		surface: SurfaceHandle,
@@ -50,11 +58,19 @@ impl Platform {
 		self.backend.reconfigure_surface(surface, params)
 	}
 
+	/// Submit a backend-specific render job. The provided job will be invoked
+	/// on the backend's rendering thread/context.
 	pub fn submit_render(
 		&self,
 		surface: SurfaceHandle,
 		job: Box<dyn RenderCallback>,
 	) -> Result<()> {
 		self.backend.submit_render(surface, job)
+	}
+
+	/// Update the platform title for a surface. Calls through to the
+	/// backend's `set_surface_title` implementation.
+	pub fn set_surface_title(&self, surface: SurfaceHandle, title: &str) -> Result<()> {
+		self.backend.set_surface_title(surface, title)
 	}
 }

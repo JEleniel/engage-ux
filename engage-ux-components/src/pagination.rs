@@ -1,8 +1,10 @@
 //! Pagination component for navigating through pages
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Pagination variant
@@ -52,10 +54,10 @@ impl Pagination {
 			show_prev_next: true,
 			variant: PaginationVariant::Default,
 			size: PaginationSize::Medium,
-			color: Color::from_hex("#000000").unwrap(),
-			active_color: Color::from_hex("#FFFFFF").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			active_background: Color::from_hex("#1976D2").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			active_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			active_background: Color::from_hex("#1976D2").unwrap_or_default(),
 			on_change: None,
 		}
 	}

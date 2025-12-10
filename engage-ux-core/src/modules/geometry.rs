@@ -9,14 +9,24 @@
 //! of the screen if the Unit is set to 37.8 (96 PPI) and the display density is 96 PPI.
 mod border;
 mod bounds;
+mod circle;
 mod direction;
-mod offset;
+mod ellipse;
+mod line;
 mod point;
+mod polygon;
 mod rectangle;
+mod text;
+mod transform;
 
 pub use border::Border;
 pub use bounds::Bounds;
+pub use circle::Circle;
 pub use direction::Direction;
-pub use offset::Offset;
+pub use ellipse::Ellipse;
+pub use line::Line;
 pub use point::Point;
+pub use polygon::{Polygon, Polyline};
 pub use rectangle::Rectangle;
+pub use text::Text;
+pub use transform::{Move, Transform};

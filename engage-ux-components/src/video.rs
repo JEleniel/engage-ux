@@ -1,8 +1,10 @@
 //! Video player component
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Video state
@@ -59,7 +61,7 @@ impl Video {
 			controls: true,
 			width: None,
 			height: None,
-			background_color: Color::from_hex("#000000").unwrap(),
+			background_color: Color::from_hex("#000000").unwrap_or_default(),
 			on_play: None,
 			on_pause: None,
 			on_ended: None,

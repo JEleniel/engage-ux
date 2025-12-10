@@ -1,59 +1,129 @@
-/// A small wrapper for a logical canvas size and a lightweight command
-/// recording surface used by controls to emit primitive drawing commands.
-///
-/// The `Canvas` stores a logical size in OAL units and an interior-mutable
-/// command list. Controls can obtain `&Canvas` and call drawing helpers
-/// (e.g. `line`, `rect`) which record commands for the renderer to consume.
+//! Lightweight command recording surface used by UI controls to emit
+//! drawing primitives. The `Canvas` is intentionally small and stores a
+//! logical size (in OAL units) and an interior-mutable command list that
+//! consumers may record into from a shared reference.
 use std::sync::Mutex;
 
 use engage_ux_core::Color;
+use engage_ux_core::geometry::{Circle, Ellipse, Line, Point, Polygon, Polyline, Rectangle, Text};
+// styling structs are represented by primitive fields; no direct import needed
 
+/// Primitive drawing commands recorded into a `Canvas`.
+///
+/// Each variant holds the minimal data the renderer needs. Coordinates are
+/// expressed in OAL logical units (device-independent f32s). Renderers are
+/// responsible for layout, font shaping and rasterization details.
 #[derive(Debug, Clone)]
 pub enum Primitive {
+	/// A single point at `pos` with `color`.
 	Point {
-		pos: (f32, f32),
+		/// Logical coordinates of the point.
+		pos: Point,
+		/// Color of the point
 		color: Color,
 	},
+
+	/// A stroked line with stroke width and color.
 	Line {
-		a: (f32, f32),
-		b: (f32, f32),
+		/// Geometric line (start/end) from core geometry.
+		line: Line,
+		/// Stroke color
 		color: Color,
+		/// Stroke width
 		stroke: f32,
 	},
+
+	/// A circle based on the core `Circle` primitive.
 	Circle {
-		center: (f32, f32),
-		radius: f32,
+		/// Core circle (center + radius).
+		circle: Circle,
+		/// Stroke color
 		color: Color,
+		/// Stroke width
 		stroke: f32,
+		/// Filled
 		fill: bool,
 	},
-	Oval {
-		center: (f32, f32),
-		radii: (f32, f32),
+
+	/// An ellipse primitive. Uses core `Ellipse` for center and radii.
+	Ellipse {
+		/// Core ellipse (center + rx/ry).
+		ellipse: Ellipse,
+		/// Stroke color
 		color: Color,
+		/// Stroke width
 		stroke: f32,
+		/// Filled
 		fill: bool,
 	},
+
+	/// An axis-aligned rectangle. Uses the core `Rectangle` type which also
+	/// includes per-corner radii if needed.
 	Rect {
-		origin: (f32, f32),
-		size: (f32, f32),
+		/// Core rectangle describing position, size and corner radii.
+		rect: Rectangle,
+		/// Stroke color
 		color: Color,
+		/// Stroke width
 		stroke: f32,
+		/// Filled
 		fill: bool,
 	},
+
+	/// A rounded rectangle. Internally uses the core `Rectangle` which has
+	/// corner radii fields; this variant exists for clarity in recordings.
 	RoundedRect {
-		origin: (f32, f32),
-		size: (f32, f32),
-		radii: (f32, f32),
+		/// Core rectangle with corner radii set.
+		rect: Rectangle,
+		/// Stroke color
 		color: Color,
+		/// Stroke width
 		stroke: f32,
+		/// Filled
 		fill: bool,
+	},
+
+	/// A closed polygon. Uses the core `Polygon` type for point storage and
+	/// polygon operations.
+	Polygon {
+		/// Core polygon.
+		polygon: Polygon,
+		/// Stroke color
+		color: Color,
+		/// Stroke width
+		stroke: f32,
+		/// Filled
+		fill: bool,
+	},
+
+	/// An open polyline composed of straight segments. Uses core `Polyline`.
+	Polyline {
+		/// Core polyline.
+		polyline: Polyline,
+		/// Stroke color
+		color: Color,
+		/// Stroke width
+		stroke: f32,
+	},
+
+	/// Text to be drawn. Uses the core `Text` primitive which contains
+	/// position, content and font size fields. Renderer performs shaping.
+	Text {
+		/// Core text primitive.
+		text: Text,
+		/// Text color
+		color: Color,
 	},
 }
 
+/// A thread-safe, interior-mutable canvas used to record drawing commands.
+///
+/// `Canvas` is intentionally minimal: it exposes helpers to record primitives
+/// and a `drain_commands` method that returns and clears the recorded
+/// commands for consumption by a renderer.
 #[derive(Debug)]
 pub struct Canvas {
-	/// Size in logical units
+	/// Size in logical units (width, height).
 	pub size_in_units: (f32, f32),
 	/// Recorded draw commands. Interior-mutable so callers with `&Canvas`
 	/// can emit commands without requiring a mutable borrow of the window.
@@ -93,47 +163,43 @@ impl Canvas {
 	}
 
 	/// Record a point primitive.
-	pub fn point(&self, pos: (f32, f32), color: Color) {
+	pub fn point(&self, mut pos: Point, color: Color) {
 		let mut guard = self.commands.lock().unwrap();
+		// Point has no inline style field in core; record color with the primitive.
 		guard.push(Primitive::Point { pos, color });
 	}
 
 	/// Record a line primitive.
-	pub fn line(&self, a: (f32, f32), b: (f32, f32), color: Color, stroke: f32) {
+	pub fn line(&self, line: Line, color: Color, stroke: f32) {
 		let mut guard = self.commands.lock().unwrap();
+		// Do not mutate core geometry: record styling in the primitive
 		guard.push(Primitive::Line {
-			a,
-			b,
+			line,
 			color,
 			stroke,
 		});
 	}
 
 	/// Record a circle primitive.
-	pub fn circle(&self, center: (f32, f32), radius: f32, color: Color, stroke: f32, fill: bool) {
+	pub fn circle(&self, circle: Circle, color: Color, stroke: f32, fill: bool) {
 		let mut guard = self.commands.lock().unwrap();
+		// Preserve original core geometry; styling is carried by the
+		// primitive's `color`/`stroke`/`fill` fields.
 		guard.push(Primitive::Circle {
-			center,
-			radius,
+			circle,
 			color,
 			stroke,
 			fill,
 		});
 	}
 
-	/// Record an oval primitive.
-	pub fn oval(
-		&self,
-		center: (f32, f32),
-		radii: (f32, f32),
-		color: Color,
-		stroke: f32,
-		fill: bool,
-	) {
+	/// Record an ellipse primitive.
+	pub fn ellipse(&self, ellipse: Ellipse, color: Color, stroke: f32, fill: bool) {
 		let mut guard = self.commands.lock().unwrap();
-		guard.push(Primitive::Oval {
-			center,
-			radii,
+		// Do not alter the provided `Ellipse`; styling is recorded
+		// separately on the primitive.
+		guard.push(Primitive::Ellipse {
+			ellipse,
 			color,
 			stroke,
 			fill,
@@ -141,18 +207,11 @@ impl Canvas {
 	}
 
 	/// Record an axis-aligned rectangle.
-	pub fn rect(
-		&self,
-		origin: (f32, f32),
-		size: (f32, f32),
-		color: Color,
-		stroke: f32,
-		fill: bool,
-	) {
+	pub fn rect(&self, rect: Rectangle, color: Color, stroke: f32, fill: bool) {
 		let mut guard = self.commands.lock().unwrap();
+		// Preserve core rectangle data; styling is attached to the primitive.
 		guard.push(Primitive::Rect {
-			origin,
-			size,
+			rect,
 			color,
 			stroke,
 			fill,
@@ -160,24 +219,44 @@ impl Canvas {
 	}
 
 	/// Record a rounded rectangle.
-	pub fn rounded_rect(
-		&self,
-		origin: (f32, f32),
-		size: (f32, f32),
-		radii: (f32, f32),
-		color: Color,
-		stroke: f32,
-		fill: bool,
-	) {
+	pub fn rounded_rect(&self, rect: Rectangle, color: Color, stroke: f32, fill: bool) {
 		let mut guard = self.commands.lock().unwrap();
 		guard.push(Primitive::RoundedRect {
-			origin,
-			size,
-			radii,
+			rect,
 			color,
 			stroke,
 			fill,
 		});
+	}
+
+	/// Record a polygon (closed) primitive. Points should be in logical units
+	/// and will be interpreted in order; the polygon will be closed automatically
+	/// by the renderer.
+	pub fn polygon(&self, polygon: Polygon, color: Color, stroke: f32, fill: bool) {
+		let mut guard = self.commands.lock().unwrap();
+		guard.push(Primitive::Polygon {
+			polygon,
+			color,
+			stroke,
+			fill,
+		});
+	}
+
+	/// Record a polyline (open) primitive.
+	pub fn polyline(&self, polyline: Polyline, color: Color, stroke: f32) {
+		let mut guard = self.commands.lock().unwrap();
+		guard.push(Primitive::Polyline {
+			polyline,
+			color,
+			stroke,
+		});
+	}
+
+	/// Record a text primitive. `text` is owned; font handling/layout is the
+	/// responsibility of the renderer implementation.
+	pub fn text(&self, text: Text, color: Color) {
+		let mut guard = self.commands.lock().unwrap();
+		guard.push(Primitive::Text { text, color });
 	}
 
 	/// Drain and return recorded commands. The renderer can call this to

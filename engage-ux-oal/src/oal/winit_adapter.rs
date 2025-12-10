@@ -12,7 +12,9 @@ use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::Window;
 
 use crate::errors::{OalError, Result};
-use crate::oal::backend::{Backend, PlatformEvent, SurfaceHandle, SurfaceParams};
+use crate::oal::backend::{
+	Backend, PlatformEvent, SurfaceDescriptor, SurfaceHandle, SurfaceParams,
+};
 use engage_ux_core::geometry::Rectangle;
 
 use wgpu::util::DeviceExt;
@@ -38,6 +40,29 @@ pub struct WgpuRenderContext<'a> {
 	pub view: Option<&'a wgpu::TextureView>,
 	/// A mutable reference to a command encoder that jobs can record into.
 	pub encoder: Option<&'a mut wgpu::CommandEncoder>,
+}
+
+/// Create a wgpu surface from a winit `Window`.
+///
+/// Safety: `wgpu::Instance::create_surface` is marked `unsafe` because it relies on
+/// platform-specific invariants that the caller must uphold:
+///
+/// - The underlying raw window handle produced by the `Window` must remain valid for
+///   the lifetime of the returned `wgpu::Surface`.
+/// - The surface must be used on the same thread that created the window (the event-loop
+///   thread in this adapter). Creating or using the surface from other threads may
+///   lead to undefined behavior depending on the platform and GPU backend.
+/// - The `Window` must not be dropped while the surface is still in use.
+///
+/// This helper centralizes the single `unsafe` call so the safety justification is easy
+/// to review and audit. Callers must ensure they call this on the event-loop thread
+/// immediately after the window is built and store the resulting `Surface` together
+/// with the `Window` (as `GpuSurface` does) so the lifetimes are tied together.
+fn create_surface_from_window(instance: &wgpu::Instance, window: &Window) -> wgpu::Surface {
+	// Safety: see function documentation above. We call this on the event-loop thread
+	// immediately after `WindowBuilder::build()` and keep the `Window` and `Surface`
+	// together in the `GpuSurface` struct to ensure the window outlives the surface.
+	unsafe { instance.create_surface(window) }.expect("create surface")
 }
 
 /// Commands sent to the event-loop thread.
@@ -158,11 +183,13 @@ impl WinitBackend {
 
 										match wb.build(&event_loop) {
 											Ok(window) => {
-												// Safety: creating a surface from a window is unsafe
-												// per wgpu docs but required.
+												// Create the surface using the documented helper that
+												// encapsulates the `unsafe` call and explains the
+												// safety invariants. See `engage-ux-oal/README.md`
+												// for additional guidelines on the lifetime and
+												// threading requirements.
 												let surface =
-													unsafe { instance.create_surface(&window) }
-														.expect("create surface");
+													create_surface_from_window(&instance, &window);
 
 												let size = window.inner_size();
 												let caps = surface.get_capabilities(&adapter);

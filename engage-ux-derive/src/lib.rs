@@ -18,7 +18,7 @@
 //!   `#[event(crate = "my::events")]`.
 //!
 //! Example
-//! ```rust
+//! ```rust,ignore
 //! use engage_ux_derive::Event;
 //! use serde::Serialize;
 //! use engage_ux_core::types::ComponentId;
@@ -386,7 +386,7 @@ mod tests {
 	#[test]
 	fn no_event_attr_returns_none() {
 		// An unrelated attribute should produce (None, None)
-		let a: Attribute = parse_quote!(#[allow(dead_code)]);
+		let a: Attribute = parse_quote!(#[deprecated]);
 		let (c, n, cat) = parse_event_attr(&[a]).unwrap();
 		assert_eq!(c, None);
 		assert_eq!(n, None);

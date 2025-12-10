@@ -10,3 +10,15 @@
 - OAL: Added `Platform` wrapper (thin Arc<dyn Backend>) to simplify backend usage.
 - OAL: Added lightweight backend shims for Wayland and X11 that delegate to the headless backend as placeholders for future full implementations.
 - OAL: Migrated `oal` backend modules to the modern module layout (removed `mod.rs` usage and added `backends.rs`).
+
+- Tests/infra: Make `native-winit` an opt-in feature so unit tests
+	and CI run the headless backend by default. This avoids platform
+	windowing dependencies during automated runs.
+- OAL: Preserve core geometry when recording primitives to `Canvas`;
+	styling is now carried by the `Primitive` fields instead of mutating
+	the core geometry objects. This restores test expectations and
+	keeps core types device-independent.
+- Core: Derive `PartialEq` for `FillStyle` and `Ellipse` to allow
+	equality assertions in unit/integration tests.
+- Tools: Added `tools/unit-check` small harness to validate unit -> px
+	conversions quickly without building platform backends.

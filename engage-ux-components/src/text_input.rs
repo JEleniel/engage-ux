@@ -1,8 +1,10 @@
 //! Text input component
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Input type
@@ -55,10 +57,10 @@ impl TextInput {
 			disabled: false,
 			required: false,
 			autocomplete: true,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			border_color: Color::from_hex("#CCCCCC").unwrap(),
-			focus_border_color: Color::from_hex("#1976D2").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			border_color: Color::from_hex("#CCCCCC").unwrap_or_default(),
+			focus_border_color: Color::from_hex("#1976D2").unwrap_or_default(),
 			font_size: 14.0,
 			on_change: None,
 			on_focus: None,

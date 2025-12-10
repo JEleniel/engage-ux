@@ -1,8 +1,10 @@
 //! Checkbox component
 
+use crate::component::{Component, ComponentId};
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Checkbox state
@@ -36,9 +38,9 @@ impl Checkbox {
 			state: CheckboxState::Unchecked,
 			label: label.into(),
 			disabled: false,
-			color: Color::from_hex("#1976D2").unwrap(),
-			check_color: Color::from_hex("#FFFFFF").unwrap(),
-			label_color: Color::from_hex("#000000").unwrap(),
+			color: Color::from_hex("#1976D2").unwrap_or_default(),
+			check_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			label_color: Color::from_hex("#000000").unwrap_or_default(),
 			size: 20.0,
 			on_change: None,
 		}

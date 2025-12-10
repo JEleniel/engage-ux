@@ -1,6 +1,7 @@
 //! Image component for displaying images
 
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Image fit mode

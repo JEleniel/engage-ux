@@ -20,4 +20,9 @@ pub enum WindowEvent {
 	Focused,
 	/// The window has been unfocused.
 	Unfocused,
+	/// The window's title was changed.
+	TitleChanged {
+		/// New title string
+		title: String,
+	},
 }

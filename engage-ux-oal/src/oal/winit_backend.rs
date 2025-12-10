@@ -10,12 +10,11 @@ mod native {
 	use winit::window::WindowBuilder;
 
 	use crate::oal::Oal;
-	use engage_ux_core::event::keyboard_event::KeyboardModifierKeys;
 	use engage_ux_core::event::{
-		Event as CoreEvent, PointerEvent as CorePointerEvent, PointerKind,
+		Event as CoreEvent, KeyboardModifierKeys, PointerEvent as CorePointerEvent, PointerKind,
 		WindowEvent as CoreWindowEvent,
 	};
-	use engage_ux_core::geometry::{Offset, Point, Rectangle};
+	use engage_ux_core::geometry::{Move, Point, Rectangle};
 
 	/// Run the native winit event loop on the current thread. This will create
 	/// platform windows for each OAL window, map winit events to `engage-ux-core`
@@ -91,7 +90,11 @@ mod native {
 								let h_units = unit.px_to_units(size.height as f32, &oal.metrics);
 
 								let rect = Rectangle {
-									top_left: Point { x: 0.0, y: 0.0 },
+									top_left: Point {
+										x: 0.0,
+										y: 0.0,
+										style: None,
+									},
 									width: w_units,
 									height: h_units,
 								};
@@ -114,8 +117,8 @@ mod native {
 
 								let pe = CorePointerEvent {
 									kind: PointerKind::Mouse,
-									position: Point { x, y },
-									delta: Offset { x: dx, y: dy },
+									position: Point { x, y, style: None },
+									delta: Move { x: dx, y: dy },
 									buttons: 0,
 									modifiers: KeyboardModifierKeys::default(),
 									pressure: None,

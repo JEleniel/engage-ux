@@ -1,6 +1,7 @@
 use std::sync::{Arc, Mutex};
 
 use crate::modules::event::event::Event;
+use crate::component::ComponentId;
 use serde::Serialize;
 use tokio::sync::mpsc::{self, UnboundedReceiver, UnboundedSender};
 
@@ -36,7 +37,7 @@ impl EventBus {
 	/// Emit any serializable payload. The payload will be converted to JSON. Returns serde_json errors
 	pub fn emit_payload<T>(
 		&self,
-		source_component_id: u128,
+		source_component_id: ComponentId,
 		payload: T,
 	) -> Result<(), serde_json::Error>
 	where
@@ -44,11 +45,7 @@ impl EventBus {
 	{
 		let value = serde_json::to_string(&payload)?;
 
-		self.emit(Event::Custom {
-			timestamp: chrono::Utc::now(),
-			source_component_id,
-			payload: value,
-		});
+		self.emit(Event::Custom { timestamp: chrono::Utc::now(), source_component_id, payload: value });
 		Ok(())
 	}
 

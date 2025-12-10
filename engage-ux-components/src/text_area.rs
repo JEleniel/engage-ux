@@ -1,8 +1,10 @@
 //! Text area component for multi-line text input
 
+use crate::component::{Component, ComponentId};
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Text area component
@@ -34,9 +36,9 @@ impl TextArea {
 			cols: 40,
 			max_length: None,
 			read_only: false,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			border_color: Color::from_hex("#CCCCCC").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			border_color: Color::from_hex("#CCCCCC").unwrap_or_default(),
 			font_size: 14.0,
 			on_change: None,
 		}

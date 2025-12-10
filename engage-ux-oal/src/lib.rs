@@ -5,12 +5,12 @@
 //! the `Renderer` trait.
 
 mod errors;
-mod oal;
+pub mod oal;
 
 pub use errors::*;
 pub use oal::{
 	Canvas, DeviceMetrics, NoopRenderer, Oal, Renderer, Unit, View, Window, WindowDesc,
-	run_event_loop,
+	canvas::Primitive, core_adapter, run_event_loop,
 };
 #[cfg(test)]
 #[path = "units_tests.rs"]

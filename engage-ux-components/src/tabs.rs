@@ -1,8 +1,10 @@
 //! Tabbed interface component
 
+use crate::component::{Component, ComponentId};
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Tab item
@@ -78,11 +80,11 @@ impl Tabs {
 			tabs: Vec::new(),
 			active_tab: None,
 			position: TabPosition::Top,
-			color: Color::from_hex("#757575").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			active_color: Color::from_hex("#1976D2").unwrap(),
-			active_background: Color::from_hex("#FFFFFF").unwrap(),
-			border_color: Color::from_hex("#E0E0E0").unwrap(),
+			color: Color::from_hex("#757575").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			active_color: Color::from_hex("#1976D2").unwrap_or_default(),
+			active_background: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			border_color: Color::from_hex("#E0E0E0").unwrap_or_default(),
 			on_change: None,
 		}
 	}

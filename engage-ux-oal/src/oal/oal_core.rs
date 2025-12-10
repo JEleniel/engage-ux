@@ -101,9 +101,19 @@ impl Oal {
 
 		// emit an initial Window moved/resized event to indicate the window is present
 		let rectangle = engage_ux_core::geometry::Rectangle {
-			top_left: engage_ux_core::geometry::Point { x: 0.0, y: 0.0 },
+			top_left: engage_ux_core::geometry::Point {
+				x: 0.0,
+				y: 0.0,
+				style: None,
+			},
 			width: desc.size_in_units.0,
 			height: desc.size_in_units.1,
+			radius_top_left: 0.0,
+			radius_top_right: 0.0,
+			radius_bottom_right: 0.0,
+			radius_bottom_left: 0.0,
+			line_style: None,
+			fill_style: None,
 		};
 
 		self.event_bus.emit(engage_ux_core::event::Event::Window {
@@ -172,6 +182,34 @@ impl Oal {
 		}
 	}
 
+	/// Set the title of a logical window. Updates the stored title and emits
+	/// a `Custom` event so platform adapters (if present) can react.
+	pub fn set_window_title<T: Into<String>>(&self, id: u128, title: T) -> Result<()> {
+		// Acquire the windows lock; recover from poisoning
+		let mut windows_guard: MutexGuard<HashMap<u128, Window>> = match self.windows.lock() {
+			Ok(g) => g,
+			Err(_poison) => return Err(OalError::PoisonedLock("windows mutex poisoned".into())),
+		};
+
+		let win = match windows_guard.get_mut(&id) {
+			Some(w) => w,
+			None => return Err(OalError::Window(format!("window id {} not found", id))),
+		};
+
+		// Update logical window title (this emits a WindowEvent::TitleChanged)
+		win.set_title(title);
+
+		// If the logical window has an associated platform surface, also
+		// request the backend update the native window title so the change is
+		// visible to users. Use the stored title on the window as the source
+		// of truth.
+		if let Some(surface) = win.platform_surface {
+			self.platform.set_surface_title(surface, &win.title)?;
+		}
+
+		Ok(())
+	}
+
 	/// Resize a logical window and reconfigure its platform surface.
 	///
 	/// This updates the logical `Window`'s view and, if a platform surface is
@@ -205,9 +243,19 @@ impl Oal {
 
 		// Emit a moved/resized event so consumers can react.
 		let rectangle = engage_ux_core::geometry::Rectangle {
-			top_left: engage_ux_core::geometry::Point { x: 0.0, y: 0.0 },
+			top_left: engage_ux_core::geometry::Point {
+				x: 0.0,
+				y: 0.0,
+				style: None,
+			},
 			width,
 			height,
+			radius_top_left: 0.0,
+			radius_top_right: 0.0,
+			radius_bottom_right: 0.0,
+			radius_bottom_left: 0.0,
+			line_style: None,
+			fill_style: None,
 		};
 
 		self.event_bus.emit(engage_ux_core::event::Event::Window {
@@ -253,9 +301,19 @@ impl Oal {
 				self.platform.submit_render(surface, job)?;
 				let logical = canvas.logical_size();
 				let rect = engage_ux_core::geometry::Rectangle {
-					top_left: engage_ux_core::geometry::Point { x: 0.0, y: 0.0 },
+					top_left: engage_ux_core::geometry::Point {
+						x: 0.0,
+						y: 0.0,
+						style: None,
+					},
 					width: logical.0,
 					height: logical.1,
+					radius_top_left: 0.0,
+					radius_top_right: 0.0,
+					radius_bottom_right: 0.0,
+					radius_bottom_left: 0.0,
+					line_style: None,
+					fill_style: None,
 				};
 				let dirty = vec![rect];
 				self.platform.present_frame(surface, &dirty)?;
@@ -271,9 +329,19 @@ impl Oal {
 		if let Some(surface) = platform_surface {
 			let logical = canvas.logical_size();
 			let rect = engage_ux_core::geometry::Rectangle {
-				top_left: engage_ux_core::geometry::Point { x: 0.0, y: 0.0 },
+				top_left: engage_ux_core::geometry::Point {
+					x: 0.0,
+					y: 0.0,
+					style: None,
+				},
 				width: logical.0,
 				height: logical.1,
+				radius_top_left: 0.0,
+				radius_top_right: 0.0,
+				radius_bottom_right: 0.0,
+				radius_bottom_left: 0.0,
+				line_style: None,
+				fill_style: None,
 			};
 			let dirty = vec![rect];
 			self.platform.present_frame(surface, &dirty)?;

@@ -42,9 +42,10 @@ fn main() {
 		// Build a boxed render job. The job ignores the backend-provided context
 		// for this simple example and just flips the flag.
 		let job = Box::new(
-			move |_ctx: &mut dyn std::any::Any| -> engage_ux_oal::errors::Result<()> {
+			move |ctx: Box<dyn std::any::Any + Send>| -> engage_ux_oal::errors::Result<Box<dyn std::any::Any + Send>> {
+				// Flip the flag and return the context unchanged.
 				flag_job.store(true, Ordering::SeqCst);
-				Ok(())
+				Ok(ctx)
 			},
 		);
 

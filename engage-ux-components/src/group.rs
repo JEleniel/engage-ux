@@ -1,7 +1,8 @@
 //! Group component for organizing related elements
 
+use crate::component::{Component, ComponentId};
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Group orientation
@@ -43,11 +44,11 @@ impl Group {
 			collapsible: false,
 			collapsed: false,
 			show_border: true,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			border_color: Color::from_hex("#CCCCCC").unwrap(),
-			title_color: Color::from_hex("#000000").unwrap(),
-			title_background: Color::from_hex("#F5F5F5").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			border_color: Color::from_hex("#CCCCCC").unwrap_or_default(),
+			title_color: Color::from_hex("#000000").unwrap_or_default(),
+			title_background: Color::from_hex("#F5F5F5").unwrap_or_default(),
 		}
 	}
 

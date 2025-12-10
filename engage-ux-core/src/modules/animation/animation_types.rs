@@ -111,6 +111,7 @@ impl AnimationType {
 			Point {
 				x: lerp_f(ax, bx).round(),
 				y: lerp_f(ay, by).round(),
+				style: None,
 			}
 		};
 

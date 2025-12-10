@@ -1,65 +1,52 @@
-# Pull Request checklist and template
+<<<<<<< HEAD
+# Pull Request Template
 
-Use this template to create clear, reviewable pull requests. Keep the Summary short (1–2 lines) and add details in the sections below.
+## Type of change
 
----
+- [ ] Bugfix
+- [ ] Feature
+- [ ] Docs
+- [ ] Chore
 
-## Type of change (select or check all that apply)
+## Summary
 
-- [ ] Bugfix — fixes a bug without changing public API
-- [ ] Feature — adds new functionality (may change public API)
-- [ ] Docs — documentation only changes
-- [ ] Chore — tooling / CI / formatting / non-functional change
+Provide a concise summary of the change and the motivation.
 
-## Summary (1–2 lines)
+## Changes
 
-Concise description of what changed and why. If this implements a proposal, reference it.
+- Brief list of the main changes (files, behaviors, features).
 
-## What I changed (short list)
+## Related issues
 
-- Brief file/behavior list (what's touched and why). Example: `engage-ux-core/src/lib.rs: add X`.
+- Link any related issues, e.g. fixes #123
 
-## Motivation and context
+## Testing and verification
 
-Why is this change needed? Who benefits? Link any relevant design notes or issue discussions.
-
-## Related issues / PRs
-
-- Fixes / relates to: #<issue-number> (use `Fixes #123` to auto-close when merged)
-
-## Tests performed
-
-Describe how you tested the change and how reviewers can reproduce locally. Include exact commands and any feature flags.
+Describe how this change was tested (commands, environment, steps) and how to verify it locally.
 
 Example:
 
-```bash
-# run unit tests for the workspace (adjust as needed)
-cargo test -p engage-ux-core
+- Run: `make test` or `pnpm test`
+- Environment: OS, runtime versions, any env vars required (do not include secrets)
+=======
+# Pull Request
 
-# run an example where applicable
-cargo run -p engage-ux -- --example basic
-```
+Please fill out this pull request template completely. Fields marked as required must be filled.
 
-Environment: e.g. Ubuntu 22.04 aarch64, Rust 1.70.0 (do not include secrets)
+Type of Change (required):
+        - bug_fix
+        - documentation
+        - new_feature
+        - performance improvement
+        - refactor
+        - security
+        - tests
 
-If this is a code change, include at least one unit test or an integration test demonstrating the behavior.
+Does the change introduce a breaking change? (required)
+        - yes
+        - no
 
-## Backwards compatibility / migration notes
+Related Issues:
 
-If this change affects public APIs, document migration steps. Per project policy, add a one-line entry to `CHANGELOG.md` (top of file) for user-visible changes, using `YYYY-MM-DD — <author>: <short description>` format. If the change is breaking, mark it `(BREAKING CHANGE)`.
-
-## Checklist for reviewers (please check before marking ready)
-
-- [ ] I ran the relevant tests locally and they pass
-- [ ] I added/updated unit tests for my change (if applicable)
-- [ ] I updated documentation where needed (docs or inline comments)
-- [ ] If this changes public behavior, I added a `CHANGELOG.md` entry at the top of the file
-- [ ] I considered security and performance implications
-
----
-
-## Notes for maintainers (optional)
-
-Any extra details useful for the maintainer (release considerations, rollout plan, or manual steps).
-
+Description (required):
+>>>>>>> 388b8aea5e651424b70717a1a2f9395b52b41905

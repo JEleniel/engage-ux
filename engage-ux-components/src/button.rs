@@ -1,8 +1,10 @@
 //! Button component for user interaction
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
@@ -34,8 +36,8 @@ impl Button {
 			properties: ComponentProperties::new(id),
 			text: text.into(),
 			variant: ButtonVariant::Primary,
-			color: Color::from_hex("#FFFFFF").unwrap(),
-			background_color: Color::from_hex("#1976D2").unwrap(),
+			color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			background_color: Color::from_hex("#1976D2").unwrap_or_default(),
 			on_click: None,
 		}
 	}
@@ -127,7 +129,7 @@ impl std::fmt::Debug for Button {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use engage_ux_core::events::EventType;
+	use chrono::Utc;
 
 	#[test]
 	fn test_button_creation() {
@@ -154,7 +156,7 @@ mod tests {
 	#[test]
 	fn test_button_colors() {
 		let mut button = Button::new(1, "Button");
-		let color = Color::from_hex("#FF0000").unwrap();
+		let color = Color::from_hex("#FF0000").unwrap_or_default();
 		button.set_color(color.clone());
 		assert_eq!(button.color(), &color);
 	}
@@ -169,7 +171,11 @@ mod tests {
 			clicked_clone.store(true, std::sync::atomic::Ordering::Relaxed);
 		});
 
-		let event = Event::new(1, EventType::Click);
+		let event = Event::Custom {
+			timestamp: Utc::now(),
+			source_component_id: 1,
+			payload: String::from("click"),
+		};
 		button.handle_click(&event);
 
 		assert!(clicked.load(std::sync::atomic::Ordering::Relaxed));

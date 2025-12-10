@@ -1,8 +1,10 @@
 //! Dialog components (alert, modal, file dialogs)
 
+use crate::component::{Component, ComponentId};
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Dialog result
@@ -170,8 +172,8 @@ impl ConfirmDialog {
 			message: message.into(),
 			visible: false,
 			use_yes_no: false,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
 			on_confirm: None,
 			on_cancel: None,
 		}
@@ -289,9 +291,9 @@ impl Modal {
 			modal: true,
 			width: None,
 			height: None,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			overlay_color: Color::from_hex("#00000080").unwrap(), // 50% transparent black
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			overlay_color: Color::from_hex("#00000080").unwrap_or_default(), // 50% transparent black
 			on_close: None,
 		}
 	}

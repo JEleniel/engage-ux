@@ -1,8 +1,10 @@
 //! Select/Dropdown component for selecting from options
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Select option
@@ -49,9 +51,9 @@ impl Select {
 			placeholder: "Select an option...".to_string(),
 			searchable: false,
 			open: false,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			border_color: Color::from_hex("#CCCCCC").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			border_color: Color::from_hex("#CCCCCC").unwrap_or_default(),
 			on_change: None,
 		}
 	}

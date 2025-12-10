@@ -128,7 +128,7 @@ classDiagram
 
 ```rust,ignore
 // Construct device metrics: dpcm (dots per centimeter), dpi (dots per inch), dpr (device pixel ratio).
-let device_metrics = DeviceMetrics::new(37.795276_f32, 96.0_f32, 1.0_f32); // example: 96 DPI == ~37.795 dpcm
+let device_metrics = DeviceMetrics::new(96.0_f32, 1.0_f32); // example: 96 DPI
 
 let oal = Oal::new(event_bus.clone(), device_metrics)?;
 // The crate exposes `Unit` (Metric/Imperial/Point/Pixel/Custom) as the unit scale.

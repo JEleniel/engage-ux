@@ -1,8 +1,10 @@
 //! Window component for application windows
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Window state
@@ -76,11 +78,11 @@ impl Window {
 			children: Vec::new(),
 			title_bar_height: 32.0,
 			menu_bar_height: 30.0,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			title_bar_color: Color::from_hex("#FFFFFF").unwrap(),
-			title_bar_background: Color::from_hex("#2C2C2C").unwrap(),
-			border_color: Color::from_hex("#CCCCCC").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			title_bar_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			title_bar_background: Color::from_hex("#2C2C2C").unwrap_or_default(),
+			border_color: Color::from_hex("#CCCCCC").unwrap_or_default(),
 			on_close: None,
 			on_minimize: None,
 			on_maximize: None,

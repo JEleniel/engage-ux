@@ -1,7 +1,8 @@
 //! Console view component with ANSI escape code support
 
+use crate::component::{Component, ComponentId};
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// ANSI color codes
@@ -28,22 +29,22 @@ pub enum AnsiColor {
 impl AnsiColor {
 	pub fn to_color(&self) -> Color {
 		match self {
-			AnsiColor::Black => Color::from_hex("#000000").unwrap(),
-			AnsiColor::Red => Color::from_hex("#CC0000").unwrap(),
-			AnsiColor::Green => Color::from_hex("#4E9A06").unwrap(),
-			AnsiColor::Yellow => Color::from_hex("#C4A000").unwrap(),
-			AnsiColor::Blue => Color::from_hex("#3465A4").unwrap(),
-			AnsiColor::Magenta => Color::from_hex("#75507B").unwrap(),
-			AnsiColor::Cyan => Color::from_hex("#06989A").unwrap(),
-			AnsiColor::White => Color::from_hex("#D3D7CF").unwrap(),
-			AnsiColor::BrightBlack => Color::from_hex("#555753").unwrap(),
-			AnsiColor::BrightRed => Color::from_hex("#EF2929").unwrap(),
-			AnsiColor::BrightGreen => Color::from_hex("#8AE234").unwrap(),
-			AnsiColor::BrightYellow => Color::from_hex("#FCE94F").unwrap(),
-			AnsiColor::BrightBlue => Color::from_hex("#729FCF").unwrap(),
-			AnsiColor::BrightMagenta => Color::from_hex("#AD7FA8").unwrap(),
-			AnsiColor::BrightCyan => Color::from_hex("#34E2E2").unwrap(),
-			AnsiColor::BrightWhite => Color::from_hex("#EEEEEC").unwrap(),
+			AnsiColor::Black => Color::from_hex("#000000").unwrap_or_default(),
+			AnsiColor::Red => Color::from_hex("#CC0000").unwrap_or_default(),
+			AnsiColor::Green => Color::from_hex("#4E9A06").unwrap_or_default(),
+			AnsiColor::Yellow => Color::from_hex("#C4A000").unwrap_or_default(),
+			AnsiColor::Blue => Color::from_hex("#3465A4").unwrap_or_default(),
+			AnsiColor::Magenta => Color::from_hex("#75507B").unwrap_or_default(),
+			AnsiColor::Cyan => Color::from_hex("#06989A").unwrap_or_default(),
+			AnsiColor::White => Color::from_hex("#D3D7CF").unwrap_or_default(),
+			AnsiColor::BrightBlack => Color::from_hex("#555753").unwrap_or_default(),
+			AnsiColor::BrightRed => Color::from_hex("#EF2929").unwrap_or_default(),
+			AnsiColor::BrightGreen => Color::from_hex("#8AE234").unwrap_or_default(),
+			AnsiColor::BrightYellow => Color::from_hex("#FCE94F").unwrap_or_default(),
+			AnsiColor::BrightBlue => Color::from_hex("#729FCF").unwrap_or_default(),
+			AnsiColor::BrightMagenta => Color::from_hex("#AD7FA8").unwrap_or_default(),
+			AnsiColor::BrightCyan => Color::from_hex("#34E2E2").unwrap_or_default(),
+			AnsiColor::BrightWhite => Color::from_hex("#EEEEEC").unwrap_or_default(),
 		}
 	}
 }
@@ -100,8 +101,8 @@ impl Console {
 			font_family: "monospace".to_string(),
 			font_size: 12.0,
 			line_height: 1.4,
-			color: Color::from_hex("#CCCCCC").unwrap(),
-			background_color: Color::from_hex("#1E1E1E").unwrap(),
+			color: Color::from_hex("#CCCCCC").unwrap_or_default(),
+			background_color: Color::from_hex("#1E1E1E").unwrap_or_default(),
 			padding: 8.0,
 		}
 	}

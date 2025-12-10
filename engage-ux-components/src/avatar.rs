@@ -1,7 +1,8 @@
 //! Avatar component for user profiles
 
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Avatar shape
@@ -60,8 +61,8 @@ impl Avatar {
 			shape: AvatarShape::Circle,
 			size: AvatarSize::Medium,
 			alt_text: String::new(),
-			color: Color::from_hex("#FFFFFF").unwrap(),
-			background_color: Color::from_hex("#757575").unwrap(),
+			color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			background_color: Color::from_hex("#757575").unwrap_or_default(),
 			border_color: None,
 			border_width: 0.0,
 		}
@@ -250,7 +251,7 @@ mod tests {
 		assert_eq!(avatar.border_width(), 0.0);
 
 		avatar.set_border_width(2.0);
-		avatar.set_border_color(Some(Color::from_hex("#000000").unwrap()));
+		avatar.set_border_color(Some(Color::from_hex("#000000").unwrap_or_default()));
 
 		assert_eq!(avatar.border_width(), 2.0);
 		assert!(avatar.border_color().is_some());
