@@ -12,7 +12,9 @@ use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::Window;
 
 use crate::errors::{OalError, Result};
-use crate::oal::backend::{Backend, PlatformEvent, SurfaceHandle, SurfaceParams};
+use crate::oal::backend::{
+	Backend, PlatformEvent, SurfaceDescriptor, SurfaceHandle, SurfaceParams,
+};
 use engage_ux_core::geometry::Rectangle;
 
 use wgpu::util::DeviceExt;
@@ -40,6 +42,29 @@ pub struct WgpuRenderContext<'a> {
 	pub encoder: Option<&'a mut wgpu::CommandEncoder>,
 }
 
+/// Create a wgpu surface from a winit `Window`.
+///
+/// Safety: `wgpu::Instance::create_surface` is marked `unsafe` because it relies on
+/// platform-specific invariants that the caller must uphold:
+///
+/// - The underlying raw window handle produced by the `Window` must remain valid for
+///   the lifetime of the returned `wgpu::Surface`.
+/// - The surface must be used on the same thread that created the window (the event-loop
+///   thread in this adapter). Creating or using the surface from other threads may
+///   lead to undefined behavior depending on the platform and GPU backend.
+/// - The `Window` must not be dropped while the surface is still in use.
+///
+/// This helper centralizes the single `unsafe` call so the safety justification is easy
+/// to review and audit. Callers must ensure they call this on the event-loop thread
+/// immediately after the window is built and store the resulting `Surface` together
+/// with the `Window` (as `GpuSurface` does) so the lifetimes are tied together.
+fn create_surface_from_window(instance: &wgpu::Instance, window: &Window) -> wgpu::Surface {
+	// Safety: see function documentation above. We call this on the event-loop thread
+	// immediately after `WindowBuilder::build()` and keep the `Window` and `Surface`
+	// together in the `GpuSurface` struct to ensure the window outlives the surface.
+	unsafe { instance.create_surface(window) }.expect("create surface")
+}
+
 /// Commands sent to the event-loop thread.
 enum Command {
 	Create {
@@ -63,6 +88,11 @@ enum Command {
 	SubmitRender {
 		id: SurfaceId,
 		job: Box<dyn crate::oal::backend::RenderCallback>,
+		resp: Option<mpsc::Sender<Result<()>>>,
+	},
+	SetTitle {
+		id: SurfaceId,
+		title: String,
 		resp: Option<mpsc::Sender<Result<()>>>,
 	},
 	Stop,
@@ -92,33 +122,41 @@ impl WinitBackend {
 		let run_flag_thread = run_flag.clone();
 		thread::spawn(move || {
 			// Create the event loop on this thread.
-			let event_loop = EventLoop::new();
+			let event_loop = match EventLoop::new() {
+				Ok(el) => el,
+				Err(e) => {
+					eprintln!("failed to create winit event loop: {}", e);
+					return;
+				}
+			};
 
 			// Initialize wgpu instance/adapter/device on this thread.
 			let instance = wgpu::Instance::default();
-			let adapter =
+			let adapter_res =
 				pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions {
 					power_preference: wgpu::PowerPreference::HighPerformance,
 					compatible_surface: None,
 					force_fallback_adapter: false,
 				}));
 
-			let adapter = match adapter {
-				Some(a) => a,
-				None => {
+			let adapter = match adapter_res {
+				Ok(a) => a,
+				Err(_) => {
 					// If we couldn't find an adapter, exit the thread.
 					return;
 				}
 			};
 
-			let (device, queue) = match pollster::block_on(adapter.request_device(
+			let device_queue_res = pollster::block_on(adapter.request_device(
 				&wgpu::DeviceDescriptor {
-					features: wgpu::Features::empty(),
-					limits: wgpu::Limits::default(),
-					label: None,
+					required_features: wgpu::Features::empty(),
+					required_limits: wgpu::Limits::default(),
+					..Default::default()
 				},
 				None,
-			)) {
+			));
+
+			let (device, queue) = match device_queue_res {
 				Ok((d, q)) => (d, q),
 				Err(_) => return,
 			};
@@ -126,6 +164,11 @@ impl WinitBackend {
 			// Track surfaces created on this thread.
 			let mut surfaces: HashMap<SurfaceId, GpuSurface> = HashMap::new();
 			let mut next_id: SurfaceId = 1;
+
+			// Pending GPU jobs keyed by surface id. Jobs are executed during the
+			// Present pass while the backend holds a mutable encoder.
+			let mut pending_jobs: HashMap<SurfaceId, Box<dyn crate::oal::backend::RenderCallback>> =
+				HashMap::new();
 
 			// Run the event loop; integrate commands by polling the receiver
 			// during MainEventsCleared.
@@ -158,11 +201,13 @@ impl WinitBackend {
 
 										match wb.build(&event_loop) {
 											Ok(window) => {
-												// Safety: creating a surface from a window is unsafe
-												// per wgpu docs but required.
+												// Create the surface using the documented helper that
+												// encapsulates the `unsafe` call and explains the
+												// safety invariants. See `engage-ux-oal/README.md`
+												// for additional guidelines on the lifetime and
+												// threading requirements.
 												let surface =
-													unsafe { instance.create_surface(&window) }
-														.expect("create surface");
+													create_surface_from_window(&instance, &window);
 
 												let size = window.inner_size();
 												let caps = surface.get_capabilities(&adapter);
@@ -210,6 +255,19 @@ impl WinitBackend {
 										if let Some(s) = surfaces.remove(&id) {
 											let _ = resp.map(|r| r.send(Ok(())));
 											drop(s);
+										} else {
+											let _ = resp.map(|r| {
+												r.send(Err(OalError::Window(format!(
+													"surface {} not found",
+													id
+												))))
+											});
+										}
+									}
+									Command::SetTitle { id, title, resp } => {
+										if let Some(s) = surfaces.get_mut(&id) {
+											s.window.set_title(&title);
+											let _ = resp.map(|r| r.send(Ok(())));
 										} else {
 											let _ = resp.map(|r| {
 												r.send(Err(OalError::Window(format!(
@@ -452,6 +510,20 @@ impl Backend for WinitBackend {
 		self.send_cmd(cmd)?;
 		resp_rx.recv().map_err(|e| {
 			OalError::Initialization(format!("reconfigure response recv failed: {}", e))
+		})??;
+		Ok(())
+	}
+
+	fn set_surface_title(&self, surface: SurfaceHandle, title: &str) -> Result<()> {
+		let (resp_tx, resp_rx) = mpsc::channel();
+		let cmd = Command::SetTitle {
+			id: surface,
+			title: title.to_string(),
+			resp: Some(resp_tx),
+		};
+		self.send_cmd(cmd)?;
+		resp_rx.recv().map_err(|e| {
+			OalError::Initialization(format!("set title response recv failed: {}", e))
 		})??;
 		Ok(())
 	}

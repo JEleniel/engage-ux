@@ -1,8 +1,10 @@
 //! Window control components (close, minimize, maximize)
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Window control button type
@@ -33,16 +35,16 @@ impl WindowControlButton {
 	pub fn new(id: ComponentId, control_type: WindowControlType) -> Self {
 		let (color, hover_color, hover_background) = match control_type {
 			WindowControlType::Close => (
-				Color::from_hex("#000000").unwrap(),
-				Color::from_hex("#FFFFFF").unwrap(),
-				Color::from_hex("#E81123").unwrap(),
+				Color::from_hex("#000000").unwrap_or_default(),
+				Color::from_hex("#FFFFFF").unwrap_or_default(),
+				Color::from_hex("#E81123").unwrap_or_default(),
 			),
 			WindowControlType::Minimize
 			| WindowControlType::Maximize
 			| WindowControlType::Restore => (
-				Color::from_hex("#000000").unwrap(),
-				Color::from_hex("#000000").unwrap(),
-				Color::from_hex("#E0E0E0").unwrap(),
+				Color::from_hex("#000000").unwrap_or_default(),
+				Color::from_hex("#000000").unwrap_or_default(),
+				Color::from_hex("#E0E0E0").unwrap_or_default(),
 			),
 		};
 
@@ -51,7 +53,7 @@ impl WindowControlButton {
 			control_type,
 			color,
 			hover_color,
-			background_color: Color::from_hex("#00000000").unwrap(), // Transparent
+			background_color: Color::from_hex("#00000000").unwrap_or_default(), // Transparent
 			hover_background,
 			size: 46.0,
 			on_click: None,
@@ -297,7 +299,7 @@ mod tests {
 	#[test]
 	fn test_window_control_button_colors() {
 		let mut button = WindowControlButton::new(1, WindowControlType::Close);
-		let custom_color = Color::from_hex("#FF0000").unwrap();
+		let custom_color = Color::from_hex("#FF0000").unwrap_or_default();
 		button.set_color(custom_color.clone());
 		assert_eq!(button.color(), &custom_color);
 	}

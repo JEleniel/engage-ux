@@ -1,7 +1,8 @@
 //! Accordion component for collapsible content panels
 
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Accordion panel
@@ -52,10 +53,10 @@ impl Accordion {
 			properties: ComponentProperties::new(id),
 			panels: Vec::new(),
 			allow_multiple: false,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			border_color: Color::from_hex("#E0E0E0").unwrap(),
-			active_color: Color::from_hex("#F5F5F5").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			border_color: Color::from_hex("#E0E0E0").unwrap_or_default(),
+			active_color: Color::from_hex("#F5F5F5").unwrap_or_default(),
 		}
 	}
 

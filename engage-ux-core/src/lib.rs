@@ -1,5 +1,5 @@
 //! Engage UX Core - Core functionality for Engage UX - a fully themable, modular UX framework for
-//! 	Rust, providing core functionality, components, and base themes.
+//!     Rust, providing core functionality, components, and base themes.
 //!
 //! This crate provides the core functionality for Engage UX including:
 //! - Color system (RGB and HSL)
@@ -16,9 +16,18 @@ mod modules;
 
 // NOTE: compatibility shim removed — prerelease API cleanup
 
+pub mod component;
+// Remove duplicate mod declaration
+
 // Keep a few top-level modules for small shared primitives and properties
 pub mod component_properties;
 
+/// Workspace error type and convenience `Result` alias.
+///
+/// See `error.rs` for the `EngageError` variants and `Result` alias used
+/// across Engage UX crates.
+pub mod error;
+pub use error::{EngageError, Result as EngageResult};
 pub use modules::*;
 
 // NOTE: top-level color compatibility module removed as part of cleanup

@@ -1,10 +1,16 @@
-// Example: submit a simple render job to the WinitBackend's GPU thread.
-// Run with: cargo run -p engage-ux-oal --example gpu_submit --features native-winit
+//! Example: submit a simple render job to the WinitBackend's GPU thread.
+//!
+//! Run with: cargo run -p engage-ux-oal --example gpu_submit --features native-winit
+//!
+//! This example demonstrates submitting a small render job to the native
+//! winit/wgpu backend. It requires the `native-winit` feature to be enabled.
 
+#[cfg(feature = "native-winit")]
 use std::sync::{
 	Arc,
 	atomic::{AtomicBool, Ordering},
 };
+#[cfg(feature = "native-winit")]
 use std::{thread, time::Duration};
 
 fn main() {
@@ -43,6 +49,7 @@ fn main() {
 		// for this simple example and just flips the flag.
 		let job = Box::new(
 			move |_ctx: &mut dyn std::any::Any| -> engage_ux_oal::errors::Result<()> {
+				// Flip the flag and return success.
 				flag_job.store(true, Ordering::SeqCst);
 				Ok(())
 			},

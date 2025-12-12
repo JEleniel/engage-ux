@@ -1,8 +1,10 @@
 //! Video player component
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Video state
@@ -59,7 +61,7 @@ impl Video {
 			controls: true,
 			width: None,
 			height: None,
-			background_color: Color::from_hex("#000000").unwrap(),
+			background_color: Color::from_hex("#000000").unwrap_or_default(),
 			on_play: None,
 			on_pause: None,
 			on_ended: None,
@@ -119,7 +121,7 @@ impl Video {
 
 	/// Set current time in seconds (seek)
 	pub fn set_current_time(&mut self, time: f64) {
-		self.current_time = time.max(0.0).min(self.duration);
+		self.current_time = time.clamp(0.0, self.duration);
 	}
 
 	/// Get duration in seconds

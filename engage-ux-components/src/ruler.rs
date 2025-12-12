@@ -1,7 +1,8 @@
 //! Ruler component for measurement and alignment
 
+use crate::component::{Component, ComponentId};
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Ruler orientation
@@ -72,10 +73,10 @@ impl Ruler {
 			major_tick_interval: 100.0,
 			minor_tick_interval: 10.0,
 			show_labels: true,
-			color: Color::from_hex("#CCCCCC").unwrap(),
-			background_color: Color::from_hex("#F5F5F5").unwrap(),
-			tick_color: Color::from_hex("#666666").unwrap(),
-			label_color: Color::from_hex("#000000").unwrap(),
+			color: Color::from_hex("#CCCCCC").unwrap_or_default(),
+			background_color: Color::from_hex("#F5F5F5").unwrap_or_default(),
+			tick_color: Color::from_hex("#666666").unwrap_or_default(),
+			label_color: Color::from_hex("#000000").unwrap_or_default(),
 			thickness: 30.0,
 		}
 	}

@@ -3,6 +3,7 @@ resolver = "3"
 members = [
   "engage-ux",
   "engage-ux-*",
+  "tools/unit-check",
 ]
 
 [workspace.package]
@@ -43,7 +44,7 @@ tiny-skia = { version = "0.11" }
 tokio = { version = "1.41", features = ["full"] }
 usvg = { version = "0.44" }
 uuid = { version = "1.18.1", features = ["serde", "v4"] }
-wgpu = "0.16"
+wgpu = "27"
 
 [workspace.lints.rust]
 missing_docs = "warn"

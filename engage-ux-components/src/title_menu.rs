@@ -1,7 +1,8 @@
 //! Title menu component (menu bar with dropdown menus)
 
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 use crate::menu::MenuItem;
@@ -52,12 +53,12 @@ impl TitleMenu {
 			properties: ComponentProperties::new(id),
 			menus: Vec::new(),
 			active_menu: None,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#F5F5F5").unwrap(),
-			hover_color: Color::from_hex("#000000").unwrap(),
-			hover_background: Color::from_hex("#E0E0E0").unwrap(),
-			active_color: Color::from_hex("#FFFFFF").unwrap(),
-			active_background: Color::from_hex("#1976D2").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#F5F5F5").unwrap_or_default(),
+			hover_color: Color::from_hex("#000000").unwrap_or_default(),
+			hover_background: Color::from_hex("#E0E0E0").unwrap_or_default(),
+			active_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			active_background: Color::from_hex("#1976D2").unwrap_or_default(),
 			height: 30.0,
 		}
 	}

@@ -1,7 +1,8 @@
 //! Icon component for displaying icons
 
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Icon component
@@ -23,7 +24,7 @@ impl Icon {
 			properties: ComponentProperties::new(id),
 			name: name.into(),
 			size: 24.0,
-			color: Color::from_hex("#000000").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
 			rotation: 0.0,
 			flip_horizontal: false,
 			flip_vertical: false,

@@ -1,8 +1,10 @@
 //! Formatted text editor component with rich text support
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Text format style
@@ -62,10 +64,10 @@ impl TextEditor {
 			read_only: false,
 			disabled: false,
 			show_toolbar: true,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			selection_color: Color::from_hex("#B3D7FF").unwrap(),
-			toolbar_background: Color::from_hex("#F5F5F5").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			selection_color: Color::from_hex("#B3D7FF").unwrap_or_default(),
+			toolbar_background: Color::from_hex("#F5F5F5").unwrap_or_default(),
 			on_change: None,
 			on_format_change: None,
 		}

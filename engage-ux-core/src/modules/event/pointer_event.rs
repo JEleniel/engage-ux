@@ -1,6 +1,6 @@
 use crate::{
 	event::keyboard_event::KeyboardModifierKeys,
-	geometry::{Offset, Point},
+	geometry::{Move, Point},
 };
 use serde::{Deserialize, Serialize};
 
@@ -12,7 +12,8 @@ pub struct PointerEvent {
 	/// The position of the pointer event in local coordinates.
 	pub position: Point,
 	/// The change in position since the last event.
-	pub delta: Offset,
+	/// Replaced the old `Offset` type with `Move`.
+	pub delta: Move,
 	/// Bitmask of the buttons that are currently pressed.
 	pub buttons: u32,
 	/// The modifier keys that are currently pressed.

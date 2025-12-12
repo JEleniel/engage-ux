@@ -4,11 +4,16 @@
 //! with conversion between them and various utility methods.
 //! RGB is used internally since that is what most displays use.
 
+use serde::{
+	Deserialize, Serialize,
+	de::{self, Deserializer},
+};
+use serde_json::Value as JsonValue;
+
 use crate::Ansi;
-use serde::{Deserialize, Serialize};
 
 /// Represents an RGB color, provides methods for conversion and manipulation
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
 pub struct Color {
 	/// Red component (0-255)
 	pub red: u8,
@@ -168,7 +173,7 @@ impl Color {
 	/// Linearly interpolate between two colors.
 	/// `t` should be in [0.0, 1.0], where 0.0 returns self and 1.0 returns other.
 	pub fn lerp(&self, other: &Color, t: f32) -> Color {
-		let clamp = |v: f32| v.max(0.0).min(1.0);
+		let clamp = |v: f32| v.clamp(0.0, 1.0);
 		let t = clamp(t);
 		let lerp_u8 = |a: u8, b: u8| ((a as f32) + (b as f32 - a as f32) * t).round() as u8;
 		Color {
@@ -188,6 +193,155 @@ impl Default for Color {
 			green: 0,
 			blue: 0,
 			alpha: 255,
+		}
+	}
+}
+
+// Custom deserialization to support "user-friendly" theme JSON formats
+impl<'de> Deserialize<'de> for Color {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: Deserializer<'de>,
+	{
+		let value = JsonValue::deserialize(deserializer).map_err(de::Error::custom)?;
+
+		// helper to convert numeric JsonValue to u8 (accepts 0..255 ints or 0.0..1.0 floats)
+		let num_to_u8 = |v: &JsonValue| -> Option<u8> {
+			if let Some(i) = v.as_i64()
+				&& (0..=255).contains(&i)
+			{
+				return Some(i as u8);
+			}
+			if let Some(u) = v.as_u64()
+				&& u <= 255
+			{
+				return Some(u as u8);
+			}
+			if let Some(f) = v.as_f64() {
+				// treat floats in 0.0..1.0 as normalized, otherwise 0..255
+				if (0.0..=1.0).contains(&f) {
+					return Some((f * 255.0).round() as u8);
+				}
+				if (0.0..=255.0).contains(&f) {
+					return Some(f.round() as u8);
+				}
+			}
+			None
+		};
+
+		match value {
+			JsonValue::String(s) => {
+				// hex string
+				Color::from_hex(&s).map_err(de::Error::custom)
+			}
+			JsonValue::Array(arr) => {
+				// treat as rgb or rgba array
+				if arr.len() >= 3 {
+					let r = num_to_u8(&arr[0])
+						.ok_or_else(|| de::Error::custom("invalid red component"))?;
+					let g = num_to_u8(&arr[1])
+						.ok_or_else(|| de::Error::custom("invalid green component"))?;
+					let b = num_to_u8(&arr[2])
+						.ok_or_else(|| de::Error::custom("invalid blue component"))?;
+					let a = if arr.len() >= 4 {
+						num_to_u8(&arr[3])
+							.ok_or_else(|| de::Error::custom("invalid alpha component"))?
+					} else {
+						255
+					};
+					Ok(Color::new(r, g, b, a))
+				} else {
+					Err(de::Error::custom(
+						"array must be length 3 or 4 for rgb/rgba",
+					))
+				}
+			}
+			JsonValue::Object(map) => {
+				// hex
+				if let Some(hex_val) = map.get("hex")
+					&& let Some(s) = hex_val.as_str()
+				{
+					return Color::from_hex(s).map_err(de::Error::custom);
+				}
+
+				// rgb: [r,g,b] or [r,g,b,a]
+				if let Some(rgb_val) = map.get("rgb")
+					&& let Some(arr) = rgb_val.as_array()
+					&& arr.len() >= 3
+				{
+					let r = num_to_u8(&arr[0]).ok_or_else(|| de::Error::custom("invalid red"))?;
+					let g = num_to_u8(&arr[1]).ok_or_else(|| de::Error::custom("invalid green"))?;
+					let b = num_to_u8(&arr[2]).ok_or_else(|| de::Error::custom("invalid blue"))?;
+					let a = if arr.len() >= 4 {
+						num_to_u8(&arr[3]).ok_or_else(|| de::Error::custom("invalid alpha"))?
+					} else {
+						255
+					};
+					return Ok(Color::new(r, g, b, a));
+				}
+
+				// hsl: [h, s, l] or [h, s, l, a]
+				if let Some(hsl_val) = map.get("hsl")
+					&& let Some(arr) = hsl_val.as_array()
+					&& arr.len() >= 3
+				{
+					let h = arr[0]
+						.as_f64()
+						.ok_or_else(|| de::Error::custom("invalid hue"))? as f32;
+					let s = arr[1]
+						.as_f64()
+						.ok_or_else(|| de::Error::custom("invalid saturation"))? as f32;
+					let l = arr[2]
+						.as_f64()
+						.ok_or_else(|| de::Error::custom("invalid lightness"))? as f32;
+					let a = if arr.len() >= 4 {
+						let af = arr[3]
+							.as_f64()
+							.ok_or_else(|| de::Error::custom("invalid alpha"))? as f32;
+						(af * 255.0).round() as u8
+					} else {
+						255
+					};
+					return Ok(Color::from_hsla(h, s, l, a as f32 / 255.0));
+				}
+
+				// space/components pair: components are floats in 0..1
+				if map.get("space").is_some()
+					&& let Some(components) = map.get("components")
+					&& let Some(arr) = components.as_array()
+					&& arr.len() >= 3
+				{
+					let r = (arr[0].as_f64().unwrap_or(0.0) * 255.0).round() as u8;
+					let g = (arr[1].as_f64().unwrap_or(0.0) * 255.0).round() as u8;
+					let b = (arr[2].as_f64().unwrap_or(0.0) * 255.0).round() as u8;
+					let a = if arr.len() >= 4 {
+						(arr[3].as_f64().unwrap_or(1.0) * 255.0).round() as u8
+					} else {
+						255
+					};
+					return Ok(Color::new(r, g, b, a));
+				}
+
+				// direct components: red/green/blue/(alpha)
+				if map.contains_key("red") && map.contains_key("green") && map.contains_key("blue")
+				{
+					let r = num_to_u8(map.get("red").unwrap())
+						.ok_or_else(|| de::Error::custom("invalid red"))?;
+					let g = num_to_u8(map.get("green").unwrap())
+						.ok_or_else(|| de::Error::custom("invalid green"))?;
+					let b = num_to_u8(map.get("blue").unwrap())
+						.ok_or_else(|| de::Error::custom("invalid blue"))?;
+					let a = if let Some(av) = map.get("alpha") {
+						num_to_u8(av).ok_or_else(|| de::Error::custom("invalid alpha"))?
+					} else {
+						255
+					};
+					return Ok(Color::new(r, g, b, a));
+				}
+
+				Err(de::Error::custom("unsupported color format"))
+			}
+			_ => Err(de::Error::custom("invalid color representation")),
 		}
 	}
 }
@@ -324,7 +478,7 @@ mod tests {
 		let c = Color::from_rgb(255, 0, 0); // red
 		let contrast = c.contrast_color();
 		// Should be a color with hue roughly opposite to red (cyan/greenish)
-		let (h, _, _, _) = contrast.to_hsla();
+		let (h, ..) = contrast.to_hsla();
 		assert!((h > 170.0 && h < 200.0) || (h > 350.0 || h < 10.0));
 	}
 

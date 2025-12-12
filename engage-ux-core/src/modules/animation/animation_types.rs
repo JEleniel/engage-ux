@@ -96,21 +96,22 @@ impl AnimationType {
 	/// Compute the animated value for an already-eased progress (0.0..1.0).
 	/// This is the method other modules expect (`interpolate` in animation.rs).
 	pub fn interpolate(&self, eased_progress: f32) -> AnimationValue {
-		let p = eased_progress.max(0.0).min(1.0);
+		let p = eased_progress.clamp(0.0, 1.0);
 
 		// helper for lerping floats (used for alpha expressed as 0.0..1.0)
 		let lerp_f32 = |a: f32, b: f32, p: f32| -> f32 {
-			let p = p.max(0.0).min(1.0);
+			let p = p.clamp(0.0, 1.0);
 			a + (b - a) * p
 		};
 
 		// helper for lerping float coordinates into an integer Point (crate Point uses i32)
-		let lerp_to_point = |ax: f32, ay: f32, bx: f32, by: f32, p: f32| -> Point {
-			let p = p.max(0.0).min(1.0);
+			let lerp_to_point = |ax: f32, ay: f32, bx: f32, by: f32, p: f32| -> Point {
+			let p = p.clamp(0.0, 1.0);
 			let lerp_f = |a: f32, b: f32| -> f32 { a + (b - a) * p };
 			Point {
 				x: lerp_f(ax, bx).round(),
 				y: lerp_f(ay, by).round(),
+				style: None,
 			}
 		};
 
@@ -121,7 +122,7 @@ impl AnimationType {
 				end_alpha,
 				..
 			} => {
-				let a = lerp_f32(*start_alpha, *end_alpha, p).max(0.0).min(1.0);
+				let a = lerp_f32(*start_alpha, *end_alpha, p).clamp(0.0, 1.0);
 				AnimationValue::Alpha((a * 255.0).round() as u8)
 			}
 			AnimationType::Scale { from, to, .. } => AnimationValue::Scale(from + (to - from) * p),

@@ -21,8 +21,10 @@ impl Unit {
 	/// Returns a floating point pixel value; callers may round if they
 	/// require integer pixels.
 	pub fn to_px(&self, units: f32, metrics: &DeviceMetrics) -> f32 {
+		// Derive DPCM on demand from DPI to keep DeviceMetrics minimal.
+		let dpcm = metrics.dpi / 2.54_f32;
 		let px_per_u = match self {
-			Unit::Metric => metrics.dpcm,
+			Unit::Metric => dpcm,
 			Unit::Imperial => metrics.dpi,
 			Unit::Point => metrics.dpi / 72.0_f32,
 			Unit::Pixel => 1.0_f32,
@@ -35,9 +37,10 @@ impl Unit {
 	/// Convert pixel values into logical units using device metrics.
 	pub fn px_to_units(&self, px: f32, metrics: &DeviceMetrics) -> f32 {
 		let px = px / metrics.dpr;
+		let dpcm = metrics.dpi / 2.54_f32;
 
 		let px_per_u = match self {
-			Unit::Metric => metrics.dpcm,
+			Unit::Metric => dpcm,
 			Unit::Imperial => metrics.dpi,
 			Unit::Point => metrics.dpi / 72.0_f32,
 			Unit::Pixel => 1.0_f32,

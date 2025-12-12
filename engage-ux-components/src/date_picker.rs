@@ -1,8 +1,10 @@
 //! Date picker component
 
+use crate::component::{Component, ComponentId};
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Date struct
@@ -93,12 +95,12 @@ impl DatePicker {
 			open: false,
 			show_week_numbers: false,
 			first_day_of_week: 0,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			selected_color: Color::from_hex("#FFFFFF").unwrap(),
-			selected_background: Color::from_hex("#1976D2").unwrap(),
-			today_color: Color::from_hex("#1976D2").unwrap(),
-			disabled_color: Color::from_hex("#CCCCCC").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			selected_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			selected_background: Color::from_hex("#1976D2").unwrap_or_default(),
+			today_color: Color::from_hex("#1976D2").unwrap_or_default(),
+			disabled_color: Color::from_hex("#CCCCCC").unwrap_or_default(),
 			on_change: None,
 		}
 	}

@@ -1,7 +1,8 @@
 //! Toast notification component
 
+use crate::component::{Component, ComponentId};
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Toast position on screen
@@ -55,9 +56,9 @@ impl Toast {
 			dismissible: true,
 			visible: false,
 			icon: None,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			border_color: Color::from_hex("#E0E0E0").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			border_color: Color::from_hex("#E0E0E0").unwrap_or_default(),
 		}
 	}
 
@@ -120,29 +121,29 @@ impl Toast {
 		// Update colors based on variant
 		match variant {
 			ToastVariant::Success => {
-				self.background_color = Color::from_hex("#4CAF50").unwrap();
-				self.color = Color::from_hex("#FFFFFF").unwrap();
-				self.border_color = Color::from_hex("#388E3C").unwrap();
+				self.background_color = Color::from_hex("#4CAF50").unwrap_or_default();
+				self.color = Color::from_hex("#FFFFFF").unwrap_or_default();
+				self.border_color = Color::from_hex("#388E3C").unwrap_or_default();
 			}
 			ToastVariant::Error => {
-				self.background_color = Color::from_hex("#F44336").unwrap();
-				self.color = Color::from_hex("#FFFFFF").unwrap();
-				self.border_color = Color::from_hex("#D32F2F").unwrap();
+				self.background_color = Color::from_hex("#F44336").unwrap_or_default();
+				self.color = Color::from_hex("#FFFFFF").unwrap_or_default();
+				self.border_color = Color::from_hex("#D32F2F").unwrap_or_default();
 			}
 			ToastVariant::Warning => {
-				self.background_color = Color::from_hex("#FF9800").unwrap();
-				self.color = Color::from_hex("#000000").unwrap();
-				self.border_color = Color::from_hex("#F57C00").unwrap();
+				self.background_color = Color::from_hex("#FF9800").unwrap_or_default();
+				self.color = Color::from_hex("#000000").unwrap_or_default();
+				self.border_color = Color::from_hex("#F57C00").unwrap_or_default();
 			}
 			ToastVariant::Info => {
-				self.background_color = Color::from_hex("#2196F3").unwrap();
-				self.color = Color::from_hex("#FFFFFF").unwrap();
-				self.border_color = Color::from_hex("#1976D2").unwrap();
+				self.background_color = Color::from_hex("#2196F3").unwrap_or_default();
+				self.color = Color::from_hex("#FFFFFF").unwrap_or_default();
+				self.border_color = Color::from_hex("#1976D2").unwrap_or_default();
 			}
 			ToastVariant::Default => {
-				self.background_color = Color::from_hex("#FFFFFF").unwrap();
-				self.color = Color::from_hex("#000000").unwrap();
-				self.border_color = Color::from_hex("#E0E0E0").unwrap();
+				self.background_color = Color::from_hex("#FFFFFF").unwrap_or_default();
+				self.color = Color::from_hex("#000000").unwrap_or_default();
+				self.border_color = Color::from_hex("#E0E0E0").unwrap_or_default();
 			}
 		}
 	}

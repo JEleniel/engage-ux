@@ -16,7 +16,6 @@ pub struct Window {
 	/// Stable identifier for the window (UUID-based u128).
 	pub id: u128,
 	/// Human-readable title for the window. May be unused in headless builds.
-	#[allow(dead_code)]
 	pub(crate) title: String,
 	/// Logical canvas backing this window. The canvas size equals the
 	/// underlying native window size expressed in OAL Units. There is no
@@ -71,10 +70,29 @@ impl Window {
 	/// Request a frame to be produced for this window (emits `FrameRequested`).
 	pub fn request_frame(&self) {
 		// Notify via EventBus that a frame was requested
-		let _ = self.event_bus.emit(Event::Custom {
+		self.event_bus.emit(Event::Custom {
 			source_component_id: self.id,
 			timestamp: chrono::Utc::now(),
 			payload: "FrameRequested".to_string(),
+		});
+	}
+
+	/// Return the window's title.
+	pub fn title(&self) -> &str {
+		&self.title
+	}
+
+	/// Set the window's title. This will update the logical window state and
+	/// emit a `Custom` event on the `EventBus` so higher-level systems or
+	/// platform adapters can react to title changes.
+	pub fn set_title<T: Into<String>>(&mut self, title: T) {
+		let new_title = title.into();
+		self.title = new_title.clone();
+		// Emit a typed Window event so consumers can handle title changes.
+		self.event_bus.emit(Event::Window {
+			source_component_id: self.id,
+			timestamp: chrono::Utc::now(),
+			payload: engage_ux_core::event::WindowEvent::TitleChanged { title: new_title },
 		});
 	}
 }

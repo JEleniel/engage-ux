@@ -5,14 +5,14 @@
 //! commonly used items. Keep module-level documentation here so that
 //! `engage_ux_core::modules` is discoverable in generated docs.
 
-/// Animation utilities and timeline helpers
+/// Animation utilities (tweens, timelines, easing functions)
 pub mod animation;
 mod colors;
 /// Drag and drop system
 pub mod drag_drop;
 /// Event types and the event bus
 pub mod event;
-/// Geometry primitives (Point, Rectangle, Offset, etc.)
+/// Geometry primitives (Point, Rectangle, Move/Transform, etc.)
 pub mod geometry;
 /// Layout system and units
 pub mod layout;
@@ -20,6 +20,9 @@ pub mod layout;
 pub mod media;
 /// Rendering primitives (SVG, render errors)
 pub mod rendering;
+mod styles;
 
 /// Re-export the color palette types at the crate level for convenience.
 pub use colors::*;
+pub use styles::*;
+// Re-export commonly used aliases from submodules for convenience

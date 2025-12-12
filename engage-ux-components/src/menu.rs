@@ -1,8 +1,10 @@
 //! Menu components (dropdown, drawer, hamburger)
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Menu item
@@ -87,10 +89,10 @@ impl Dropdown {
 			items: Vec::new(),
 			open: false,
 			trigger_id: None,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			hover_color: Color::from_hex("#E0E0E0").unwrap(),
-			border_color: Color::from_hex("#CCCCCC").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			hover_color: Color::from_hex("#E0E0E0").unwrap_or_default(),
+			border_color: Color::from_hex("#CCCCCC").unwrap_or_default(),
 		}
 	}
 
@@ -207,9 +209,9 @@ impl Drawer {
 			open: false,
 			overlay: true,
 			width: 280.0,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			overlay_color: Color::from_hex("#00000080").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			overlay_color: Color::from_hex("#00000080").unwrap_or_default(),
 			on_close: None,
 		}
 	}
@@ -325,7 +327,7 @@ impl HamburgerMenu {
 			properties: ComponentProperties::new(id),
 			open: false,
 			animated: true,
-			color: Color::from_hex("#000000").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
 			size: 24.0,
 			on_toggle: None,
 		}

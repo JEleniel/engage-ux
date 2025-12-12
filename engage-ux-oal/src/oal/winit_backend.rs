@@ -10,12 +10,11 @@ mod native {
 	use winit::window::WindowBuilder;
 
 	use crate::oal::Oal;
-	use engage_ux_core::event::keyboard_event::KeyboardModifierKeys;
 	use engage_ux_core::event::{
-		Event as CoreEvent, PointerEvent as CorePointerEvent, PointerKind,
+		Event as CoreEvent, KeyboardModifierKeys, PointerEvent as CorePointerEvent, PointerKind,
 		WindowEvent as CoreWindowEvent,
 	};
-	use engage_ux_core::geometry::{Offset, Point, Rectangle};
+	use engage_ux_core::geometry::{Move, Point, Rectangle};
 
 	/// Run the native winit event loop on the current thread. This will create
 	/// platform windows for each OAL window, map winit events to `engage-ux-core`
@@ -27,9 +26,11 @@ mod native {
 	use crate::errors::{OalError, Result};
 
 	pub fn run_event_loop(oal: Arc<Oal>) -> Result<()> {
-		// EventLoop::new() is infallible; construct it and then attempt to
-		// create platform windows (which may fail).
-		let event_loop: EventLoop<()> = EventLoop::new();
+		// EventLoop::new() may be fallible on some platforms in newer winit
+		// releases. Convert any error into an `OalError` so callers receive a
+		// typed error instead of panicking.
+		let event_loop: EventLoop<()> = EventLoop::new()
+			.map_err(|e| OalError::Initialization(format!("event loop creation failed: {}", e)))?;
 
 		// create windows
 		let mut winit_map = std::collections::HashMap::new();
@@ -44,7 +45,10 @@ mod native {
 
 		for (_id, win) in windows_guard.iter() {
 			let size = win.canvas.size_in_units;
-			let unit = oal.unit_scale();
+			// `unit_scale` may be fallible (depends on device metrics retrieval);
+			// propagate errors to the caller instead of calling methods on a
+			// potential `Result`.
+			let unit = oal.unit_scale()?;
 			let w_px = unit.to_px(size.0, &oal.metrics).max(1.0) as u32;
 			let h_px = unit.to_px(size.1, &oal.metrics).max(1.0) as u32;
 
@@ -91,7 +95,11 @@ mod native {
 								let h_units = unit.px_to_units(size.height as f32, &oal.metrics);
 
 								let rect = Rectangle {
-									top_left: Point { x: 0.0, y: 0.0 },
+									top_left: Point {
+										x: 0.0,
+										y: 0.0,
+										style: None,
+									},
 									width: w_units,
 									height: h_units,
 								};
@@ -114,8 +122,8 @@ mod native {
 
 								let pe = CorePointerEvent {
 									kind: PointerKind::Mouse,
-									position: Point { x, y },
-									delta: Offset { x: dx, y: dy },
+									position: Point { x, y, style: None },
+									delta: Move { x: dx, y: dy },
 									buttons: 0,
 									modifiers: KeyboardModifierKeys::default(),
 									pressure: None,
@@ -168,9 +176,6 @@ mod native {
 							timestamp: chrono::Utc::now(),
 							payload: "FrameRequested".to_string(),
 						});
-
-						// If we exited the event loop normally, return success.
-						Ok(())
 					}
 				}
 				_ => {}
@@ -178,6 +183,10 @@ mod native {
 		});
 	}
 }
+
+// When native feature is enabled, expose the native run_event_loop at module root
+#[cfg(feature = "native-winit")]
+pub use self::native::run_event_loop;
 
 // Fallback headless emitter when native-winit feature is not enabled.
 #[cfg(not(feature = "native-winit"))]
@@ -219,7 +228,7 @@ pub fn run_event_loop(oal: Arc<Oal>) -> Result<()> {
 			}
 		};
 		for (_id, w) in windows_guard.iter() {
-			let _ = oal.event_bus.emit(engage_ux_core::event::Event::Custom {
+			oal.event_bus.emit(engage_ux_core::event::Event::Custom {
 				source_component_id: w.id,
 				timestamp: chrono::Utc::now(),
 				payload: "FrameRequested".to_string(),

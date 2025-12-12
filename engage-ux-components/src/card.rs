@@ -1,7 +1,8 @@
 //! Card component for grouping content
 
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Card component
@@ -19,7 +20,7 @@ impl Card {
 		Self {
 			properties: ComponentProperties::new(id),
 			title: None,
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
 			border_radius: 4.0,
 			elevation: 1,
 		}

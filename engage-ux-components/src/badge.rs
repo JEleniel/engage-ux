@@ -1,7 +1,8 @@
 //! Badge component for notifications and status indicators
 
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Badge variant
@@ -48,8 +49,8 @@ impl Badge {
 			shape: BadgeShape::Rounded,
 			dot: false,
 			max: None,
-			color: Color::from_hex("#FFFFFF").unwrap(),
-			background_color: Color::from_hex("#757575").unwrap(),
+			color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			background_color: Color::from_hex("#757575").unwrap_or_default(),
 			font_size: 12.0,
 		}
 	}
@@ -102,28 +103,28 @@ impl Badge {
 		// Update colors based on variant
 		match variant {
 			BadgeVariant::Primary => {
-				self.background_color = Color::from_hex("#1976D2").unwrap();
-				self.color = Color::from_hex("#FFFFFF").unwrap();
+				self.background_color = Color::from_hex("#1976D2").unwrap_or_default();
+				self.color = Color::from_hex("#FFFFFF").unwrap_or_default();
 			}
 			BadgeVariant::Success => {
-				self.background_color = Color::from_hex("#4CAF50").unwrap();
-				self.color = Color::from_hex("#FFFFFF").unwrap();
+				self.background_color = Color::from_hex("#4CAF50").unwrap_or_default();
+				self.color = Color::from_hex("#FFFFFF").unwrap_or_default();
 			}
 			BadgeVariant::Warning => {
-				self.background_color = Color::from_hex("#FF9800").unwrap();
-				self.color = Color::from_hex("#000000").unwrap();
+				self.background_color = Color::from_hex("#FF9800").unwrap_or_default();
+				self.color = Color::from_hex("#000000").unwrap_or_default();
 			}
 			BadgeVariant::Error => {
-				self.background_color = Color::from_hex("#F44336").unwrap();
-				self.color = Color::from_hex("#FFFFFF").unwrap();
+				self.background_color = Color::from_hex("#F44336").unwrap_or_default();
+				self.color = Color::from_hex("#FFFFFF").unwrap_or_default();
 			}
 			BadgeVariant::Info => {
-				self.background_color = Color::from_hex("#2196F3").unwrap();
-				self.color = Color::from_hex("#FFFFFF").unwrap();
+				self.background_color = Color::from_hex("#2196F3").unwrap_or_default();
+				self.color = Color::from_hex("#FFFFFF").unwrap_or_default();
 			}
 			BadgeVariant::Default => {
-				self.background_color = Color::from_hex("#757575").unwrap();
-				self.color = Color::from_hex("#FFFFFF").unwrap();
+				self.background_color = Color::from_hex("#757575").unwrap_or_default();
+				self.color = Color::from_hex("#FFFFFF").unwrap_or_default();
 			}
 		}
 	}

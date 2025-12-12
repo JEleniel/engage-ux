@@ -1,8 +1,10 @@
 //! Toggle switch component
 
+use crate::component::{Component, ComponentId};
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Toggle size
@@ -56,10 +58,10 @@ impl Toggle {
 			disabled: false,
 			label: String::new(),
 			size: ToggleSize::Medium,
-			active_color: Color::from_hex("#1976D2").unwrap(),
-			inactive_color: Color::from_hex("#BDBDBD").unwrap(),
-			thumb_color: Color::from_hex("#FFFFFF").unwrap(),
-			label_color: Color::from_hex("#000000").unwrap(),
+			active_color: Color::from_hex("#1976D2").unwrap_or_default(),
+			inactive_color: Color::from_hex("#BDBDBD").unwrap_or_default(),
+			thumb_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			label_color: Color::from_hex("#000000").unwrap_or_default(),
 			on_change: None,
 		}
 	}

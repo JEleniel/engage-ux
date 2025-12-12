@@ -5,7 +5,7 @@ use crate::geometry::{Border, Rectangle};
 #[derive(Debug, Clone)]
 pub struct Bounds {
 	/// The outer rectangle defining the bounds.
-	pub outer_rectangle: Rectangle,
+	pub bounds: Rectangle,
 	/// The margin (white space) around the element.
 	pub margin: Border,
 	/// The padding (filled space) inside the element.
@@ -15,7 +15,7 @@ pub struct Bounds {
 impl Bounds {
 	/// Get the rectangle representing the margin area.
 	pub fn margin_rectangle(&self) -> Rectangle {
-		self.outer_rectangle.shrink(&self.margin)
+		self.bounds.shrink(&self.margin)
 	}
 
 	/// Get the rectangle representing the padding area.

@@ -230,19 +230,16 @@ impl Animation {
 		}
 
 		// Must have a start instant to compute elapsed; if missing, nothing to do.
-		if self.start_instant.is_none() {
-			return None;
-		}
+		self.start_instant?;
 
 		// If caller provided a non-zero delta, move the start instant backwards by
 		// that delta so that elapsed computed from the wall clock reflects the
 		// accumulated deltas across successive update() calls. If delta is zero,
 		// compute elapsed from the wall clock directly.
-		if _delta > ChronoDuration::zero() {
-			if let Some(s) = self.start_instant {
+		if _delta > ChronoDuration::zero()
+			&& let Some(s) = self.start_instant {
 				self.start_instant = Some(s - _delta);
 			}
-		}
 
 		let elapsed = Utc::now().signed_duration_since(self.start_instant.unwrap());
 
@@ -259,12 +256,11 @@ impl Animation {
 			self.current_iteration += 1;
 
 			// Check if we should repeat
-			if let Some(repeat_count) = self.repeat {
-				if self.current_iteration >= repeat_count {
+			if let Some(repeat_count) = self.repeat
+				&& self.current_iteration >= repeat_count {
 					self.state = AnimationState::Completed;
 					return Some(self.get_value(1.0));
 				}
-			}
 
 			// Reset for next iteration: adjust the start instant so future elapsed is computed from now - delay.
 			self.start_instant = Some(Utc::now() - self.delay);
