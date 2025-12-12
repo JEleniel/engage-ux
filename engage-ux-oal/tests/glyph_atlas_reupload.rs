@@ -1,3 +1,7 @@
+//! Glyph atlas reupload tests.
+//!
+//! Validates that the glyph atlas responds to device recreate events.
+
 use engage_ux_oal::oal::device_lifecycle;
 use engage_ux_oal::oal::text::GlyphAtlas;
 

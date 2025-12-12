@@ -90,6 +90,11 @@ enum Command {
 		job: Box<dyn crate::oal::backend::RenderCallback>,
 		resp: Option<mpsc::Sender<Result<()>>>,
 	},
+	SetTitle {
+		id: SurfaceId,
+		title: String,
+		resp: Option<mpsc::Sender<Result<()>>>,
+	},
 	Stop,
 }
 
@@ -117,33 +122,41 @@ impl WinitBackend {
 		let run_flag_thread = run_flag.clone();
 		thread::spawn(move || {
 			// Create the event loop on this thread.
-			let event_loop = EventLoop::new();
+			let event_loop = match EventLoop::new() {
+				Ok(el) => el,
+				Err(e) => {
+					eprintln!("failed to create winit event loop: {}", e);
+					return;
+				}
+			};
 
 			// Initialize wgpu instance/adapter/device on this thread.
 			let instance = wgpu::Instance::default();
-			let adapter =
+			let adapter_res =
 				pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions {
 					power_preference: wgpu::PowerPreference::HighPerformance,
 					compatible_surface: None,
 					force_fallback_adapter: false,
 				}));
 
-			let adapter = match adapter {
-				Some(a) => a,
-				None => {
+			let adapter = match adapter_res {
+				Ok(a) => a,
+				Err(_) => {
 					// If we couldn't find an adapter, exit the thread.
 					return;
 				}
 			};
 
-			let (device, queue) = match pollster::block_on(adapter.request_device(
+			let device_queue_res = pollster::block_on(adapter.request_device(
 				&wgpu::DeviceDescriptor {
-					features: wgpu::Features::empty(),
-					limits: wgpu::Limits::default(),
-					label: None,
+					required_features: wgpu::Features::empty(),
+					required_limits: wgpu::Limits::default(),
+					..Default::default()
 				},
 				None,
-			)) {
+			));
+
+			let (device, queue) = match device_queue_res {
 				Ok((d, q)) => (d, q),
 				Err(_) => return,
 			};
@@ -151,6 +164,11 @@ impl WinitBackend {
 			// Track surfaces created on this thread.
 			let mut surfaces: HashMap<SurfaceId, GpuSurface> = HashMap::new();
 			let mut next_id: SurfaceId = 1;
+
+			// Pending GPU jobs keyed by surface id. Jobs are executed during the
+			// Present pass while the backend holds a mutable encoder.
+			let mut pending_jobs: HashMap<SurfaceId, Box<dyn crate::oal::backend::RenderCallback>> =
+				HashMap::new();
 
 			// Run the event loop; integrate commands by polling the receiver
 			// during MainEventsCleared.
@@ -237,6 +255,19 @@ impl WinitBackend {
 										if let Some(s) = surfaces.remove(&id) {
 											let _ = resp.map(|r| r.send(Ok(())));
 											drop(s);
+										} else {
+											let _ = resp.map(|r| {
+												r.send(Err(OalError::Window(format!(
+													"surface {} not found",
+													id
+												))))
+											});
+										}
+									}
+									Command::SetTitle { id, title, resp } => {
+										if let Some(s) = surfaces.get_mut(&id) {
+											s.window.set_title(&title);
+											let _ = resp.map(|r| r.send(Ok(())));
 										} else {
 											let _ = resp.map(|r| {
 												r.send(Err(OalError::Window(format!(
@@ -479,6 +510,20 @@ impl Backend for WinitBackend {
 		self.send_cmd(cmd)?;
 		resp_rx.recv().map_err(|e| {
 			OalError::Initialization(format!("reconfigure response recv failed: {}", e))
+		})??;
+		Ok(())
+	}
+
+	fn set_surface_title(&self, surface: SurfaceHandle, title: &str) -> Result<()> {
+		let (resp_tx, resp_rx) = mpsc::channel();
+		let cmd = Command::SetTitle {
+			id: surface,
+			title: title.to_string(),
+			resp: Some(resp_tx),
+		};
+		self.send_cmd(cmd)?;
+		resp_rx.recv().map_err(|e| {
+			OalError::Initialization(format!("set title response recv failed: {}", e))
 		})??;
 		Ok(())
 	}

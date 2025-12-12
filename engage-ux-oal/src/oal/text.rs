@@ -12,6 +12,14 @@ use rusttype::{Font as RtFont, Scale as RtScale, point as rt_point};
 use std::collections::HashMap;
 use std::sync::OnceLock;
 
+// Reduce type complexity for clippy by using aliases for glyph maps/placements
+type GlyphMap = Arc<Mutex<HashMap<char, (u32, u32, Vec<u8>)>>>;
+type GlyphPositions = Arc<Mutex<HashMap<char, (u32, u32, u32, u32)>>>;
+// Simple alias for placement maps returned by packing functions. Using a
+// dedicated alias avoids long inline types in function signatures and
+// satisfies clippy's `type_complexity` suggestions.
+type GlyphPlacementMap = HashMap<char, (u32, u32, u32, u32)>;
+
 /// Minimal glyph atlas skeleton.
 ///
 /// This is a lightweight placeholder that registers a reupload callback
@@ -25,9 +33,9 @@ pub struct GlyphAtlas {
 	callback_handle: Option<usize>,
 	device_reupload_handle: Option<usize>,
 	// Simple in-memory glyph cache: char -> (width, height, bitmap)
-	glyphs: Arc<Mutex<HashMap<char, (u32, u32, Vec<u8>)>>>,
+	glyphs: GlyphMap,
 	// Glyph placements inside the last-packed atlas: char -> (x, y, w, h) in pixels
-	glyph_positions: Arc<Mutex<HashMap<char, (u32, u32, u32, u32)>>>,
+	glyph_positions: GlyphPositions,
 	// Glyphs that have been rasterized but not yet uploaded to the GPU atlas.
 	pending_glyphs: Arc<Mutex<std::collections::HashSet<char>>>,
 	// Simple packer state (reset on perform_reupload). Use interior
@@ -107,13 +115,13 @@ impl GlyphAtlas {
 			let pixel_count = (width as usize) * (height as usize);
 			let data = vec![0xFFu8; pixel_count * 4];
 
-			let buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+			let _buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
 				label: Some("atlas_upload_buffer"),
 				contents: &data,
 				usage: wgpu::BufferUsages::COPY_SRC,
 			});
 
-			let mut encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
+			let _encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
 				label: Some("atlas_upload_encoder"),
 			});
 
@@ -121,11 +129,11 @@ impl GlyphAtlas {
 			// In wgpu 0.27 the buffer/texture copy types were renamed to
 			// `TexelCopyBufferLayout` and `TexelCopyTextureInfo` in the
 			// `wgpu-types` crate (aliased here as `wgt`).
-			let layout = wgt::TexelCopyBufferLayout {
-				offset: 0,
-				bytes_per_row: Some((4 * width) as u32),
-				rows_per_image: Some(height as u32),
-			};
+				let layout = wgt::TexelCopyBufferLayout {
+					offset: 0,
+					bytes_per_row: Some(4 * width),
+					rows_per_image: Some(height),
+				};
 			let dst = wgt::TexelCopyTextureInfo {
 				texture: &texture,
 				mip_level: 0,
@@ -136,16 +144,15 @@ impl GlyphAtlas {
 
 			// Update internal state to reflect reupload (if still live).
 			if let Some(last_arc) = last_weak_for_reupload.upgrade() {
-				let new_id = (&*device as *const _) as usize;
+				let new_id = (device as *const _) as usize;
 				if let Ok(mut g) = last_arc.lock() {
 					*g = Some(new_id);
 				}
 			}
-			if let Some(reup_arc) = reup_weak_for_reupload.upgrade() {
-				if let Ok(mut r) = reup_arc.lock() {
+			if let Some(reup_arc) = reup_weak_for_reupload.upgrade()
+				&& let Ok(mut r) = reup_arc.lock() {
 					*r = true;
 				}
-			}
 			drop(texture);
 		});
 
@@ -175,7 +182,7 @@ impl GlyphAtlas {
 							let py = y as usize;
 							let idx = py * width as usize + px;
 							if idx < pixel_data.len() {
-								pixel_data[idx] = (v * 255.0).max(0.0).min(255.0) as u8;
+								pixel_data[idx] = (v * 255.0).clamp(0.0, 255.0) as u8;
 							}
 						});
 						let mut rgba = Vec::with_capacity((width * height * 4) as usize);
@@ -232,18 +239,18 @@ impl GlyphAtlas {
 				.glyph(ch)
 				.scaled(scale)
 				.positioned(rt_point(0.0, v_metrics.ascent));
-			if let Some(bb) = glyph.pixel_bounding_box() {
+					if let Some(bb) = glyph.pixel_bounding_box() {
 				let width = bb.width() as u32;
 				let height = bb.height() as u32;
 				let mut pixel_data = vec![0u8; (width * height) as usize];
-				glyph.draw(|x, y, v| {
-					let px = x as usize;
-					let py = y as usize;
-					let idx = py * width as usize + px;
-					if idx < pixel_data.len() {
-						pixel_data[idx] = (v * 255.0).max(0.0).min(255.0) as u8;
-					}
-				});
+						glyph.draw(|x, y, v| {
+							let px = x as usize;
+							let py = y as usize;
+							let idx = py * width as usize + px;
+							if idx < pixel_data.len() {
+								pixel_data[idx] = (v * 255.0).clamp(0.0, 255.0) as u8;
+							}
+						});
 				// expand to RGBA
 				let mut rgba = Vec::with_capacity((width * height * 4) as usize);
 				for a in pixel_data.iter() {
@@ -264,15 +271,15 @@ impl GlyphAtlas {
 	}
 
 	fn pack_and_upload_from(
-		glyphs: &Arc<Mutex<HashMap<char, (u32, u32, Vec<u8>)>>>,
+		glyphs: &GlyphMap,
 		atlas_size: (u32, u32),
 		device: &wgpu::Device,
 		queue: &wgpu::Queue,
-	) -> Result<(wgpu::Texture, HashMap<char, (u32, u32, u32, u32)>), String> {
+	) -> Result<(wgpu::Texture, GlyphPlacementMap), String> {
 		let (aw, ah) = atlas_size;
 		let mut atlas = vec![0u8; aw as usize * ah as usize * 4];
 		let gmap = glyphs.lock().map_err(|_| "glyphs lock poisoned")?;
-		let mut placements: HashMap<char, (u32, u32, u32, u32)> = HashMap::new();
+		let mut placements: GlyphPlacementMap = HashMap::new();
 		let mut x: u32 = 0;
 		let mut y: u32 = 0;
 		let mut row_h: u32 = 0;
@@ -324,20 +331,20 @@ impl GlyphAtlas {
 
 		let texture = device.create_texture(&desc);
 
-		let buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+		let _buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
 			label: Some("atlas_upload_buffer"),
 			contents: &atlas,
 			usage: wgpu::BufferUsages::COPY_SRC,
 		});
 
-		let mut encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
+		let _encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
 			label: Some("atlas_upload_encoder"),
 		});
 		// Upload packed atlas data using write_texture.
 		let layout = wgt::TexelCopyBufferLayout {
 			offset: 0,
-			bytes_per_row: Some((4 * aw) as u32),
-			rows_per_image: Some(ah as u32),
+			bytes_per_row: Some(4 * aw),
+			rows_per_image: Some(ah),
 		};
 		let dst = wgt::TexelCopyTextureInfo {
 			texture: &texture,
@@ -356,12 +363,12 @@ impl GlyphAtlas {
 	// glyph should be placed inside the atlas without building a full
 	// atlas buffer.
 	fn compute_placements(
-		glyphs: &Arc<Mutex<HashMap<char, (u32, u32, Vec<u8>)>>>,
+		glyphs: &GlyphMap,
 		atlas_size: (u32, u32),
-	) -> Result<HashMap<char, (u32, u32, u32, u32)>, String> {
+	) -> Result<GlyphPlacementMap, String> {
 		let (aw, ah) = atlas_size;
 		let gmap = glyphs.lock().map_err(|_| "glyphs lock poisoned")?;
-		let mut placements: HashMap<char, (u32, u32, u32, u32)> = HashMap::new();
+		let mut placements: GlyphPlacementMap = HashMap::new();
 		let mut x: u32 = 0;
 		let mut y: u32 = 0;
 		let mut row_h: u32 = 0;
@@ -419,7 +426,7 @@ impl GlyphAtlas {
 		};
 		let placements = match Self::compute_placements(&self.glyphs, atlas_sz) {
 			Ok(p) => p,
-			Err(e) => {
+			Err(_) => {
 				// Atlas full or packing failed; fallback to full reupload
 				let (tex, plats) =
 					Self::pack_and_upload_from(&self.glyphs, atlas_sz, device, queue)?;
@@ -492,24 +499,23 @@ impl GlyphAtlas {
 				// already uploaded
 				continue;
 			}
-			if let Some((x, y, w, h)) = placements.get(ch) {
-				if let Some((_gw, _gh, bitmap)) = gmap.get(ch) {
+			if let Some((x, y, w, h)) = placements.get(ch)
+				&& let Some((_gw, _gh, bitmap)) = gmap.get(ch) {
 					// create a small buffer for this glyph and copy into the atlas
 					let row_bytes = (*w as usize) * 4;
-					let buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+					let _buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
 						label: Some("glyph-sub-upload"),
-						contents: &bitmap,
+						contents: bitmap,
 						usage: wgpu::BufferUsages::COPY_SRC,
 					});
-					let mut encoder =
-						device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
-							label: Some("glyph-sub-encoder"),
-						});
+					let _encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
+						label: Some("glyph-sub-encoder"),
+					});
 					// Sub-upload the glyph bitmap into the existing atlas texture.
 					let layout = wgt::TexelCopyBufferLayout {
 						offset: 0,
 						bytes_per_row: Some(row_bytes as u32),
-						rows_per_image: Some(*h as u32),
+						rows_per_image: Some(*h),
 					};
 					let dst = wgt::TexelCopyTextureInfo {
 						texture: atlas_ref,
@@ -519,7 +525,7 @@ impl GlyphAtlas {
 					};
 					queue.write_texture(
 						dst,
-						&bitmap,
+						bitmap,
 						layout,
 						wgpu::Extent3d {
 							width: *w,
@@ -530,7 +536,6 @@ impl GlyphAtlas {
 					// record placement
 					gp.insert(*ch, (*x, *y, *w, *h));
 				}
-			}
 		}
 
 		// mark reuploaded and bump version
@@ -592,10 +597,7 @@ impl GlyphAtlas {
 			*s
 		};
 		let (texture, placements) =
-			match Self::pack_and_upload_from(&self.glyphs, atlas_sz, device, queue) {
-				Ok(t) => t,
-				Err(e) => return Err(e),
-			};
+			Self::pack_and_upload_from(&self.glyphs, atlas_sz, device, queue)?;
 
 		// Create a texture view for sampling
 		let view = texture.create_view(&wgpu::TextureViewDescriptor::default());
@@ -621,11 +623,10 @@ impl GlyphAtlas {
 
 		// Record that a reupload occurred and update last device id using
 		// the active device if available.
-		if let Some(active) = crate::oal::device_lifecycle::get_active_device() {
-			if let Ok(mut g) = self.last_device.lock() {
+		if let Some(active) = crate::oal::device_lifecycle::get_active_device()
+			&& let Ok(mut g) = self.last_device.lock() {
 				*g = Some(active);
 			}
-		}
 		if let Ok(mut r) = self.reuploaded.lock() {
 			*r = true;
 		}
@@ -666,11 +667,10 @@ impl GlyphAtlas {
 	/// otherwise sample it. This clones the view by creating a new view from
 	/// the stored `wgpu::Texture` (cheap operation).
 	pub fn get_atlas_view(&self) -> Option<wgpu::TextureView> {
-		if let Ok(at) = self.atlas_texture.lock() {
-			if let Some(ref tex) = *at {
+		if let Ok(at) = self.atlas_texture.lock()
+			&& let Some(ref tex) = *at {
 				return Some(tex.create_view(&wgpu::TextureViewDescriptor::default()));
 			}
-		}
 		None
 	}
 
@@ -694,8 +694,8 @@ impl GlyphAtlas {
 		layout: &wgpu::BindGroupLayout,
 		sampler: &wgpu::Sampler,
 	) -> Option<wgpu::BindGroup> {
-		if let Ok(at) = self.atlas_texture.lock() {
-			if let Some(ref tex) = *at {
+		if let Ok(at) = self.atlas_texture.lock()
+			&& let Some(ref tex) = *at {
 				let view = tex.create_view(&wgpu::TextureViewDescriptor::default());
 				let bg = device.create_bind_group(&wgpu::BindGroupDescriptor {
 					label: Some("glyph_atlas_bind_group"),
@@ -713,7 +713,6 @@ impl GlyphAtlas {
 				});
 				return Some(bg);
 			}
-		}
 		None
 	}
 }
@@ -765,5 +764,11 @@ impl Drop for GlyphAtlas {
 		if let Some(handle) = self.worker_handle.take() {
 			let _ = handle.join();
 		}
+	}
+}
+
+impl Default for GlyphAtlas {
+	fn default() -> Self {
+		Self::new()
 	}
 }

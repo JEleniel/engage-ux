@@ -1,3 +1,7 @@
+//! Device lifecycle callback tests.
+//!
+//! Ensure device recreated/reupload callbacks are invoked and handled.
+
 use std::sync::{
 	Arc,
 	atomic::{AtomicBool, Ordering},

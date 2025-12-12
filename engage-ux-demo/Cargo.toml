@@ -1,0 +1,13 @@
+[package]
+name = "engage-ux-demo"
+version.workspace = true
+edition.workspace = true
+description = "Demo binary that exercises Engage UX components, themes, and core APIs."
+publish = false
+
+[dependencies]
+engage-ux = { path = "../engage-ux" }
+engage-ux-components = { path = "../engage-ux-components" }
+engage-ux-core = { path = "../engage-ux-core" }
+engage-ux-themes = { path = "../engage-ux-themes" }
+serde_json = { workspace = true }

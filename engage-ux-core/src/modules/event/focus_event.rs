@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::component::ComponentId;
+use serde::{Deserialize, Serialize};
 
 /// Represents a focus event within the application.
 #[derive(Debug, Clone, Serialize, Deserialize)]

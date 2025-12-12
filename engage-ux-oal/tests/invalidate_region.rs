@@ -1,3 +1,7 @@
+//! Invalidate region tests for the OAL backends.
+//!
+//! Exercises `invalidate_region` and related surface lifecycle behavior.
+
 use engage_ux_oal::oal::backend::{Backend, HeadlessBackend, SurfaceDescriptor};
 
 #[test]

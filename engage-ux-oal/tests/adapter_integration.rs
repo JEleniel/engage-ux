@@ -1,3 +1,8 @@
+//! Adapter integration tests for the OAL backends.
+//!
+//! These exercises verify recording and backend adapter behavior in a
+//! headless or test environment.
+
 use engage_ux_core::Color;
 use engage_ux_core::geometry::{Circle, Line, Point, Polygon, Polyline, Rectangle, Text};
 use engage_ux_oal::Canvas;

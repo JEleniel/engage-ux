@@ -315,11 +315,10 @@ impl DragManager {
 		if target != drag_state.current_target {
 			// Leave old target
 			if let Some(old_target) = drag_state.current_target {
-				if let Some(target_ref) = self.drop_targets.get(&old_target) {
-					if let Ok(mut target) = target_ref.try_write() {
+				if let Some(target_ref) = self.drop_targets.get(&old_target)
+					&& let Ok(mut target) = target_ref.try_write() {
 						target.on_drag_leave();
 					}
-				}
 
 				// Emit leave event
 				let event = DragEvent::DragLeave {
@@ -332,10 +331,10 @@ impl DragManager {
 			}
 
 			// Enter new target
-			if let Some(new_target) = target {
-				if let Some(target_ref) = self.drop_targets.get(&new_target) {
-					if let Ok(mut target) = target_ref.try_write() {
-						if target.can_drop(&drag_state.data) {
+			if let Some(new_target) = target
+				&& let Some(target_ref) = self.drop_targets.get(&new_target)
+					&& let Ok(mut target) = target_ref.try_write()
+						&& target.can_drop(&drag_state.data) {
 							target.on_drag_enter(&drag_state.data, x, y);
 							drag_state.current_target = Some(new_target);
 
@@ -346,18 +345,14 @@ impl DragManager {
 								y,
 							});
 						}
-					}
-				}
-			}
 		}
 
 		// Over target
 		if let Some(current_target) = drag_state.current_target {
-			if let Some(target_ref) = self.drop_targets.get(&current_target) {
-				if let Ok(mut target) = target_ref.try_write() {
+			if let Some(target_ref) = self.drop_targets.get(&current_target)
+				&& let Ok(mut target) = target_ref.try_write() {
 					target.on_drag_over(&drag_state.data, x, y);
 				}
-			}
 
 			return Some(DragEvent::DragOver {
 				source: drag_state.source,
@@ -379,9 +374,9 @@ impl DragManager {
 	pub async fn drop(&mut self, x: f32, y: f32) -> Option<DragEvent> {
 		let drag_state = self.current_drag.take()?;
 
-		if let Some(target_id) = drag_state.current_target {
-			if let Some(target_ref) = self.drop_targets.get(&target_id) {
-				if let Ok(mut target) = target_ref.try_write() {
+		if let Some(target_id) = drag_state.current_target
+			&& let Some(target_ref) = self.drop_targets.get(&target_id)
+				&& let Ok(mut target) = target_ref.try_write() {
 					let _success =
 						target.on_drop(drag_state.data.clone(), drag_state.operation, x, y);
 
@@ -394,8 +389,6 @@ impl DragManager {
 						y,
 					});
 				}
-			}
-		}
 
 		Some(DragEvent::DragEnd {
 			source: drag_state.source,
@@ -408,13 +401,11 @@ impl DragManager {
 		let drag_state = self.current_drag.take()?;
 
 		// Leave current target if any
-		if let Some(target_id) = drag_state.current_target {
-			if let Some(target_ref) = self.drop_targets.get(&target_id) {
-				if let Ok(mut target) = target_ref.try_write() {
+		if let Some(target_id) = drag_state.current_target
+			&& let Some(target_ref) = self.drop_targets.get(&target_id)
+				&& let Ok(mut target) = target_ref.try_write() {
 					target.on_drag_leave();
 				}
-			}
-		}
 
 		Some(DragEvent::DragEnd {
 			source: drag_state.source,

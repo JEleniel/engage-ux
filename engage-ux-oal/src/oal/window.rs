@@ -70,7 +70,7 @@ impl Window {
 	/// Request a frame to be produced for this window (emits `FrameRequested`).
 	pub fn request_frame(&self) {
 		// Notify via EventBus that a frame was requested
-		let _ = self.event_bus.emit(Event::Custom {
+		self.event_bus.emit(Event::Custom {
 			source_component_id: self.id,
 			timestamp: chrono::Utc::now(),
 			payload: "FrameRequested".to_string(),
@@ -89,7 +89,7 @@ impl Window {
 		let new_title = title.into();
 		self.title = new_title.clone();
 		// Emit a typed Window event so consumers can handle title changes.
-		let _ = self.event_bus.emit(Event::Window {
+		self.event_bus.emit(Event::Window {
 			source_component_id: self.id,
 			timestamp: chrono::Utc::now(),
 			payload: engage_ux_core::event::WindowEvent::TitleChanged { title: new_title },

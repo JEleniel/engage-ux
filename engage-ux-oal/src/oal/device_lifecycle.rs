@@ -9,14 +9,18 @@ static CURRENT_DEVICE: OnceLock<Mutex<Option<usize>>> = OnceLock::new();
 /// Registry for callbacks invoked when a device is recreated. Callbacks
 /// receive (old_device_id, new_device_id) and should perform any necessary
 /// reupload or state migration for GPU resources tied to the new device.
-static DEVICE_RECREATED_CALLBACKS: OnceLock<
-	Mutex<HashMap<usize, Arc<dyn Fn(usize, usize) + Send + Sync>>>,
-> = OnceLock::new();
+// Type aliases to reduce visible type complexity for clippy
+// Callback types (single callback) - use aliases so function signatures
+// remain readable and avoid triggering `type_complexity` lint.
+type DeviceRecreatedCallback = Arc<dyn Fn(usize, usize) + Send + Sync>;
+type DeviceReuploadCallback = Arc<dyn Fn(&wgpu::Device, &wgpu::Queue) + Send + Sync>;
+
+type DeviceRecreatedCallbacks = Mutex<HashMap<usize, DeviceRecreatedCallback>>;
+static DEVICE_RECREATED_CALLBACKS: OnceLock<DeviceRecreatedCallbacks> = OnceLock::new();
 /// Registry for callbacks that perform GPU reuploads when a new device and
 /// queue become available. Callbacks receive (&wgpu::Device, &wgpu::Queue).
-static DEVICE_REUPLOAD_CALLBACKS: OnceLock<
-	Mutex<HashMap<usize, Arc<dyn Fn(&wgpu::Device, &wgpu::Queue) + Send + Sync>>>,
-> = OnceLock::new();
+type DeviceReuploadCallbacks = Mutex<HashMap<usize, DeviceReuploadCallback>>;
+static DEVICE_REUPLOAD_CALLBACKS: OnceLock<DeviceReuploadCallbacks> = OnceLock::new();
 static NEXT_REUPLOAD_CALLBACK_ID: OnceLock<Mutex<usize>> = OnceLock::new();
 static NEXT_CALLBACK_ID: OnceLock<Mutex<usize>> = OnceLock::new();
 
@@ -32,27 +36,25 @@ pub fn set_active_device(device_id: usize) {
 
 /// Clear the active device record (e.g. during shutdown).
 pub fn clear_active_device() {
-	if let Some(lock) = CURRENT_DEVICE.get() {
-		if let Ok(mut g) = lock.lock() {
+	if let Some(lock) = CURRENT_DEVICE.get()
+		&& let Ok(mut g) = lock.lock() {
 			*g = None;
 		}
-	}
 }
 
 /// Return the currently active device id, if any.
 pub fn get_active_device() -> Option<usize> {
-	if let Some(lock) = CURRENT_DEVICE.get() {
-		if let Ok(g) = lock.lock() {
+	if let Some(lock) = CURRENT_DEVICE.get()
+		&& let Ok(g) = lock.lock() {
 			return *g;
 		}
-	}
 	None
 }
 
 /// Register a callback to be invoked when a device is recreated. The
 /// callback receives (old_device_id, new_device_id). Returns a handle id
 /// that can be used to unregister the callback.
-pub fn register_device_recreated_callback(cb: Arc<dyn Fn(usize, usize) + Send + Sync>) -> usize {
+pub fn register_device_recreated_callback(cb: DeviceRecreatedCallback) -> usize {
 	let map_lock = DEVICE_RECREATED_CALLBACKS.get_or_init(|| Mutex::new(HashMap::new()));
 	let id_lock = NEXT_CALLBACK_ID.get_or_init(|| Mutex::new(1));
 	let mut idg = id_lock.lock().unwrap();
@@ -66,18 +68,17 @@ pub fn register_device_recreated_callback(cb: Arc<dyn Fn(usize, usize) + Send + 
 
 /// Unregister a previously registered callback by handle id.
 pub fn unregister_device_recreated_callback(handle_id: usize) {
-	if let Some(map_lock) = DEVICE_RECREATED_CALLBACKS.get() {
-		if let Ok(mut map) = map_lock.lock() {
+	if let Some(map_lock) = DEVICE_RECREATED_CALLBACKS.get()
+		&& let Ok(mut map) = map_lock.lock() {
 			map.remove(&handle_id);
 		}
-	}
 }
 
 /// Register a callback that will be invoked when the backend has a new
 /// `wgpu::Device` and `wgpu::Queue` available after device recreation.
 /// Returns a handle that can be used to unregister the callback.
 pub fn register_device_reupload_callback(
-	cb: Arc<dyn Fn(&wgpu::Device, &wgpu::Queue) + Send + Sync>,
+	cb: DeviceReuploadCallback,
 ) -> usize {
 	let map_lock = DEVICE_REUPLOAD_CALLBACKS.get_or_init(|| Mutex::new(HashMap::new()));
 	let id_lock = NEXT_REUPLOAD_CALLBACK_ID.get_or_init(|| Mutex::new(1));
@@ -92,19 +93,18 @@ pub fn register_device_reupload_callback(
 
 /// Unregister a previously registered reupload callback.
 pub fn unregister_device_reupload_callback(handle_id: usize) {
-	if let Some(map_lock) = DEVICE_REUPLOAD_CALLBACKS.get() {
-		if let Ok(mut map) = map_lock.lock() {
+	if let Some(map_lock) = DEVICE_REUPLOAD_CALLBACKS.get()
+		&& let Ok(mut map) = map_lock.lock() {
 			map.remove(&handle_id);
 		}
-	}
 }
 
 /// Invoke all registered device reupload callbacks with the provided
 /// `device` and `queue`. Callbacks are executed in a best-effort fashion
 /// and panics are caught to avoid bringing down the event loop.
 pub fn call_device_reupload_callbacks(device: &wgpu::Device, queue: &wgpu::Queue) {
-	if let Some(map_lock) = DEVICE_REUPLOAD_CALLBACKS.get() {
-		if let Ok(map) = map_lock.lock() {
+	if let Some(map_lock) = DEVICE_REUPLOAD_CALLBACKS.get()
+		&& let Ok(map) = map_lock.lock() {
 			for (_id, cb) in map.iter() {
 				let cb = cb.clone();
 				let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(move || {
@@ -112,7 +112,6 @@ pub fn call_device_reupload_callbacks(device: &wgpu::Device, queue: &wgpu::Queue
 				}));
 			}
 		}
-	}
 }
 
 /// Notify that a device was recreated. This will invalidate GPU caches for
@@ -126,8 +125,8 @@ pub fn device_recreated(old_device_id: usize, new_device_id: usize) {
 	set_active_device(new_device_id);
 
 	// Invoke callbacks (best-effort; ignore panics to avoid bringing down the event loop).
-	if let Some(map_lock) = DEVICE_RECREATED_CALLBACKS.get() {
-		if let Ok(map) = map_lock.lock() {
+	if let Some(map_lock) = DEVICE_RECREATED_CALLBACKS.get()
+		&& let Ok(map) = map_lock.lock() {
 			for (_id, cb) in map.iter() {
 				let cb = cb.clone();
 				// Run callback; catch unwinds to keep event loop stable.
@@ -136,5 +135,4 @@ pub fn device_recreated(old_device_id: usize, new_device_id: usize) {
 				}));
 			}
 		}
-	}
 }

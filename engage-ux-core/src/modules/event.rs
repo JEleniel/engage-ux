@@ -2,6 +2,7 @@ mod accessibility_event;
 mod bus;
 mod clipboard_event;
 mod drag_drop_event;
+#[allow(clippy::module_inception)]
 mod event;
 mod focus_event;
 mod gesture_event;

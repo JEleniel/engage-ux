@@ -131,22 +131,17 @@ pub struct HeadlessBackend {
 /// using the provided GPU objects.
 pub trait RenderCallback: Send {
 	/// Called on the backend thread with a backend-specific context passed
-	/// as an owned boxed value. The callback may return a boxed context as
-	/// well (for example to return a modified encoder) which the backend
-	/// will attempt to downcast back to its concrete type after the call.
-	fn call_box(
-		self: Box<Self>,
-		backend_ctx: Box<dyn std::any::Any + Send>,
-	) -> Result<Box<dyn std::any::Any + Send>>;
+	/// as a mutable erased `Any` reference. Backends should document the
+	/// concrete context type they provide (for example the winit/wgpu
+	/// backend provides a `WgpuRenderContext` reference during Present).
+	///
+	/// Using a mutable reference avoids boxing backend-local references and
+	/// keeps the callback invocation lightweight.
+	fn call_box(self: Box<Self>, backend_ctx: &mut dyn std::any::Any) -> Result<()>;
 }
 
-impl<F: Send + FnOnce(Box<dyn std::any::Any + Send>) -> Result<Box<dyn std::any::Any + Send>>>
-	RenderCallback for F
-{
-	fn call_box(
-		self: Box<F>,
-		backend_ctx: Box<dyn std::any::Any + Send>,
-	) -> Result<Box<dyn std::any::Any + Send>> {
+impl<F: Send + FnOnce(&mut dyn std::any::Any) -> Result<()>> RenderCallback for F {
+	fn call_box(self: Box<F>, backend_ctx: &mut dyn std::any::Any) -> Result<()> {
 		// Move out the FnOnce and call it.
 		let f = *self;
 		f(backend_ctx)
@@ -225,5 +220,11 @@ impl Backend for HeadlessBackend {
 		Err(OalError::Renderer(
 			"submit_render not supported for headless backend".into(),
 		))
+	}
+}
+
+impl Default for HeadlessBackend {
+	fn default() -> Self {
+		Self::new()
 	}
 }

@@ -4,6 +4,13 @@ Project progress snapshot and action plan — Engage UX
 
 Updated: 2025-12-10
 
+## Recent updates (automated)
+
+- 2025-12-12: Added initial GitHub Actions CI workflow (`.github/workflows/ci.yml`) with cross-build and host test jobs.
+- 2025-12-12: Documented minimal `unsafe` usage in `engage-ux-oal` (crate doc + README note).
+- 2025-12-12: Added an accessibility test harness for core interactive components (`engage-ux-components/tests/accessibility_harness.rs`).
+- 2025-12-12: Performed a small code tidy pass to address common lint warnings (unused variables/imports, test crate docs).
+
 ## Project snapshot
 
 - Repository: `engage-ux` (multi-crate Rust workspace)

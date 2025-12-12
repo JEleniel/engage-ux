@@ -4,7 +4,7 @@ applyTo: '*'
 
 # Rust Style Guide
 
-This document defines formatting and style conventions for all Rust codez These rules are enforced by the project's `rustfmt.toml` configuration.
+This document defines formatting and style conventions for all Rust source code. These rules are enforced by the project's `rustfmt.toml` configuration.
 
 ---
 

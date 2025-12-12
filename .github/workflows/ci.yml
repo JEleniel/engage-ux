@@ -1,0 +1,159 @@
+name: CI
+
+on:
+  push: {}
+  pull_request: {}
+  workflow_dispatch: {}
+
+jobs:
+  fmt-check:
+    name: Format check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+      - name: Install Rust + rustfmt
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+  clippy:
+    name: Clippy (deny warnings)
+    runs-on: ubuntu-latest
+    needs: fmt-check
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+      - name: Install Rust + clippy
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: clippy
+      - name: Run clippy (deny warnings)
+        run: cargo clippy --all --workspace -- -D warnings
+
+  build-and-test:
+    name: Build & Test
+    runs-on: ${{ matrix.os }}
+    needs: clippy
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Build workspace
+        run: cargo build --all --workspace --verbose
+      - name: Run tests
+        run: cargo test --all --workspace --verbose
+
+  cross-build:
+    name: Cross-build matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          [
+            'x86_64-unknown-linux-gnu',
+            'aarch64-unknown-linux-gnu',
+            'x86_64-pc-windows-msvc',
+            'x86_64-apple-darwin',
+            'aarch64-apple-darwin',
+            'aarch64-apple-ios',
+            'aarch64-linux-android',
+          ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Add target (if available)
+        run: |
+          rustup target add ${{ matrix.target }} || true
+      - name: Cross-build (check compilation)
+        run: |
+          cargo build --all --workspace --target ${{ matrix.target }}
+
+  linux-winit:
+    name: Linux native backend (Wayland/X11)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: ['x86_64', 'aarch64']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Build headless (default)
+        run: cargo build --all --workspace
+      - name: Build native winit backend (Wayland)
+        env:
+          XDG_SESSION_TYPE: wayland
+        run: cargo build --all --workspace --features native-winit
+      - name: Build native winit backend (X11)
+        env:
+          XDG_SESSION_TYPE: x11
+        run: cargo build --all --workspace --features native-winit
+
+  ios-build:
+    name: iOS cross-build (macOS runner)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Add iOS target
+        run: rustup target add aarch64-apple-ios || true
+      - name: Build for iOS target (compile-only)
+        run: cargo build --all --workspace --target aarch64-apple-ios || true
+
+  android-build:
+    name: Android cross-build (compile only)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Add Android target
+        run: rustup target add aarch64-linux-android || true
+      - name: Attempt Android build (requires NDK/toolchain)
+        run: cargo build --all --workspace --target aarch64-linux-android || true

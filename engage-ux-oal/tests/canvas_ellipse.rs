@@ -1,3 +1,7 @@
+//! Canvas ellipse tests for the OAL canvas recording surface.
+//!
+//! Verifies ellipse recording and primitive semantics.
+
 use engage_ux_core::Color;
 use engage_ux_core::geometry::Ellipse;
 use engage_ux_oal::oal::canvas::{Canvas, Primitive};

@@ -121,7 +121,7 @@ impl Video {
 
 	/// Set current time in seconds (seek)
 	pub fn set_current_time(&mut self, time: f64) {
-		self.current_time = time.max(0.0).min(self.duration);
+		self.current_time = time.clamp(0.0, self.duration);
 	}
 
 	/// Get duration in seconds

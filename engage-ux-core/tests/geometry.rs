@@ -1,3 +1,8 @@
+//! Geometry unit tests for the `engage-ux-core::geometry` module.
+//!
+//! These tests exercise geometric primitives and helpers used across the
+//! workspace.
+
 use engage_ux_core::geometry::{
 	Border, Circle, Ellipse, Line, Move, Point, Polygon, Polyline, Rectangle, Text,
 };

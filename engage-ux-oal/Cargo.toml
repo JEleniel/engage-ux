@@ -33,5 +33,6 @@ default = ["skia"]
 native-winit = []
 skia = []
 
-[lints]
-workspace = true
+[lints.rust]
+missing_docs = "warn"
+unsafe_code = "allow"

@@ -1,12 +1,14 @@
-// Example: automatically pick the best available OAL backend and open a window.
-// - If the `native-winit` feature is enabled, the example will prefer the
-//   native winit backend (Wayland/X11 depending on the host).
-// - Otherwise it falls back to the headless backend so the example still
-//   compiles and runs in CI or environments without a compositor.
-//
-// Run with: cargo run -p engage-ux-oal --example auto_backend_demo --features native-winit
+//! Example: automatically pick the best available OAL backend and open a window.
+//!
+//! - If the `native-winit` feature is enabled, the example will prefer the
+//!   native winit backend (Wayland/X11 depending on the host).
+//! - Otherwise it falls back to the headless backend so the example still
+//!   compiles and runs in CI or environments without a compositor.
+//!
+//! Run with: cargo run -p engage-ux-oal --example auto_backend_demo --features native-winit
 
 use engage_ux_oal::oal::backend::Backend;
+#[cfg(feature = "native-winit")]
 use std::{thread, time::Duration};
 
 fn main() {
@@ -38,9 +40,11 @@ fn main() {
 				// Submit a tiny render job if supported. Use a boxed job that
 				// flips a flag — similar to the gpu_submit example.
 				let job = Box::new(
-					move |ctx: Box<dyn std::any::Any + Send>| -> engage_ux_oal::errors::Result<Box<dyn std::any::Any + Send>> {
-						// No-op render in this small demo: return the context unchanged.
-						Ok(ctx)
+					move |_ctx: &mut dyn std::any::Any| -> engage_ux_oal::errors::Result<()> {
+						// No-op render in this small demo: we don't need the
+						// backend context; simply return success.
+						let _ = _ctx;
+						Ok(())
 					},
 				);
 

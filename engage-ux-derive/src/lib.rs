@@ -48,6 +48,9 @@ use syn::{Attribute, DeriveInput, Meta, parse_macro_input};
 
 use darling::FromMeta;
 
+// Type alias to reduce verbose return types in `parse_event_attr` and
+// silence clippy's `type_complexity` suggestion.
+type EventAttrTuple = (Option<String>, Option<String>, Option<String>);
 #[derive(FromMeta, Debug)]
 struct EventAttr {
 	#[darling(rename = "crate")]
@@ -293,7 +296,7 @@ pub fn derive_event(input: TokenStream) -> TokenStream {
 /// shorthand string literal form `#[event("name")]`.
 fn parse_event_attr(
 	attrs: &[Attribute],
-) -> Result<(Option<String>, Option<String>, Option<String>), syn::Error> {
+) -> Result<EventAttrTuple, syn::Error> {
 	for attr in attrs.iter() {
 		if let Meta::List(list) = &attr.meta {
 			if !list.path.is_ident("event") {
@@ -310,50 +313,43 @@ fn parse_event_attr(
 			let trimmed = s.trim();
 			if !trimmed.contains('=') {
 				// shorthand form, look for a single string literal
-				if let Some(first_q) = trimmed.find('"') {
-					if let Some(end_q) = trimmed[first_q + 1..].find('"') {
+				if let Some(first_q) = trimmed.find('"')
+					&& let Some(end_q) = trimmed[first_q + 1..].find('"') {
 						let name = trimmed[first_q + 1..first_q + 1 + end_q].to_string();
 						return Ok((None, Some(name), None));
 					}
-				}
 			}
 
 			// look for name = "..." or crate = "..."
-			if let Some(idx) = s.find("crate") {
-				if let Some(eq_idx) = s[idx..].find('=') {
+			if let Some(idx) = s.find("crate")
+				&& let Some(eq_idx) = s[idx..].find('=') {
 					let rest = &s[idx + eq_idx + 1..];
-					if let Some(start_q) = rest.find('"') {
-						if let Some(end_q) = rest[start_q + 1..].find('"') {
+					if let Some(start_q) = rest.find('"')
+						&& let Some(end_q) = rest[start_q + 1..].find('"') {
 							let crate_path = rest[start_q + 1..start_q + 1 + end_q].to_string();
 							return Ok((Some(crate_path), None, None));
 						}
-					}
 				}
-			}
 
-			if let Some(idx) = s.find("name") {
-				if let Some(eq_idx) = s[idx..].find('=') {
+			if let Some(idx) = s.find("name")
+				&& let Some(eq_idx) = s[idx..].find('=') {
 					let rest = &s[idx + eq_idx + 1..];
-					if let Some(start_q) = rest.find('"') {
-						if let Some(end_q) = rest[start_q + 1..].find('"') {
+					if let Some(start_q) = rest.find('"')
+						&& let Some(end_q) = rest[start_q + 1..].find('"') {
 							let name = rest[start_q + 1..start_q + 1 + end_q].to_string();
 							return Ok((None, Some(name), None));
 						}
-					}
 				}
-			}
 
-			if let Some(idx) = s.find("category") {
-				if let Some(eq_idx) = s[idx..].find('=') {
+			if let Some(idx) = s.find("category")
+				&& let Some(eq_idx) = s[idx..].find('=') {
 					let rest = &s[idx + eq_idx + 1..];
-					if let Some(start_q) = rest.find('"') {
-						if let Some(end_q) = rest[start_q + 1..].find('"') {
+					if let Some(start_q) = rest.find('"')
+						&& let Some(end_q) = rest[start_q + 1..].find('"') {
 							let category = rest[start_q + 1..start_q + 1 + end_q].to_string();
 							return Ok((None, None, Some(category)));
 						}
-					}
 				}
-			}
 		}
 	}
 

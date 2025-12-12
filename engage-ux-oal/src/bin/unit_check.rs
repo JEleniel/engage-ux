@@ -1,3 +1,6 @@
+//! Small unit conversion checks used by the OAL crate.
+//!
+//! This binary performs quick sanity checks for unit conversion helpers.
 fn main() {
 	use engage_ux_oal::oal::{DeviceMetrics, Unit};
 

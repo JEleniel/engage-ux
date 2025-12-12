@@ -81,8 +81,8 @@ impl Rectangle {
 		Self {
 			top_left: Point {
 				x: self.top_left.x + border.left,
-				 y: self.top_left.y + border.top,
-				 style: None,
+				y: self.top_left.y + border.top,
+				style: None,
 			},
 			width: self.width - border.left - border.right,
 			height: self.height - border.top - border.bottom,

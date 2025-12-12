@@ -11,7 +11,6 @@ use std::sync::Arc;
 /// These functions take geometry-only types from `engage-ux-core` and accept
 /// styling parameters (color, stroke, fill) from the caller so core stays
 /// device-independent.
-
 /// Record a point
 pub fn emit_point(canvas: &Canvas, pos: &engage_ux_core::geometry::Point, color: Color) {
 	canvas.point(pos.clone(), color);
@@ -104,11 +103,10 @@ impl DrawableContextAdapter {
 	}
 
 	fn resolve_color_from_line_style(ls: &Option<CoreLineStyle>) -> Color {
-		if let Some(ls) = ls {
-			if let Some(c) = ls.color.as_ref() {
-				return c.clone();
+		if let Some(ls) = ls
+			&& let Some(c) = ls.color.as_ref() {
+				return *c;
 			}
-		}
 		Color::from_rgb(0, 0, 0)
 	}
 
@@ -135,12 +133,11 @@ impl engage_ux_core::component::DrawableContext for DrawableContextAdapter {
 	fn draw_rectangle(&mut self, r: CoreRectangle) {
 		let mut fill = false;
 		let mut color = Color::from_rgb(0, 0, 0);
-		if let Some(fs) = r.fill_style.as_ref() {
-			if let Some(c) = fs.color.as_ref() {
-				color = c.clone();
+		if let Some(fs) = r.fill_style.as_ref()
+			&& let Some(c) = fs.color.as_ref() {
+				color = *c;
 				fill = true;
 			}
-		}
 		if !fill {
 			// fallback to line style
 			color = Self::resolve_color_from_line_style(&r.line_style);
@@ -152,12 +149,11 @@ impl engage_ux_core::component::DrawableContext for DrawableContextAdapter {
 	fn draw_circle(&mut self, c: CoreCircle) {
 		let mut fill = false;
 		let mut color = Color::from_rgb(0, 0, 0);
-		if let Some(fs) = c.fill_style.as_ref() {
-			if let Some(col) = fs.color.as_ref() {
-				color = col.clone();
+		if let Some(fs) = c.fill_style.as_ref()
+			&& let Some(col) = fs.color.as_ref() {
+				color = *col;
 				fill = true;
 			}
-		}
 		if !fill {
 			color = Self::resolve_color_from_line_style(&c.line_style);
 		}
@@ -168,12 +164,11 @@ impl engage_ux_core::component::DrawableContext for DrawableContextAdapter {
 	fn draw_ellipse(&mut self, e: CoreEllipse) {
 		let mut fill = false;
 		let mut color = Color::from_rgb(0, 0, 0);
-		if let Some(fs) = e.fill_style.as_ref() {
-			if let Some(col) = fs.color.as_ref() {
-				color = col.clone();
+		if let Some(fs) = e.fill_style.as_ref()
+			&& let Some(col) = fs.color.as_ref() {
+				color = *col;
 				fill = true;
 			}
-		}
 		if !fill {
 			color = Self::resolve_color_from_line_style(&e.line_style);
 		}
@@ -185,12 +180,11 @@ impl engage_ux_core::component::DrawableContext for DrawableContextAdapter {
 		// Use polygon.fill_style to determine fill and color
 		let mut fill = false;
 		let mut color = Color::from_rgb(0, 0, 0);
-		if let Some(fs) = p.fill_style.as_ref() {
-			if let Some(col) = fs.color.as_ref() {
-				color = col.clone();
+		if let Some(fs) = p.fill_style.as_ref()
+			&& let Some(col) = fs.color.as_ref() {
+				color = *col;
 				fill = true;
 			}
-		}
 		if !fill {
 			color = Self::resolve_color_from_line_style(&p.line_style);
 		}
@@ -202,7 +196,7 @@ impl engage_ux_core::component::DrawableContext for DrawableContextAdapter {
 		let color = p
 			.style
 			.as_ref()
-			.and_then(|s| s.color.clone())
+			.and_then(|s| s.color)
 			.unwrap_or_else(|| Color::from_rgb(0, 0, 0));
 		let stroke = p.style.as_ref().and_then(|s| s.stroke_width).unwrap_or(1.0);
 		self.canvas.polyline(p, color, stroke);
@@ -210,16 +204,14 @@ impl engage_ux_core::component::DrawableContext for DrawableContextAdapter {
 
 	fn draw_text(&mut self, t: CoreText) {
 		let mut color = Color::from_rgb(0, 0, 0);
-		if let Some(fs) = t.fill_style.as_ref() {
-			if let Some(c) = fs.color.as_ref() {
-				color = c.clone();
+		if let Some(fs) = t.fill_style.as_ref()
+			&& let Some(c) = fs.color.as_ref() {
+				color = *c;
 			}
-		}
-		if let Some(ls) = t.line_style.as_ref() {
-			if let Some(c) = ls.color.as_ref() {
-				color = c.clone();
+		if let Some(ls) = t.line_style.as_ref()
+			&& let Some(c) = ls.color.as_ref() {
+				color = *c;
 			}
-		}
 		self.canvas.text(t, color);
 	}
 }

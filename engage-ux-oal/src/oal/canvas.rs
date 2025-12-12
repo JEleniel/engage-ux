@@ -163,7 +163,7 @@ impl Canvas {
 	}
 
 	/// Record a point primitive.
-	pub fn point(&self, mut pos: Point, color: Color) {
+	pub fn point(&self, pos: Point, color: Color) {
 		let mut guard = self.commands.lock().unwrap();
 		// Point has no inline style field in core; record color with the primitive.
 		guard.push(Primitive::Point { pos, color });
