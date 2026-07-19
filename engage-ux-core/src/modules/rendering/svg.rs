@@ -261,6 +261,9 @@ impl Default for SvgParser {
 
 /// Convert SVG element type from string
 impl SvgElementType {
+	/// Convert a tag name string (e.g., "rect", "circle") to the
+	/// corresponding `SvgElementType`.
+	/// Returns `None` for unknown or unsupported tag names.
 	pub fn from_tag_name(s: &str) -> Option<Self> {
 		match s.to_lowercase().as_str() {
 			"svg" => Some(SvgElementType::Svg),

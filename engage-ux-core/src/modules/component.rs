@@ -1,131 +1,141 @@
-//! Component trait and base structures
+//! Component trait and types
 //!
-//! Defines the base trait that all UI components must implement.
+//! Defines the base `Component` trait that all UI components implement, along with
+//! common type aliases used throughout the framework.
 
-use serde::{Deserialize, Serialize};
 use std::sync::Arc;
-use tokio::sync::RwLock;
 
-/// Unique identifier for components
-pub type ComponentId = u64;
+pub use crate::component_properties::ComponentProperties;
 
-/// Rectangle representing position and size
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-pub struct Rect {
-	pub x: f32,
-	pub y: f32,
-	pub width: f32,
-	pub height: f32,
-}
+/// Unique identifier for a component instance
+pub type ComponentId = u128;
 
-impl Rect {
-	pub fn new(x: f32, y: f32, width: f32, height: f32) -> Self {
-		Self {
-			x,
-			y,
-			width,
-			height,
-		}
-	}
+/// Callback for handling component events
+///
+/// Event callbacks are optional handlers that components can invoke when certain
+/// events occur (e.g., button clicks, text changes). The callback receives a reference
+/// to the event that triggered it. Uses Arc to allow sharing and cloning across
+/// components that derive Clone.
+pub type EventCallback = Arc<dyn Fn(&crate::event::Event) + Send + Sync>;
 
-	pub fn contains_point(&self, x: f32, y: f32) -> bool {
-		x >= self.x && x <= self.x + self.width && y >= self.y && y <= self.y + self.height
-	}
-}
-
-/// Properties common to all components
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ComponentProperties {
-	pub id: ComponentId,
-	pub visible: bool,
-	pub enabled: bool,
-	pub bounds: Rect,
-}
-
-impl ComponentProperties {
-	pub fn new(id: ComponentId) -> Self {
-		Self {
-			id,
-			visible: true,
-			enabled: true,
-			bounds: Rect::new(0.0, 0.0, 100.0, 100.0),
-		}
-	}
-}
-
-/// Base trait for all UI components
+/// Base trait that all UI components implement
+///
+/// This trait provides a common interface for managing component properties
+/// (visibility, enabled state, and unique identifier) across all component types.
+/// Components should implement this trait to participate in the component system.
+///
+/// Components can optionally implement lifecycle hooks like `on_register` to subscribe
+/// to the EventBus when they're added to the application.
 pub trait Component: Send + Sync {
-	/// Get the component's unique identifier
+	/// Get the unique identifier for this component
 	fn id(&self) -> ComponentId;
 
-	/// Get component properties
+	/// Get a reference to this component's properties
 	fn properties(&self) -> &ComponentProperties;
 
-	/// Get mutable component properties
+	/// Get a mutable reference to this component's properties
 	fn properties_mut(&mut self) -> &mut ComponentProperties;
 
-	/// Check if component is visible
+	/// Optional: Called when the component is registered with an app
+	///
+	/// This is a good place to subscribe to the EventBus to listen for events
+	/// directed at this component (events where `source_component_id` matches
+	/// this component's ID). Override this method to set up subscriptions.
+	///
+	/// # Example
+	///
+	/// ```ignore
+	/// fn on_register(&mut self, bus: &EventBus) {
+	///     self.event_receiver = Some(bus.subscribe());
+	/// }
+	/// ```
+	fn on_register(&mut self, _bus: &crate::event::EventBus) {
+		// Default: do nothing
+	}
+
+	/// Optional: Called when the component is about to be unregistered from an app
+	///
+	/// This is a good place to clean up resources, stop listening for events, etc.
+	fn on_unregister(&mut self) {
+		// Default: do nothing
+	}
+
+	/// Check if the component is visible
+	#[inline]
 	fn is_visible(&self) -> bool {
 		self.properties().visible
 	}
 
-	/// Set visibility
-	fn set_visible(&mut self, visible: bool) {
-		self.properties_mut().visible = visible;
-	}
-
-	/// Check if component is enabled
+	/// Check if the component is enabled (accepts input)
+	#[inline]
 	fn is_enabled(&self) -> bool {
 		self.properties().enabled
 	}
 
-	/// Set enabled state
+	/// Set the visibility of the component
+	#[inline]
+	fn set_visible(&mut self, visible: bool) {
+		self.properties_mut().visible = visible;
+	}
+
+	/// Set the enabled state of the component
+	#[inline]
 	fn set_enabled(&mut self, enabled: bool) {
 		self.properties_mut().enabled = enabled;
 	}
-
-	/// Get component bounds
-	fn bounds(&self) -> Rect {
-		self.properties().bounds
-	}
-
-	/// Set component bounds
-	fn set_bounds(&mut self, bounds: Rect) {
-		self.properties_mut().bounds = bounds;
-	}
 }
-
-/// Thread-safe wrapper for components
-pub type ComponentRef = Arc<RwLock<dyn Component>>;
 
 #[cfg(test)]
 mod tests {
 	use super::*;
 
-	#[test]
-	fn test_rect_creation() {
-		let rect = Rect::new(10.0, 20.0, 100.0, 50.0);
-		assert_eq!(rect.x, 10.0);
-		assert_eq!(rect.y, 20.0);
-		assert_eq!(rect.width, 100.0);
-		assert_eq!(rect.height, 50.0);
+	// Mock component for testing
+	struct MockComponent {
+		properties: ComponentProperties,
+	}
+
+	impl Component for MockComponent {
+		fn id(&self) -> ComponentId {
+			self.properties.id
+		}
+
+		fn properties(&self) -> &ComponentProperties {
+			&self.properties
+		}
+
+		fn properties_mut(&mut self) -> &mut ComponentProperties {
+			&mut self.properties
+		}
 	}
 
 	#[test]
-	fn test_rect_contains_point() {
-		let rect = Rect::new(0.0, 0.0, 100.0, 100.0);
-		assert!(rect.contains_point(50.0, 50.0));
-		assert!(rect.contains_point(0.0, 0.0));
-		assert!(rect.contains_point(100.0, 100.0));
-		assert!(!rect.contains_point(101.0, 50.0));
-		assert!(!rect.contains_point(50.0, 101.0));
+	fn test_component_visibility() {
+		let mut component = MockComponent {
+			properties: ComponentProperties::new(1),
+		};
+
+		assert!(component.is_visible());
+		component.set_visible(false);
+		assert!(!component.is_visible());
 	}
 
 	#[test]
-	fn test_component_properties() {
-		let props = ComponentProperties::new(1);
-		assert_eq!(props.id, 1);
-		assert!(props.visible);
-		assert!(props.enabled);
+	fn test_component_enabled() {
+		let mut component = MockComponent {
+			properties: ComponentProperties::new(1),
+		};
+
+		assert!(component.is_enabled());
+		component.set_enabled(false);
+		assert!(!component.is_enabled());
+	}
+
+	#[test]
+	fn test_component_id() {
+		let component = MockComponent {
+			properties: ComponentProperties::new(42),
+		};
+
+		assert_eq!(component.id(), 42);
 	}
 }

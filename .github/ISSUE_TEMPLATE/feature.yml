@@ -1,0 +1,53 @@
+name: Feature — Implementation & Memory Entry
+description: Structured feature issue template for humans and automation agents. Includes a machine-readable JSON spec and instructions for updating long-term memory.
+title: 'Feature - '
+labels:
+  - feature
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to propose a feature.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Provide a concise one-line summary of the feature (what it delivers and who benefits).
+      placeholder: A concise one-line summary.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: 'Select one of: functional, non-functional, technical-debt.'
+      options:
+        - functional
+        - non-functional
+        - technical-debt
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Implementation steps (human-readable)
+
+        - Define the feature in the project design docs (`docs/design/features/`).
+        - Add or update tests (unit, integration, e2e) as required.
+        - Implement code changes.
+        - If this work is being tracked on GitHub and a pull request is desired: use a feature branch, open a PR, and link it to this issue.
+        - Otherwise: attach a patch/diff and testing notes directly to this issue.
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: Describe how reviewers and CI will consider this feature complete.
+      placeholder: |
+        - Behavior documented and tested
+        - Security/privacy considerations addressed
+        - CI checks passing

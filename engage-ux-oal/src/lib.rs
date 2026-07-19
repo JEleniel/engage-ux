@@ -1,30 +1,17 @@
-//! OS Abstraction Layer (OAL) for Engage UX
+//! OS Abstraction Layer for Engage UX
 //!
-//! Provides platform-specific implementations for:
-//! - Window management
-//! - Graphics rendering
-//! - Input handling
-//! - Screen reader and accessibility APIs
-//! - File system access
-//! - Multi-monitor support
+//! This crate provides a minimal OAL implementation: unit conversions, device metrics,
+//! window handles, and an EventBus integration. Rendering backends are pluggable via
+//! the `Renderer` trait.
 
-pub mod backends;
-pub mod monitor;
-pub mod platform;
-pub mod window;
+mod errors;
+mod oal;
 
-pub use backends::{
-	BackendFactory, RenderBackend, ScreenReaderBackend, WindowBackend, get_backend_factory,
+pub use errors::*;
+pub use oal::{
+	Canvas, DeviceMetrics, NoopRenderer, Oal, Renderer, Unit, View, Window, WindowDesc,
+	run_event_loop,
 };
-pub use monitor::{Monitor, MonitorBounds, MonitorConfiguration, MonitorLayoutMode};
-pub use platform::Platform;
-pub use window::Window;
-
 #[cfg(test)]
-mod tests {
-	#[test]
-	fn oal_modules_exist() {
-		// Basic smoke test to ensure modules compile
-		assert!(true);
-	}
-}
+#[path = "units_tests.rs"]
+mod units_tests;

@@ -1,50 +1,103 @@
-name: 'Bug report'
-about: 'Use this form to report reproducible bugs. Provide steps to reproduce and expected behavior.'
-title: '[bug] '
-labels: ['bug']
+name: Bug report
+description: 'Report reproducible bugs: include steps, logs, and environment details.'
+title: 'Bug: '
+labels:
+  - bug
+  - needs-triage
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is the impact?
+      options:
+        - blocker
+        - high
+        - medium
+        - low
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgently should this be addressed?
+      options:
+        - P0 (urgent)
+        - P1 (high)
+        - P2 (normal)
+        - P3 (low)
+
   - type: textarea
     id: summary
     attributes:
-      label: 'Summary'
-      description: 'Short description of the bug.'
-      placeholder: 'A short, descriptive summary of the issue.'
+      label: Summary
+      description: Provide a concise one-line summary of the bug.
+      placeholder: A concise one-line summary.
+    validations:
+      required: true
+
   - type: textarea
-    id: steps
+    id: steps_to_reproduce
     attributes:
-      label: 'Steps to reproduce'
-      description: 'Exact steps to reproduce the behavior. Include commands and inputs.'
+      label: Steps to reproduce
+      description: Provide exact steps, including commands and inputs.
       placeholder: |
-        1. Do this
-        2. Then this
-        3. Observe the problem
+        1.
+        2.
+    validations:
+      required: true
+
   - type: textarea
-    id: expected
+    id: expected_behavior
     attributes:
-      label: 'Expected behavior'
-      description: 'What you expected to happen.'
-      placeholder: 'Describe the expected outcome.'
+      label: Expected behavior
+      description: Describe the behavior you expected.
+      placeholder: Describe the behavior you expected.
+    validations:
+      required: true
+
   - type: textarea
-    id: actual
+    id: actual_behavior
     attributes:
-      label: 'Actual behavior'
-      description: 'What actually happened, including error messages and stack traces.'
-      placeholder: 'Describe the observed outcome, include logs/errors.'
-  - type: input
+      label: Actual behavior
+      description: Describe the observed behavior.
+      placeholder: Describe the observed behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducible_example
+    attributes:
+      label: Reproducible example / minimal test case
+      description: Provide a minimal code snippet, dataset, or commands to reproduce.
+      placeholder: |
+        # commands to reproduce
+      render: shell
+
+  - type: textarea
+    id: logs_stack_traces
+    attributes:
+      label: Logs / Stack traces
+      description: Paste relevant logs or stack traces.
+      placeholder: |
+        # logs or stack traces
+      render: text
+
+  - type: textarea
     id: environment
     attributes:
-      label: 'Environment'
-      description: 'OS, runtime versions, and any relevant environment variables (do not include secrets).'
-      placeholder: 'e.g. Ubuntu 22.04, Node v20, Rust 1.70'
-  - type: textarea
-    id: additional
-    attributes:
-      label: 'Additional context'
-      description: 'Screenshots, log excerpts, or other context that may help diagnose the issue.'
-  - type: checkboxes
-    id: checklist
-    attributes:
-      label: 'Checklist'
-      options:
-        - label: 'I reproducible the issue in a minimal environment'
-        - label: 'I searched existing issues and PRs'
+      label: Environment
+      description: Provide environment details.
+      value: |
+        - Project version / branch / commit:
+        - OS:
+        - Runtime/tooling versions:
+    validations:
+      required: true

@@ -1,0 +1,46 @@
+name: Documentation
+description: Improvements, fixes, or additions to documentation.
+title: 'Docs: '
+labels:
+  - documentation
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to request a documentation change.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Documentation
+      description: Provide a concise one-line summary of the documentation change or gap.
+      placeholder: A concise one-line summary.
+    validations:
+      required: true
+
+  - type: textarea
+    id: files_pages_affected
+    attributes:
+      label: Files / pages affected
+      description: List the file paths or documentation pages this change should touch (e.g., docs/, README.md).
+      placeholder: |
+        - docs/...
+        - README.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested_change
+    attributes:
+      label: Suggested change
+      description: Describe the proposed change (add examples, fix wording, add diagrams, etc.).
+      placeholder: Describe the proposed documentation change.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: Describe how reviewers will verify the change is complete.

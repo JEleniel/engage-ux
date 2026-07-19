@@ -14,7 +14,27 @@
 
 mod modules;
 
+// NOTE: compatibility shim removed — prerelease API cleanup
+
+// Keep a few top-level modules for small shared primitives and properties
+pub mod component_properties;
+
 pub use modules::*;
+pub use component_properties::ComponentProperties;
+
+// Compatibility alias for old import path: engage_ux_core::component
+pub mod component {
+	//! Compatibility alias for the component module
+	pub use crate::modules::component::*;
+}
+
+// Compatibility alias for old import path: engage_ux_core::events
+pub mod events {
+	//! Compatibility alias for the event module
+	pub use crate::event::*;
+}
+
+// NOTE: top-level color compatibility module removed as part of cleanup
 
 #[cfg(test)]
 mod tests {

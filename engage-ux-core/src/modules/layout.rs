@@ -208,13 +208,18 @@ impl Default for Layout {
 /// Calculated bounds in absolute pixels
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct CalculatedBounds {
+	/// X offset in pixels
 	pub x: f32,
+	/// Y offset in pixels
 	pub y: f32,
+	/// Width in pixels
 	pub width: f32,
+	/// Height in pixels
 	pub height: f32,
 }
 
 impl CalculatedBounds {
+	/// Create a new `CalculatedBounds` from components.
 	pub fn new(x: f32, y: f32, width: f32, height: f32) -> Self {
 		Self {
 			x,

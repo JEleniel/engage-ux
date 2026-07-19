@@ -1,140 +1,145 @@
-# Project specific
-# Add files and directories specific to your project that should be ignored here
+# =========================
+# engage-ux: project-specific
+# =========================
+# Build/artifacts
 .analyze/
 target/
 
-# Visual Studio Code
+# =========================
+# IDEs / Editors
+# =========================
+# Visual Studio Code - ignore all but a few checked-in workspace files
 .vscode/*
-!.vscode/*.code-snippets
 !.vscode/extensions.json
 !.vscode/launch.json
-!.vscode/settings.*.json
-!.vscode/settings.json
 !.vscode/tasks.json
+!.vscode/settings.json
+!.vscode/*.code-snippets
+.vscode-test/
 .history/
-.vscode-test
 *.vsix
 
-# Archive Files
+# JetBrains IDEs
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim/Neovim swap and backup
+.*.swp
+.*.swo
+.*.swn
+*.un~
+*~
+
+# Emacs
+*~
+.#*
+
+# =========================
+# OS-specific
+# =========================
+# macOS
+.DS_Store
+.AppleDB
+.AppleDesktop
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+.fseventsd
+.DocumentRevisions-V100
+._*
+
+# Windows
+$RECYCLE.BIN/
+[Dd]esktop.ini
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+*.lnk
+
+# Linux
+.directory
+.fuse_hidden*
+.nfs*
+.Trash-
+
+# =========================
+# Archives, packages, backups
+# (common compressed and package formats)
+# =========================
 *.7z
 *.bz2
-*.bzip
-*.bzip2
 *.cab
 *.deb
 *.dmg
 *.egg
 *.gem
 *.gz
-*.gzip
 *.iso
 *.jar
 *.lzma
 *.msi
 *.msix
-*.msm
-*.msp
 *.rar
 *.rpm
 *.tar
 *.tgz
 *.txz
-*.tzst
-*.xar
 *.xpi
 *.xz
 *.zip
 *.zst
 
-# Backup Files
+# Backup and diff
 *.bak
-*.gho
-*.ori
 *.orig
-
-# Diff Files
+*.ori
+*.gho
 *.diff
 *.patch
 
-# Configuration Files
-.env*
-!.env.example
-
-# Linux Files
-*~
-.directory
-.fuse_hidden*
-.nfs*
-.Trash-*
-
-# Windows Files
-$RECYCLE.BIN/
-[Dd]esktop.ini
-ehthumbs.db
-ehthumbs_vista.db
-*.lnk
-*.stackdump
-Thumbs.db
-Thumbs.db:encryptable
-
-# MacOS Files
-._*
-.apdisk
-.AppleDB
-.AppleDesktop
-.AppleDouble
-.com.apple.timemachine.donotpresent
-.DocumentRevisions-V100
-.DS_Store
-.fseventsd
-.LSOverride
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-Icon
-Network Trash Folder
-Temporary Items
-
-# Cache, Temporary, and Other Common Files
+# =========================
+# Temp, cache, and runtime
+# =========================
 .cache/
 .temp/
 temp/
 tmp/
+pids/
+logs/
 *.tmp
-*.orig
+*.seed
 *.rej
 
-# Security Files
+# Runtime / PID files
+*.pid
+*.pid.lock
+
+# =========================
+# Logs and diagnostics
+# =========================
+*.log
+*-debug.log*
+*-error.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# =========================
+# Security / keys / certificates
+# (include common private/certificate formats)
+# =========================
 *.pem
 *.key
+*.csr
 *.crt
 *.cert
-*.keystore
+*.cer
+*.der
 *.p12
 *.pfx
-
-# Logs and Diagnostics
-logs/
-*.log
-*-debug.log*
-*-error.log*
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-
-# Runtime data
-*.pid
-*.pid.lock
-*.pfx
-
-# Logs and Diagnostics
-logs/
-*.log
-*-debug.log*
-*-error.log*
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-
-# Runtime data
-pids/
-*.pid
-*.pid.lock
-*.seed
+*.jks
+*.keystore

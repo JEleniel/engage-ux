@@ -2,39 +2,35 @@
 
 ## Reporting Security Issues
 
-We take security bugs seriously. We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
+We take security seriously and appreciate responsible disclosure.
 
-### Reporting a Vulnerability
+### How to Report a Vulnerability
 
-**Please do not report security vulnerabilities through public GitHub issues.**
+**Do not report vulnerabilities through public GitHub issues.**
 
-Instead, please use one of these channels:
+Instead, use one of these channels:
 
-- Use GitHub's security advisory feature: [Report a Vulnerability](https://github.com/{username}/{repo}/security/advisories/new)
-- For critical issues, you can encrypt your report using our [security team's PGP key](https://github.com/JEleniel.gpg)
+- GitHub's security advisory: [Report a Vulnerability](https://github.com/JEleniel/engage-ux/security/advisories/new)
+- For critical issues, encrypt your report using our [security team's PGP key](https://github.com/JEleniel.gpg)
 
-Please include the following information in your report:
+Include:
 
 - Description of the vulnerability
-- Steps to reproduce the issue
+- Steps to reproduce
 - Potential impact
-- Any known mitigations
-- Any related references or CVEs
+- Known mitigations
+- Related references or CVEs
 
 ### What to Expect
 
-When you submit a vulnerability report, our team will:
-
-1. Confirm receipt within 48 hours
-2. Provide a detailed response within 7 days
-3. Keep you informed about our progress
-4. Credit you in the security advisory (unless you prefer to remain anonymous)
-
-> **Note:** Replace `{username}` and `{repo}` in links with your GitHub username and repository name when using this template.
+- Confirmation of receipt within 48 hours
+- Detailed response within 7 days
+- Progress updates
+- Credit in the advisory (unless you prefer anonymity)
 
 ## Scope
 
-If you believe you've found a security vulnerability in {repo}, we encourage you to let us know right away. We will investigate all legitimate reports and do our best to quickly fix the problem.
+If you believe you've found a security vulnerability, let us know immediately. We investigate all legitimate reports and fix problems quickly.
 
 ### In Scope
 
@@ -46,8 +42,8 @@ If you believe you've found a security vulnerability in {repo}, we encourage you
 
 ### Out of Scope
 
-- Bugs that don't have a security impact
-- DOS attacks
+- Bugs without security impact
+- Denial of Service (DOS) attacks
 - Spam attacks
 - Social engineering
 - Physical security

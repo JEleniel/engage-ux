@@ -7,24 +7,26 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
+chrono = { workspace = true }
 engage-ux-core = { path = "../engage-ux-core" }
+keyboard-types = { workspace = true }
+pollster = { workspace = true }
 serde = { workspace = true }
-winit = "0.30"
-softbuffer = "0.4"
-raw-window-handle = "0.6"
+serde_json = { workspace = true }
+skia-safe = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+uuid = { workspace = true }
+wgpu = { workspace = true }
+winit = { version = "0.30.12" }
 
-[dev-dependencies]
+[features]
+# Enable native winit backend (creates real platform windows). Disabled by default
+native-winit = []
+# Enable Skia-based software and GPU renderers. When enabled, the
+# `SkiaSoftwareRenderer` becomes available and future GPU paths will
+# attempt to utilize Skia's GPU interfaces.
+skia = []
 
-[target.'cfg(target_os = "android")'.dependencies]
-
-[target.'cfg(target_os = "ios")'.dependencies]
-
-[target.'cfg(target_os = "linux")'.dependencies]
-tiny-skia = { workspace = true }
-
-[target.'cfg(target_os = "macos")'.dependencies]
-
-[target.'cfg(target_os = "windows")'.dependencies]
-
-[lints.rust]
-unsafe_code = "forbid"
+[lints]
+workspace = true

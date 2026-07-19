@@ -1,0 +1,45 @@
+name: 'Chore / Maintenance'
+description: 'Non-functional repository maintenance, refactors, or housekeeping tasks.'
+title: 'Chore: '
+labels:
+  - chore
+  - maintenance
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to describe a maintenance task.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Chore
+      description: Provide a concise description of the maintenance task.
+      placeholder: A concise description of the maintenance task.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps
+      description: List the high-level steps required to complete this chore.
+      placeholder: |
+        - [ ] Step 1
+        - [ ] Step 2
+
+  - type: textarea
+    id: risks_rollback
+    attributes:
+      label: Risks & rollback plan
+      description: Describe any potential risks and how to roll back the change.
+      placeholder: Risks, mitigations, and rollback plan.
+
+  - type: textarea
+    id: validation_tests
+    attributes:
+      label: Validation / tests
+      description: How should this chore be validated? Include test commands or CI expectations.
+      placeholder: |
+        - Expected CI signals:
+        - Local validation commands:

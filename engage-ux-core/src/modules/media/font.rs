@@ -175,6 +175,7 @@ impl Font {
 
 /// Font registry for managing loaded fonts
 #[derive(Debug, Default)]
+#[allow(dead_code)]
 pub struct FontRegistry {
 	/// Registered fonts by family name
 	fonts: HashMap<String, Vec<Font>>,

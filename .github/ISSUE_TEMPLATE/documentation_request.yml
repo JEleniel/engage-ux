@@ -1,30 +1,56 @@
 name: 'Documentation request'
-about: 'Request improvements or corrections to documentation.'
+about: 'Report missing, incorrect, or unclear documentation and suggest improvements.'
 title: '[docs] '
 labels: ['documentation']
 body:
-  - type: textarea
+  - type: markdown
+    attributes:
+      value: |
+        Thanks — clear documentation requests make it easier to submit a focused PR. If you can, include the exact text or a proposed snippet.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 'Documentation area'
+      description: 'Which docs area is affected?'
+      options:
+        - label: 'getting-started'
+          value: getting-started
+        - label: 'api/reference'
+          value: api
+        - label: 'guides/examples'
+          value: guides
+        - label: 'design/architecture'
+          value: design
+        - label: 'other'
+          value: other
+
+  - type: input
     id: summary
     attributes:
-      label: 'Summary'
-      description: 'Brief summary of the documentation change requested.'
-      placeholder: 'Short description of the missing or incorrect documentation.'
+      label: 'One-line summary'
+      description: 'Short description of the requested documentation change.'
+      placeholder: 'e.g. "Clarify theme JSON field names in themes docs"'
+
   - type: textarea
     id: current
     attributes:
-      label: 'Current documentation'
-      description: 'Link or quote the current documentation that should change (if applicable).'
-      placeholder: 'URL or excerpt of the current docs.'
+      label: 'Current documentation (link or excerpt)'
+      description: 'Link, file path, or excerpt of the docs that should change.'
+      placeholder: 'URL or path to the docs and a short excerpt.'
+
   - type: textarea
     id: improvement
     attributes:
       label: 'Proposed improvement'
-      description: 'Describe the requested change and provide a suggested replacement or example.'
+      description: 'Suggested replacement text, code snippets, or examples. Small diffs or PR links are ideal.'
       placeholder: 'Proposed text, code snippets, or screenshots.'
+
   - type: checkboxes
     id: checklist
     attributes:
-      label: 'Checklist'
+      label: 'Pre-submit checklist'
       options:
         - label: 'I searched existing docs and issues'
         - label: 'This change improves clarity or correctness'
+        - label: 'I can submit a PR with this change (optional)'

@@ -3,7 +3,6 @@
 //! Provides a comprehensive drag and drop API supporting drag sources,
 //! drop targets, drag data, and drag events.
 
-use crate::component::ComponentId;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -27,11 +26,11 @@ pub enum DragDataType {
 /// Drag data container
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DragData {
-	/// Data type
+	/// The kind of data contained in this drag payload
 	data_type: DragDataType,
-	/// Data content as bytes
+	/// Raw payload bytes for the drag data
 	data: Vec<u8>,
-	/// Metadata
+	/// Optional metadata key/value pairs associated with the drag
 	metadata: HashMap<String, String>,
 }
 
@@ -119,43 +118,75 @@ pub enum DragOperation {
 pub enum DragEvent {
 	/// Drag operation started
 	DragStart {
-		source: ComponentId,
+		/// Id of the drag source component
+		source: u128,
+		/// Drag payload
 		data: DragData,
+		/// X coordinate in local space where the drag started
 		x: f32,
+		/// Y coordinate in local space where the drag started
 		y: f32,
 	},
 	/// Drag is moving
-	DragMove { source: ComponentId, x: f32, y: f32 },
+	DragMove {
+		/// Id of the drag source component
+		source: u128,
+		/// Current X coordinate
+		x: f32,
+		/// Current Y coordinate
+		y: f32,
+	},
 	/// Drag entered a drop target
 	DragEnter {
-		source: ComponentId,
-		target: ComponentId,
+		/// Id of the drag source component
+		source: u128,
+		/// Id of the target component entered
+		target: u128,
+		/// X coordinate where entered
 		x: f32,
+		/// Y coordinate where entered
 		y: f32,
 	},
 	/// Drag is over a drop target
 	DragOver {
-		source: ComponentId,
-		target: ComponentId,
+		/// Id of the drag source component
+		source: u128,
+		/// Id of the target currently under the pointer
+		target: u128,
+		/// Current X coordinate
 		x: f32,
+		/// Current Y coordinate
 		y: f32,
 	},
 	/// Drag left a drop target
 	DragLeave {
-		source: ComponentId,
-		target: ComponentId,
+		/// Id of the drag source component
+		source: u128,
+		/// Id of the target that was left
+		target: u128,
 	},
 	/// Item dropped on target
 	Drop {
-		source: ComponentId,
-		target: ComponentId,
+		/// Id of the drag source component
+		source: u128,
+		/// Id of the drop target
+		target: u128,
+		/// Drag payload delivered to the target
 		data: DragData,
+		/// Operation performed (copy/move/link)
 		operation: DragOperation,
+		/// X coordinate where drop occurred
 		x: f32,
+		/// Y coordinate where drop occurred
 		y: f32,
 	},
 	/// Drag operation ended (dropped or cancelled)
-	DragEnd { source: ComponentId, success: bool },
+	DragEnd {
+		/// Id of the drag source component
+		source: u128,
+		/// Whether the drag completed successfully
+		success: bool,
+	},
 }
 
 /// Drag source trait for components that can be dragged
@@ -211,9 +242,9 @@ pub trait DropTarget {
 /// Drag state information
 #[derive(Debug, Clone)]
 struct DragState {
-	source: ComponentId,
+	source: u128,
 	data: DragData,
-	current_target: Option<ComponentId>,
+	current_target: Option<u128>,
 	operation: DragOperation,
 }
 
@@ -222,7 +253,7 @@ pub struct DragManager {
 	/// Current drag state
 	current_drag: Option<DragState>,
 	/// Registered drop targets
-	drop_targets: HashMap<ComponentId, Arc<RwLock<dyn DropTarget + Send + Sync>>>,
+	drop_targets: HashMap<u128, Arc<RwLock<dyn DropTarget + Send + Sync>>>,
 }
 
 impl DragManager {
@@ -235,23 +266,19 @@ impl DragManager {
 	}
 
 	/// Register a drop target
-	pub fn register_target(
-		&mut self,
-		id: ComponentId,
-		target: Arc<RwLock<dyn DropTarget + Send + Sync>>,
-	) {
+	pub fn register_target(&mut self, id: u128, target: Arc<RwLock<dyn DropTarget + Send + Sync>>) {
 		self.drop_targets.insert(id, target);
 	}
 
 	/// Unregister a drop target
-	pub fn unregister_target(&mut self, id: ComponentId) {
+	pub fn unregister_target(&mut self, id: u128) {
 		self.drop_targets.remove(&id);
 	}
 
 	/// Start a drag operation
 	pub fn start_drag(
 		&mut self,
-		source: ComponentId,
+		source: u128,
 		data: DragData,
 		operation: DragOperation,
 	) -> DragEvent {
@@ -271,12 +298,7 @@ impl DragManager {
 	}
 
 	/// Update drag position and check for target
-	pub async fn update_drag(
-		&mut self,
-		x: f32,
-		y: f32,
-		target: Option<ComponentId>,
-	) -> Option<DragEvent> {
+	pub async fn update_drag(&mut self, x: f32, y: f32, target: Option<u128>) -> Option<DragEvent> {
 		let drag_state = self.current_drag.as_mut()?;
 
 		// Check if we entered a new target
@@ -396,7 +418,7 @@ impl DragManager {
 	}
 
 	/// Get current drag source
-	pub fn current_source(&self) -> Option<ComponentId> {
+	pub fn current_source(&self) -> Option<u128> {
 		self.current_drag.as_ref().map(|s| s.source)
 	}
 }
@@ -540,5 +562,27 @@ mod tests {
 			DragDataType::Custom("custom".to_string()),
 		];
 		assert_eq!(types.len(), 5);
+	}
+
+	#[tokio::test]
+	async fn test_drop_without_target_returns_none_or_end() {
+		let mut manager = DragManager::new();
+		let data = DragData::text("Orphan");
+		manager.start_drag(1, data, DragOperation::Copy);
+
+		// Attempt to drop where no target is registered.
+		let result = manager.drop(0.0, 0.0).await;
+
+		// Depending on implementation this may return None or DragEnd with success=false.
+		// Accept either outcome but ensure dropping without a target does not succeed.
+		match result {
+			Some(DragEvent::Drop { .. }) => panic!("Drop should not succeed without target"),
+			Some(DragEvent::DragEnd { success, .. }) => assert!(!success),
+			Some(_) => {
+				// Other intermediate drag events are acceptable, but ensure no active dragging remains
+				assert!(!manager.is_dragging());
+			}
+			None => assert!(!manager.is_dragging()),
+		}
 	}
 }

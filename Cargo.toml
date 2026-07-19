@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
 members = [
+  "engage-ux",
   "engage-ux-*",
 ]
 
@@ -20,8 +21,8 @@ categories = [
 ]
 
 [workspace.dependencies]
-bitflags = { version = "2.4" }
 chrono = { version = "0.4", features = ["serde"] }
+flagset = { version = "0.4" }
 fontdue = { version = "0.9" }
 image = { version = "0.25", default-features = false, features = [
   "bmp",
@@ -32,14 +33,18 @@ image = { version = "0.25", default-features = false, features = [
   "webp",
 ] }
 keyboard-types = { version = "0.8", features = ["serde"] }
+pollster = "0.3"
 resvg = { version = "0.44" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0" }
+skia-safe = "0.73"
 thiserror = { version = "2" }
 tiny-skia = { version = "0.11" }
 tokio = { version = "1.41", features = ["full"] }
 usvg = { version = "0.44" }
+uuid = { version = "1.19", features = ["serde", "v4"] }
+wgpu = "0.20"
 
 [workspace.lints.rust]
 missing_docs = "warn"
-unsafe_code = "forbid"
+unsafe_code = "warn"

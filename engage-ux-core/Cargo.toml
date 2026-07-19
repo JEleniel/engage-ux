@@ -7,8 +7,9 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-bitflags = { workspace = true }
 chrono = { workspace = true }
+engage-ux-derive = { path = "../engage-ux-derive" }
+flagset = { workspace = true }
 fontdue = { workspace = true }
 image = { workspace = true }
 keyboard-types = { workspace = true }
@@ -19,6 +20,7 @@ thiserror = { workspace = true }
 tiny-skia = { workspace = true }
 tokio = { workspace = true }
 usvg = { workspace = true }
+uuid = { workspace = true }
 
 [dev-dependencies]
 

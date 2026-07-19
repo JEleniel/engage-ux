@@ -1,0 +1,66 @@
+name: 'Test request'
+description: 'Request new tests or CI changes (unit/integration/e2e).'
+title: 'Test: '
+labels:
+  - test
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to request tests or CI changes.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Test request
+      description: Provide a short summary of the tests to add or modify.
+      placeholder: Short summary of the tests to add or modify.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_type
+    attributes:
+      label: Test type
+      description: Select one or more test categories.
+      multiple: true
+      options:
+        - Unit
+        - Integration
+        - E2E
+        - Smoke
+        - Regression
+        - Performance
+    validations:
+      required: true
+
+  - type: textarea
+    id: files_modules
+    attributes:
+      label: Files / modules to cover
+      description: List files or modules that should be tested.
+      placeholder: |
+        - path/to/file
+        - module/component name
+
+  - type: textarea
+    id: test_description
+    attributes:
+      label: Test description
+      description: Describe the test scenario, expected assertions, and edge cases.
+      placeholder: Scenario, assertions, and edge cases.
+
+  - type: textarea
+    id: ci_changes
+    attributes:
+      label: CI changes (if any)
+      description: Describe required CI job changes or new matrix permutations.
+      placeholder: Describe any CI changes needed.
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: How will reviewers verify the tests are complete and sufficient?
+      placeholder: How reviewers/CI will verify completion.
