@@ -1,8 +1,10 @@
 //! Radio button component
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Radio button component
@@ -37,9 +39,9 @@ impl RadioButton {
 			value: value.into(),
 			group: group.into(),
 			disabled: false,
-			color: Color::from_hex("#BDBDBD").unwrap(),
-			selected_color: Color::from_hex("#1976D2").unwrap(),
-			label_color: Color::from_hex("#000000").unwrap(),
+			color: Color::from_hex("#BDBDBD").unwrap_or_default(),
+			selected_color: Color::from_hex("#1976D2").unwrap_or_default(),
+			label_color: Color::from_hex("#000000").unwrap_or_default(),
 			size: 20.0,
 			on_change: None,
 		}

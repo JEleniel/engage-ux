@@ -1,7 +1,8 @@
 //! Text component for displaying formatted text
 
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Font weight options
@@ -33,7 +34,7 @@ impl Text {
 		Self {
 			properties: ComponentProperties::new(id),
 			content: content.into(),
-			color: Color::from_hex("#000000").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
 			font_size: 16.0,
 			font_weight: FontWeight::Regular,
 			italic: false,

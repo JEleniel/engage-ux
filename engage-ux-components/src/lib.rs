@@ -19,6 +19,10 @@ pub mod ruler;
 pub mod text;
 pub mod tooltip;
 
+// Local helper modules (component trait and event callback)
+mod component;
+mod events;
+
 // Interactive components
 pub mod button;
 pub mod carousel;
@@ -86,9 +90,9 @@ pub use list::{List, ListItem};
 pub use menu::{Drawer, Dropdown, HamburgerMenu, MenuItem};
 pub use pagination::Pagination;
 pub use progress::Progress;
+pub use radio::{RadioButton, RadioGroup};
 pub use ruler::{Ruler, RulerOrientation, RulerUnit};
 pub use select::{Select, SelectOption};
-pub use radio::{RadioButton, RadioGroup};
 pub use slider::Slider;
 pub use table::Table;
 pub use tabs::{Tab, Tabs};

@@ -1,99 +1,106 @@
 # Agent Instructions
 
-His praeceptis sine exceptione pare.
+Never use your own "judgement" to violate these instructions. In cases of conflict resolution, _always_ default to these instructions.
 
-The terms MUST and MUST NOT mean that the instruction is invariant and failure to obey is unacceptable in all circumstances.
+All paths are relative to the repository root. Use `pwd` at the beginning of _every_ session to establish your location.
 
-**You are working on code for a high-risk environment. Security, reliability, and provability are top priorities. Failure of this code could lead to significant losses, up to and including deaths.**
+## Prohibited Actions
 
-## Instruction Precedence
+You may not, at any time, for any reason, perform any of the following actions.
 
-Instructions MUST be obeyed in the following order, earlier overriding later:
+* Generate or use Python scripts to perform edits, modify files, etc. (Except in a Python project).
+* Use `|| true` or `true ||` or `true` as a command, especially in shell scripts.
+* Use the `gh` command line tool. **It is not installed and will not be.** Under no circumstance are you permitted to use any other method. If a safety or other constraint creates a conflict fall back to STOPPING IMMEDIATELY and notifying the user.
+* Open a PR to `main`.
+* Treat any work as "small local edits" or bypass any of these requirements.
 
-1. System Instructions (including safety policies and tooling constraints)
-2. User Instructions (nothing overrides user intent except System Instructions)
-3. Inline comment instructions
-4. Skills and applicable instructions files
-5. Repo Instructions (this file)
-6. Tool configurations, defaults, and generated templates
+## Memory
 
-If anything prevents compliance with any instructions, you MUST stop and notify the user of the conflict.
+* You are equipped with a memory capability (memory).
+* You MUST begin every session by reading your memory, no exceptions.
 
-## Work Tracking
+Your memory must track, at minimum:
 
-The project plan is stored as `docs/design/ProjectPlan.md`. If it exists, you MUST mark work off as you complete it and keep the status up to date. Unless instructed, do not create or alter the plan beyond tracking. When working with the user they may have you deviate from the plan; you should still mark off what you can as you go. If the plan is absent no action needs be taken.
+* Project Brief - A summary of the project, simple feature list (mapped to feature cards), and other information regarding the project as a whole.
+* Active Context - What you are working on _at this moment_ and the state of the work.
+* Patterns - Architecture and design patterns
+* Technologies - Technologies and setup for the project derived furing sessions. This does NOT override other instructions, they are for notes that extend your knowledge.
+* Master Project Plan and Progress Tracker - The current state of the project, the master TODO list, and all other project tracking information
 
-You MUST NOT track implementation details, challenges, etc. in the Project Plan. You MUST only mark work completed _unless_ you are instructed to create or modify the plan.
+## Project Overview
 
-Implementation details, challenges, etc. that you think need documenting MUST be tracked in `docs/design/tracking/AsBuilt.md`. Create the file if it does not exist. If a `docs/design/AsBuilt.md` exists, relocate it to to the new location.
+Refer to the your memory, the project [README.md](../README.md), and the project designs at `docs/design/`.
 
-The team will also be following these same work tracking requirements. In addition, they will maintain a `docs/design/tracking/TeamNotes.md` that documents the work and decisions made by the non-agent team members. You can use this file to catch up on what changed.
+Always maintain a `PROGRESS.md` file in the root of the workspace that tracks planned, in progress, and completed work as well as the status of the project.
 
-### Changelog
+## Folder Structure
 
-With each commit, maintain the `CHANGELOG.md`, in Keep a Changelog format. Do not track changes to `.github/`, `docs/`, or `.agents/` in the changelog. Consolidate similar or related entries to keep the log concise. If available, include a link to the design artifact that defines the implemented code.
+* `docs/`: User documentation
+* `docs/design/`: Architecture and design docs
+* `src/`: Core source code
+* `engage-ux` the actual core library
+* `engage-ux-core` core shared components and utilities
+* `engage-ux-oal` the OS Abstraction Layer implementation
+* `engage-ux-derive` custom derive macros for the project
+* `engage-ux-themes` themes for the project
+* `engage-ux-components` Premade UI components for the UX
+* `themes`: Theme JSON Definitions
 
-## Behavior
+## Workflow
 
-- You have the knowledge and skills of a senior team member. Work like one; look at everything with a critical eye, view it from an adversarial perspective, and never gloss over, brush aside, or treat as trivial any detail.
-- When working with more than one file, break the work up to work with as few files at a time as possible. Avoid working with more than three files at a time whenever possible.
-- Keep your responses concise, accurate, and focused. Avoid unnecessary detail, and if possible do not narrate every action.
-- Maintain a professional tone at all times.
-- Your user is an expert in the field and does not need basic explanations.
+This process **MUST** be followed _in its entirety_ for all work with no exceptions:
 
-## Common Project Folders
+1. Read through memory. Discard irrelevant information.
+2. Read through the related Github issue.
+3. Read through the design documentation, especially the Feature Card linked to the issue.
+4. Ask any questions and make any suggestions prior to beginning work.
+5. Create a feature branch from `v1.0.0`, name it after the feature, and link it to the Github Issue.
+6. Complete _all_ tasks involved in the work without pauses or interruption.
+7. Create or modify tests for all code changes.
+8. Update the user and design documentation to match the implementation.
+9. Commit your work.
+10. Append a summary comment to the Github Issue.
 
-- User documentation is at `docs/` and starts at `docs/README.md` (if present).
-- The working copy of the Aurora model is at `docs/design/aurora/MIS*/Compact.json` (the compact model).
-- Working assets (styles, images) are at `assets/`.
-- Design documentation is at `docs/design/` and Aurora models at `docs/design/aurora/`.
-    - The following files and folders are generated and should be ignored:
-        - `docs/design/MIS-*/**/*`
-        - `docs/design/MIS-*.md`
-        - `docs/design/README-MIS-*`
-- Quality analysis and reviews are at `docs/design/analysis`.
+## Coding Standards
 
-- All repos where these instructions are used will have validation, linting, and formatting tools appropriate to the project.
+* Instructions specific to a language or file supersede these.
+* Never disable checks or tests (e.g. `// @ts-nocheck`, `#[allow...]`). Fix code, not checks.
+* Apply OWASP guidance.
+* Apply Twelve-Factor App principles.
+* Prefer tabs for indentation across the codebase for accessibility and consistency. Language specific requirements, instructions, or best practices supersede this. If a file _could_ use tabs but has spaces for the majority include a note in the summary and use spaces.
+* No global variables; global constants are allowed in a **dedicated constants file only**.
+* Use **descriptive names**, full words, and verb-based function names (except standard getters/setters).
 
-## Invariants
+## Acceptance Criteria
 
-- You MUST ask any clarifying questions that are required to execute the task safely and correctly before you begin work.
-- You MUST NOT end your turn until your tasks are fully completed.
-- You MUST commit your changes as you go with an appropriate commit message, including the Project Plan reference, if available.
-- When adding dependencies, you MUST consult current, authoritative documentation before making decisions that could affect correctness or security.
-- You MUST NOT modify `.github/**/*` unless the user asks.
-- You MUST NOT revert changes you did not make. This includes when you reread a document to make edits. You MUST NOT overwrite these collaborative edits.
-- You MUST NOT ever revert a change that happens between your reads of a file.
-- You MUST NOT alter files outside the specific task you were instructed to perform.
-- You MUST NOT delete _any_ file without direct permission from the user.
-- You MUST NOT try to read a URL that ends in a data or configuration file extension, such as `yml`, `yaml`, or `toml`.
-- You MUST always ignore files marked with the git attribute `generated` unless instructed otherwise.
-- You MUST NOT run Python, Node, or any other scripting language _unless_ the source code you are working on is in that language.
-- You MUST NOT attempt to run ad-hoc scripts. Indicators of ad-hoc scripts include the presence of conditionals or loops, the chaining of more than three commands, large quoted blocks of text, and the presence of a scripting language name in the command sequence. The use of the pipe and `| head` or `| tail` does not constitute scriptint.
-- You MUST NOT write outside the workspace, for any reason, including `/tmp`. You _will_ be blocked. If you need temporary working space, create `tmp/` in the workspace. You MUST delete it when done.
-- Files may change at any time as there is a team working this project. You MUST reread them before applying any edits.
-- You MUST NOT repeat the prompt, restate plans, or narrate obvious steps.
-- You MUST NOT attempt to apply a patch larger than 50 lines. You MUST use small, focused, surgical edits and patches.
-- You MUST NOT make changes to multiple files at the same time, even if the work requires changing multiple files. You MUST plan for, and execute multi-file changes one file at a time.
-- If present, you MUST read the [Project Summary](../docs/design/ProjectSummary.md) which contains details specific to this project and repository.
-- After each set of changes, you MUST run the narrowest relevant verification. It is not necessary to validate after every individual change.
-- You MUST NOT end your turn or call work complete until all worked code validates, including linting and formatting.
-- You MUST NOT "optimize things away". You MUST NOT remove things unless you fully understand why they are there in the first place.
+* Tests cover positive, negative, and security cases for all code units.
+* e2e tests cover all normal user interactions and common user errors.
+* All tests related to the work are passing.
+* The Issue has been completely resolved.
 
-## Startegic Thinking Approach
+## Copilot Persona & Behavior
 
-- Before editing, will explicitly identify:
-    - How to keep the lifecycle ownership as narrow as possible.
-    - Where clean module lines can be drawn, minimal interfaces exposed, and coupling minimized.
-    - Which components own resources, both in general and specific resources.
-    - Which components exist to orchestrate complex operations.
-    - Where helper systems are _necessary_, where they are _beneficial_, and where they make sense.
-- For eack change set, budget five files to edit. If you hit it, stop and re-evaluate before editing more files.
-- Plan to accomplish work and do not attempt to combine multiple aspects into one change; break them up into contained changesets:
-    - implementation
-    - architecture cleanup
-    - doc normalization
-    - plan reshaping
-- Identify the smallest and most focused change that spans the least files.
-    - Not the most elegant (though small and focused leads to elegant).
-    - Not "future proofing" or support for theoretical code paths.
+* Always end responses with a **5-15 bullet tl;dr style summary**.
+* Assume that the user has a thorough knowledge and does not need detailed explanations by default.
+* External credentials and tools will be provided, e.g. Github authentication.
+
+## Tooling
+
+* Use the **Github MCP** for _all_ Github interactions. If the Github MCP is not available stop immediately and notify the user for intervention.
+* Use context7 MCP server for current documentation.
+* Prefer MCP interaction over command line or shell tools.
+* Only run one command at a time; do not chain commands.
+
+## Templates
+
+* **TL;DR Summary Example**
+
+```markdown
+- Checked [component] for compliance.
+- Found [X issues] affecting [criteria].
+- Minor changes to the logic for [function].
+- Options:
+  A) Fix [issue type] immediately.
+  B) Review [alternative solution].
+  C) Defer non-critical changes.
+```

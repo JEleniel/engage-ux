@@ -1,0 +1,9 @@
+[package]
+name = "unit-check"
+version = "0.1.0"
+edition = "2021"
+description = "Placeholder workspace tool crate for local builds/tests."
+publish = false
+
+[lib]
+path = "src/lib.rs"

@@ -1,7 +1,8 @@
 //! Line numbers component for code editors
 
+use crate::component::{Component, ComponentId};
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Line numbers component for displaying line numbers in code editors
@@ -28,10 +29,10 @@ impl LineNumbers {
 			start_line: 1,
 			end_line: total_lines,
 			current_line: None,
-			color: Color::from_hex("#858585").unwrap(),
-			background_color: Color::from_hex("#F5F5F5").unwrap(),
-			current_line_color: Color::from_hex("#000000").unwrap(),
-			current_line_background: Color::from_hex("#E0E0E0").unwrap(),
+			color: Color::from_hex("#858585").unwrap_or_default(),
+			background_color: Color::from_hex("#F5F5F5").unwrap_or_default(),
+			current_line_color: Color::from_hex("#000000").unwrap_or_default(),
+			current_line_background: Color::from_hex("#E0E0E0").unwrap_or_default(),
 			font_size: 12.0,
 			padding: 8.0,
 			width: 50.0,

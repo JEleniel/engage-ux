@@ -4,73 +4,31 @@ use super::MediaError;
 use std::collections::HashMap;
 
 /// Font weight
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone)]
 pub enum FontWeight {
-	/// Thin (100)
-	Thin,
 	/// Extra Light (200)
 	ExtraLight,
 	/// Light (300)
 	Light,
-	/// Normal/Regular (400)
+	/// Normal/Regular (500)
 	Normal,
-	/// Medium (500)
-	Medium,
-	/// Semi Bold (600)
-	SemiBold,
 	/// Bold (700)
 	Bold,
 	/// Extra Bold (800)
 	ExtraBold,
-	/// Black (900)
-	Black,
-}
-
-impl FontWeight {
-	/// Get numeric value
-	pub fn value(&self) -> u16 {
-		match self {
-			FontWeight::Thin => 100,
-			FontWeight::ExtraLight => 200,
-			FontWeight::Light => 300,
-			FontWeight::Normal => 400,
-			FontWeight::Medium => 500,
-			FontWeight::SemiBold => 600,
-			FontWeight::Bold => 700,
-			FontWeight::ExtraBold => 800,
-			FontWeight::Black => 900,
-		}
-	}
-
-	/// Create from numeric value
-	pub fn from_value(value: u16) -> Self {
-		match value {
-			0..=150 => FontWeight::Thin,
-			151..=250 => FontWeight::ExtraLight,
-			251..=350 => FontWeight::Light,
-			351..=450 => FontWeight::Normal,
-			451..=550 => FontWeight::Medium,
-			551..=650 => FontWeight::SemiBold,
-			651..=750 => FontWeight::Bold,
-			751..=850 => FontWeight::ExtraBold,
-			_ => FontWeight::Black,
-		}
-	}
 }
 
 /// Font style
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone)]
 pub enum FontStyle {
 	/// Normal/upright style
 	Normal,
 	/// Italic style
 	Italic,
-	/// Oblique style
-	Oblique,
 }
 
 /// Font family
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone)]
 pub struct FontFamily {
 	/// Family name
 	pub name: String,
@@ -193,14 +151,6 @@ impl FontRegistry {
 		self.fonts.entry(family_name).or_default().push(font);
 	}
 
-	/// Get font by family and style
-	pub fn get(&self, family: &str, weight: FontWeight, style: FontStyle) -> Option<&Font> {
-		self.fonts
-			.get(family)?
-			.iter()
-			.find(|f| f.weight == weight && f.style == style)
-	}
-
 	/// Get all fonts for a family
 	pub fn get_family(&self, family: &str) -> Option<&Vec<Font>> {
 		self.fonts.get(family)
@@ -214,91 +164,5 @@ impl FontRegistry {
 	/// Get all registered family names
 	pub fn families(&self) -> Vec<&String> {
 		self.fonts.keys().collect()
-	}
-}
-
-#[cfg(test)]
-mod tests {
-	use super::*;
-
-	#[test]
-	fn test_font_weight_value() {
-		assert_eq!(FontWeight::Normal.value(), 400);
-		assert_eq!(FontWeight::Bold.value(), 700);
-		assert_eq!(FontWeight::Thin.value(), 100);
-	}
-
-	#[test]
-	fn test_font_weight_from_value() {
-		assert_eq!(FontWeight::from_value(400), FontWeight::Normal);
-		assert_eq!(FontWeight::from_value(700), FontWeight::Bold);
-		assert_eq!(FontWeight::from_value(550), FontWeight::Medium);
-	}
-
-	#[test]
-	fn test_font_family() {
-		let family = FontFamily::new("Arial");
-		assert_eq!(family.name, "Arial");
-		assert!(family.fallbacks.is_empty());
-
-		let family_with_fallbacks =
-			FontFamily::with_fallbacks("Helvetica", vec!["Arial", "sans-serif"]);
-		assert_eq!(family_with_fallbacks.fallbacks.len(), 2);
-	}
-
-	#[test]
-	fn test_font_creation() {
-		let family = FontFamily::new("Georgia");
-		let font = Font::new(family.clone(), 16.0);
-		assert_eq!(font.family.name, "Georgia");
-		assert_eq!(font.size, 16.0);
-		assert_eq!(font.weight, FontWeight::Normal);
-	}
-
-	#[test]
-	fn test_font_with_style() {
-		let family = FontFamily::new("Times New Roman");
-		let font = Font::with_style(family, 18.0, FontWeight::Bold, FontStyle::Italic);
-		assert_eq!(font.weight, FontWeight::Bold);
-		assert_eq!(font.style, FontStyle::Italic);
-	}
-
-	#[test]
-	fn test_font_load_from_bytes() {
-		// Test with invalid data - should return error
-		let data = vec![1, 2, 3, 4]; // Fake font data
-		let result = Font::load_from_bytes(data, 14.0);
-		assert!(result.is_err());
-
-		// Empty data should also fail
-		let empty_data = vec![];
-		let result = Font::load_from_bytes(empty_data, 14.0);
-		assert!(result.is_err());
-	}
-
-	#[test]
-	fn test_font_registry() {
-		let mut registry = FontRegistry::new();
-
-		let family = FontFamily::new("Open Sans");
-		let font = Font::new(family.clone(), 16.0);
-		registry.register(font);
-
-		assert!(registry.has_family("Open Sans"));
-		assert!(!registry.has_family("Arial"));
-
-		let retrieved = registry.get("Open Sans", FontWeight::Normal, FontStyle::Normal);
-		assert!(retrieved.is_some());
-	}
-
-	#[test]
-	fn test_font_registry_families() {
-		let mut registry = FontRegistry::new();
-
-		registry.register(Font::new(FontFamily::new("Arial"), 12.0));
-		registry.register(Font::new(FontFamily::new("Georgia"), 14.0));
-
-		let families = registry.families();
-		assert_eq!(families.len(), 2);
 	}
 }

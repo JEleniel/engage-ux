@@ -1,0 +1,16 @@
+[package]
+name = "engage-ux"
+version.workspace = true
+edition.workspace = true
+description = "Top-level developer-facing crate that re-exports the public surface of Engage UX (core + OAL)."
+repository.workspace = true
+license.workspace = true
+
+[dependencies]
+engage-ux-core = { path = "../engage-ux-core" }
+engage-ux-oal = { path = "../engage-ux-oal" }
+
+[dev-dependencies]
+
+[lints]
+workspace = true

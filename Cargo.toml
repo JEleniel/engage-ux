@@ -3,6 +3,7 @@ resolver = "3"
 members = [
   "engage-ux",
   "engage-ux-*",
+  "tools/unit-check",
 ]
 
 [workspace.package]
@@ -22,7 +23,7 @@ categories = [
 
 [workspace.dependencies]
 chrono = { version = "0.4", features = ["serde"] }
-flagset = { version = "0.4" }
+flagset = { version = "0.4.7" }
 fontdue = { version = "0.9" }
 image = { version = "0.25", default-features = false, features = [
   "bmp",
@@ -37,13 +38,13 @@ pollster = "0.3"
 resvg = { version = "0.44" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0" }
-skia-safe = "0.73"
+skia-safe = "0.73.0"
 thiserror = { version = "2" }
 tiny-skia = { version = "0.11" }
 tokio = { version = "1.41", features = ["full"] }
 usvg = { version = "0.44" }
-uuid = { version = "1.19", features = ["serde", "v4"] }
-wgpu = "0.20"
+uuid = { version = "1.18.1", features = ["serde", "v4"] }
+wgpu = "27"
 
 [workspace.lints.rust]
 missing_docs = "warn"

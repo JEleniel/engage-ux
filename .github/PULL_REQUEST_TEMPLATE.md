@@ -1,12 +1,6 @@
-# Pull Request
+<<<<<<< HEAD
 
-Thanks for taking the time to open a pull request.
-
-This template applies when submitting a GitHub pull request for this repository.
-
-## Related issues
-
-Link related issues (examples: `Fixes #123`, `Closes #123`, `Related to #123`).
+# Pull Request Template
 
 ## Type of change (required if no issue linked)
 
@@ -24,29 +18,40 @@ What does this change do, and why?
 
 ## Changes
 
-List the key changes (high level):
+- Brief list of the main changes (files, behaviors, features).
 
--
--
--
+## Related issues
 
-## Breaking change
+- Link any related issues, e.g. fixes #123
 
-- [ ] This change introduces a breaking change
+## Testing and verification
 
-If yes, describe the impact and migration steps:
+Describe how this change was tested (commands, environment, steps) and how to verify it locally.
 
-## Testing
+Example:
 
-How was this validated?
+- Run: `make test` or `pnpm test`
+- Environment: OS, runtime versions, any env vars required (do not include secrets)
+=======
 
-- Commands run:
-- Environment details (OS, runtime/tooling versions; do not include secrets):
-- Manual testing steps (if any):
+# Pull Request
 
-## Checklist
+Please fill out this pull request template completely. Fields marked as required must be filled.
 
-- [ ] I kept this PR focused and scoped
-- [ ] I updated documentation (if needed)
-- [ ] I added or updated tests (if needed)
-- [ ] I verified the change locally (or explained why not)
+Type of Change (required):
+        - bug_fix
+        - documentation
+        - new_feature
+        - performance improvement
+        - refactor
+        - security
+        - tests
+
+Does the change introduce a breaking change? (required)
+        - yes
+        - no
+
+Related Issues:
+
+Description (required):
+>>>>>>> 388b8aea5e651424b70717a1a2f9395b52b41905

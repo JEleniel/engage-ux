@@ -1,4 +1,5 @@
 /// High-level animation APIs and the builder
+#[allow(clippy::module_inception)]
 pub mod animation;
 /// Animation runtime state definitions
 pub mod animation_state;

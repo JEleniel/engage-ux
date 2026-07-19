@@ -17,6 +17,8 @@ pub enum ImageFormat {
 	Bmp,
 	/// TIFF format
 	Tiff,
+	/// SVG
+	Svg,
 }
 
 impl ImageFormat {
@@ -29,6 +31,7 @@ impl ImageFormat {
 			"gif" => Some(ImageFormat::Gif),
 			"bmp" => Some(ImageFormat::Bmp),
 			"tif" | "tiff" => Some(ImageFormat::Tiff),
+			"svg" => Some(ImageFormat::Svg),
 			_ => None,
 		}
 	}
@@ -69,6 +72,15 @@ impl ImageFormat {
 			return Some(ImageFormat::Tiff);
 		}
 
+		// SVG: look for an XML header or the <svg tag in the initial bytes
+		let probe_len = std::cmp::min(256, data.len());
+		if let Ok(s) = std::str::from_utf8(&data[..probe_len]) {
+			let s_lower = s.to_lowercase();
+			if s_lower.contains("<svg") || s_lower.contains("<?xml") {
+				return Some(ImageFormat::Svg);
+			}
+		}
+
 		None
 	}
 
@@ -81,6 +93,7 @@ impl ImageFormat {
 			ImageFormat::Gif => "image/gif",
 			ImageFormat::Bmp => "image/bmp",
 			ImageFormat::Tiff => "image/tiff",
+			ImageFormat::Svg => "image/svg+xml",
 		}
 	}
 }
@@ -132,6 +145,7 @@ impl ImageData {
 	/// Load from file path
 	pub fn load_from_file(path: &str) -> Result<Self, MediaError> {
 		use image::ImageReader;
+		// image crate will be used for raster formats; SVGs are not rasterized here
 
 		let img = ImageReader::open(path)
 			.map_err(|e| MediaError::LoadFailed(format!("Failed to open image: {}", e)))?
@@ -145,6 +159,12 @@ impl ImageData {
 				.unwrap_or(""),
 		)
 		.ok_or_else(|| MediaError::UnsupportedFormat("Unknown image format".to_string()))?;
+		// SVG currently isn't rasterized by this function; return unsupported
+		if format == ImageFormat::Svg {
+			return Err(MediaError::UnsupportedFormat(
+				"SVG rasterization not implemented; use a vector renderer".to_string(),
+			));
+		}
 
 		let width = img.width();
 		let height = img.height();

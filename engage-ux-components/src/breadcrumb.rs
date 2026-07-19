@@ -1,8 +1,10 @@
 //! Breadcrumb navigation component
 
+use crate::component::{Component, ComponentId};
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Breadcrumb item
@@ -70,9 +72,9 @@ impl Breadcrumb {
 			items: Vec::new(),
 			separator: "/".to_string(),
 			max_items: None,
-			color: Color::from_hex("#757575").unwrap(),
-			active_color: Color::from_hex("#000000").unwrap(),
-			separator_color: Color::from_hex("#CCCCCC").unwrap(),
+			color: Color::from_hex("#757575").unwrap_or_default(),
+			active_color: Color::from_hex("#000000").unwrap_or_default(),
+			separator_color: Color::from_hex("#CCCCCC").unwrap_or_default(),
 			font_size: 14.0,
 		}
 	}

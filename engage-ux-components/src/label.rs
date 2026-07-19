@@ -1,7 +1,8 @@
 //! Label component for displaying static text
 
+use crate::component::{Component, ComponentId};
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Text alignment options
@@ -28,7 +29,7 @@ impl Label {
 		Self {
 			properties: ComponentProperties::new(id),
 			text: text.into(),
-			color: Color::from_hex("#000000").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
 			font_size: 16.0,
 			align: TextAlign::Left,
 		}
@@ -111,7 +112,7 @@ mod tests {
 	#[test]
 	fn test_label_color() {
 		let mut label = Label::new(1, "Text");
-		let color = Color::from_hex("#FF0000").unwrap();
+		let color = Color::from_hex("#FF0000").unwrap_or_default();
 		label.set_color(color.clone());
 		assert_eq!(label.color(), &color);
 	}

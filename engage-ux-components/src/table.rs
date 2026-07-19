@@ -1,7 +1,8 @@
 //! Table component for structured data display
 
+use crate::component::{Component, ComponentId};
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// Table cell data
@@ -95,11 +96,11 @@ impl Table {
 			striped: true,
 			bordered: true,
 			hover: true,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			header_background: Color::from_hex("#F5F5F5").unwrap(),
-			stripe_color: Color::from_hex("#FAFAFA").unwrap(),
-			border_color: Color::from_hex("#E0E0E0").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			header_background: Color::from_hex("#F5F5F5").unwrap_or_default(),
+			stripe_color: Color::from_hex("#FAFAFA").unwrap_or_default(),
+			border_color: Color::from_hex("#E0E0E0").unwrap_or_default(),
 		}
 	}
 

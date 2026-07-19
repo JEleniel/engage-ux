@@ -1,7 +1,8 @@
 //! List component for displaying collections of items
 
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
 use serde::{Deserialize, Serialize};
 
 /// List item
@@ -47,10 +48,10 @@ impl List {
 			multi_select: false,
 			selected_indices: Vec::new(),
 			item_height: 40.0,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#FFFFFF").unwrap(),
-			selected_color: Color::from_hex("#1976D2").unwrap(),
-			hover_color: Color::from_hex("#E3F2FD").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			selected_color: Color::from_hex("#1976D2").unwrap_or_default(),
+			hover_color: Color::from_hex("#E3F2FD").unwrap_or_default(),
 		}
 	}
 

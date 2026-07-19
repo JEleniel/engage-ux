@@ -119,7 +119,7 @@ pub enum DragEvent {
 	/// Drag operation started
 	DragStart {
 		/// Id of the drag source component
-		source: u128,
+		source: ComponentId,
 		/// Drag payload
 		data: DragData,
 		/// X coordinate in local space where the drag started
@@ -130,7 +130,7 @@ pub enum DragEvent {
 	/// Drag is moving
 	DragMove {
 		/// Id of the drag source component
-		source: u128,
+		source: ComponentId,
 		/// Current X coordinate
 		x: f32,
 		/// Current Y coordinate
@@ -139,9 +139,9 @@ pub enum DragEvent {
 	/// Drag entered a drop target
 	DragEnter {
 		/// Id of the drag source component
-		source: u128,
+		source: ComponentId,
 		/// Id of the target component entered
-		target: u128,
+		target: ComponentId,
 		/// X coordinate where entered
 		x: f32,
 		/// Y coordinate where entered
@@ -150,9 +150,9 @@ pub enum DragEvent {
 	/// Drag is over a drop target
 	DragOver {
 		/// Id of the drag source component
-		source: u128,
+		source: ComponentId,
 		/// Id of the target currently under the pointer
-		target: u128,
+		target: ComponentId,
 		/// Current X coordinate
 		x: f32,
 		/// Current Y coordinate
@@ -161,16 +161,16 @@ pub enum DragEvent {
 	/// Drag left a drop target
 	DragLeave {
 		/// Id of the drag source component
-		source: u128,
+		source: ComponentId,
 		/// Id of the target that was left
-		target: u128,
+		target: ComponentId,
 	},
 	/// Item dropped on target
 	Drop {
 		/// Id of the drag source component
-		source: u128,
+		source: ComponentId,
 		/// Id of the drop target
-		target: u128,
+		target: ComponentId,
 		/// Drag payload delivered to the target
 		data: DragData,
 		/// Operation performed (copy/move/link)
@@ -183,7 +183,7 @@ pub enum DragEvent {
 	/// Drag operation ended (dropped or cancelled)
 	DragEnd {
 		/// Id of the drag source component
-		source: u128,
+		source: ComponentId,
 		/// Whether the drag completed successfully
 		success: bool,
 	},
@@ -305,11 +305,10 @@ impl DragManager {
 		if target != drag_state.current_target {
 			// Leave old target
 			if let Some(old_target) = drag_state.current_target {
-				if let Some(target_ref) = self.drop_targets.get(&old_target) {
-					if let Ok(mut target) = target_ref.try_write() {
+				if let Some(target_ref) = self.drop_targets.get(&old_target)
+					&& let Ok(mut target) = target_ref.try_write() {
 						target.on_drag_leave();
 					}
-				}
 
 				// Emit leave event
 				let event = DragEvent::DragLeave {
@@ -322,10 +321,10 @@ impl DragManager {
 			}
 
 			// Enter new target
-			if let Some(new_target) = target {
-				if let Some(target_ref) = self.drop_targets.get(&new_target) {
-					if let Ok(mut target) = target_ref.try_write() {
-						if target.can_drop(&drag_state.data) {
+			if let Some(new_target) = target
+				&& let Some(target_ref) = self.drop_targets.get(&new_target)
+					&& let Ok(mut target) = target_ref.try_write()
+						&& target.can_drop(&drag_state.data) {
 							target.on_drag_enter(&drag_state.data, x, y);
 							drag_state.current_target = Some(new_target);
 
@@ -336,18 +335,14 @@ impl DragManager {
 								y,
 							});
 						}
-					}
-				}
-			}
 		}
 
 		// Over target
 		if let Some(current_target) = drag_state.current_target {
-			if let Some(target_ref) = self.drop_targets.get(&current_target) {
-				if let Ok(mut target) = target_ref.try_write() {
+			if let Some(target_ref) = self.drop_targets.get(&current_target)
+				&& let Ok(mut target) = target_ref.try_write() {
 					target.on_drag_over(&drag_state.data, x, y);
 				}
-			}
 
 			return Some(DragEvent::DragOver {
 				source: drag_state.source,
@@ -369,9 +364,9 @@ impl DragManager {
 	pub async fn drop(&mut self, x: f32, y: f32) -> Option<DragEvent> {
 		let drag_state = self.current_drag.take()?;
 
-		if let Some(target_id) = drag_state.current_target {
-			if let Some(target_ref) = self.drop_targets.get(&target_id) {
-				if let Ok(mut target) = target_ref.try_write() {
+		if let Some(target_id) = drag_state.current_target
+			&& let Some(target_ref) = self.drop_targets.get(&target_id)
+				&& let Ok(mut target) = target_ref.try_write() {
 					let _success =
 						target.on_drop(drag_state.data.clone(), drag_state.operation, x, y);
 
@@ -384,8 +379,6 @@ impl DragManager {
 						y,
 					});
 				}
-			}
-		}
 
 		Some(DragEvent::DragEnd {
 			source: drag_state.source,
@@ -398,13 +391,11 @@ impl DragManager {
 		let drag_state = self.current_drag.take()?;
 
 		// Leave current target if any
-		if let Some(target_id) = drag_state.current_target {
-			if let Some(target_ref) = self.drop_targets.get(&target_id) {
-				if let Ok(mut target) = target_ref.try_write() {
+		if let Some(target_id) = drag_state.current_target
+			&& let Some(target_ref) = self.drop_targets.get(&target_id)
+				&& let Ok(mut target) = target_ref.try_write() {
 					target.on_drag_leave();
 				}
-			}
-		}
 
 		Some(DragEvent::DragEnd {
 			source: drag_state.source,
@@ -477,7 +468,11 @@ mod tests {
 			DragEvent::DragStart { source, .. } => {
 				assert_eq!(source, 1);
 			}
-			_ => panic!("Expected DragStart event"),
+			other => assert!(
+				matches!(other, DragEvent::DragStart { .. }),
+				"Expected DragStart event, got: {:?}",
+				other
+			),
 		}
 	}
 
@@ -495,7 +490,11 @@ mod tests {
 				assert_eq!(source, 1);
 				assert!(!success);
 			}
-			_ => panic!("Expected DragEnd event"),
+			other => assert!(
+				matches!(other, Some(DragEvent::DragEnd { .. })),
+				"Expected DragEnd event, got: {:?}",
+				other
+			),
 		}
 	}
 
@@ -576,7 +575,10 @@ mod tests {
 		// Depending on implementation this may return None or DragEnd with success=false.
 		// Accept either outcome but ensure dropping without a target does not succeed.
 		match result {
-			Some(DragEvent::Drop { .. }) => panic!("Drop should not succeed without target"),
+			Some(DragEvent::Drop { .. }) => assert!(
+				!matches!(result, Some(DragEvent::Drop { .. })),
+				"Drop should not succeed without target"
+			),
 			Some(DragEvent::DragEnd { success, .. }) => assert!(!success),
 			Some(_) => {
 				// Other intermediate drag events are acceptable, but ensure no active dragging remains

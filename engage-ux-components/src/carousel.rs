@@ -1,8 +1,10 @@
 //! Carousel component for cycling through items
 
+use crate::component::{Component, ComponentId};
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Carousel item
@@ -66,10 +68,10 @@ impl Carousel {
 			show_indicators: true,
 			show_controls: true,
 			transition: CarouselTransition::Slide,
-			color: Color::from_hex("#FFFFFF").unwrap(),
-			background_color: Color::from_hex("#000000").unwrap(),
-			indicator_color: Color::from_hex("#FFFFFF80").unwrap(),
-			active_indicator_color: Color::from_hex("#FFFFFF").unwrap(),
+			color: Color::from_hex("#FFFFFF").unwrap_or_default(),
+			background_color: Color::from_hex("#000000").unwrap_or_default(),
+			indicator_color: Color::from_hex("#FFFFFF80").unwrap_or_default(),
+			active_indicator_color: Color::from_hex("#FFFFFF").unwrap_or_default(),
 			on_change: None,
 		}
 	}

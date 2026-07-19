@@ -1,8 +1,10 @@
 //! Link component for navigation and actions
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Link component
@@ -43,9 +45,9 @@ impl Link {
 			href: href.into(),
 			target: LinkTarget::Self_,
 			underline: true,
-			color: Color::from_hex("#1976D2").unwrap(),
-			hover_color: Color::from_hex("#1565C0").unwrap(),
-			visited_color: Color::from_hex("#7B1FA2").unwrap(),
+			color: Color::from_hex("#1976D2").unwrap_or_default(),
+			hover_color: Color::from_hex("#1565C0").unwrap_or_default(),
+			visited_color: Color::from_hex("#7B1FA2").unwrap_or_default(),
 			font_size: 14.0,
 			on_click: None,
 		}

@@ -1,8 +1,10 @@
 //! Banner component for important messages
 
+use crate::events::EventCallback;
 use engage_ux_core::Color;
-use engage_ux_core::component::{Component, ComponentId, ComponentProperties};
-use engage_ux_core::events::{Event, EventCallback};
+use engage_ux_core::component::{Component, ComponentId};
+use engage_ux_core::component_properties::ComponentProperties;
+use engage_ux_core::event::Event;
 use serde::{Deserialize, Serialize};
 
 /// Banner variant
@@ -54,9 +56,9 @@ impl Banner {
 			visible: true,
 			dismissible: true,
 			icon: None,
-			color: Color::from_hex("#000000").unwrap(),
-			background_color: Color::from_hex("#E3F2FD").unwrap(),
-			border_color: Color::from_hex("#2196F3").unwrap(),
+			color: Color::from_hex("#000000").unwrap_or_default(),
+			background_color: Color::from_hex("#E3F2FD").unwrap_or_default(),
+			border_color: Color::from_hex("#2196F3").unwrap_or_default(),
 			on_dismiss: None,
 			on_action: None,
 			action_text: None,
@@ -122,24 +124,24 @@ impl Banner {
 		// Update colors based on variant
 		match variant {
 			BannerVariant::Info => {
-				self.background_color = Color::from_hex("#E3F2FD").unwrap();
-				self.border_color = Color::from_hex("#2196F3").unwrap();
-				self.color = Color::from_hex("#000000").unwrap();
+				self.background_color = Color::from_hex("#E3F2FD").unwrap_or_default();
+				self.border_color = Color::from_hex("#2196F3").unwrap_or_default();
+				self.color = Color::from_hex("#000000").unwrap_or_default();
 			}
 			BannerVariant::Success => {
-				self.background_color = Color::from_hex("#E8F5E9").unwrap();
-				self.border_color = Color::from_hex("#4CAF50").unwrap();
-				self.color = Color::from_hex("#000000").unwrap();
+				self.background_color = Color::from_hex("#E8F5E9").unwrap_or_default();
+				self.border_color = Color::from_hex("#4CAF50").unwrap_or_default();
+				self.color = Color::from_hex("#000000").unwrap_or_default();
 			}
 			BannerVariant::Warning => {
-				self.background_color = Color::from_hex("#FFF3E0").unwrap();
-				self.border_color = Color::from_hex("#FF9800").unwrap();
-				self.color = Color::from_hex("#000000").unwrap();
+				self.background_color = Color::from_hex("#FFF3E0").unwrap_or_default();
+				self.border_color = Color::from_hex("#FF9800").unwrap_or_default();
+				self.color = Color::from_hex("#000000").unwrap_or_default();
 			}
 			BannerVariant::Error => {
-				self.background_color = Color::from_hex("#FFEBEE").unwrap();
-				self.border_color = Color::from_hex("#F44336").unwrap();
-				self.color = Color::from_hex("#000000").unwrap();
+				self.background_color = Color::from_hex("#FFEBEE").unwrap_or_default();
+				self.border_color = Color::from_hex("#F44336").unwrap_or_default();
+				self.color = Color::from_hex("#000000").unwrap_or_default();
 			}
 		}
 	}
